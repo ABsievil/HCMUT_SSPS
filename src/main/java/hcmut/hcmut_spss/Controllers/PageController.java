@@ -25,7 +25,7 @@ public class PageController {
 
     @RequestMapping(value = {"/", "index"}, method = RequestMethod.GET)
     String webcomePage(){
-        return "login";
+        return "index";
     }
 
     @RequestMapping("/login")
