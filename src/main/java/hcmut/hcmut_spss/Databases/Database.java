@@ -27,9 +27,9 @@ public class Database {
         return new CommandLineRunner() {
             @Override
             public void run(String... args) throws Exception {
-                User user1 = new User(null, null, "user1", passwordEncoder.encode("1245"), Role.USER);
+                User user1 = new User(null, null, "user1", passwordEncoder.encode("1245"), "nccuong@gmail.com", Role.USER);
                 logger.info("insert user account: " + userRepository.save(user1));
-                User admin = new User(null, null, "admin", passwordEncoder.encode("1245"), Role.ADMIN);
+                User admin = new User(null, null, "admin", passwordEncoder.encode("1245"), "nccuong2@gmail.com", Role.ADMIN);
                 logger.info("insert admin account: " + userRepository.save(admin));
             }
         };
