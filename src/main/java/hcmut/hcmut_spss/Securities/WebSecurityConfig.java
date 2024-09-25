@@ -26,6 +26,9 @@ public class WebSecurityConfig {
     @Autowired
     private WhiteList whiteList;
 
+    @Autowired
+    private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
       DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -90,11 +93,12 @@ public class WebSecurityConfig {
             // detail at: https://www.javadevjournal.com/spring-security/spring-security-session/
             .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); 
 
-            // http.oauth2Login(oauth2 -> oauth2
-            //     .loginPage("/login")
-            //     .defaultSuccessUrl("/api/v1/User/oauth2") // not working
-            // );
-
+            http.oauth2Login(oauth2 -> oauth2
+                .loginPage("/login")
+                .defaultSuccessUrl("/api/v1/User/oauth2") // not working
+                .loginPage("/login").permitAll()
+                .successHandler(oAuth2LoginSuccessHandler)
+            );
             http.authenticationProvider(authenticationProvider());
             http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);    
 
