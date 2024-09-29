@@ -27,7 +27,7 @@ function MyComponent() {
   ];
 
   return (
-    <div className="flex overflow-hidden flex-col pt-4 font-semibold bg-white">
+    <div className="flex overflow-hidden flex-col pt-4 mb-8 font-semibold bg-white">
       <main className="flex flex-col px-6 pt-12 pb-5 w-full text-sm leading-3 text-black bg-white max-md:px-5 max-md:max-w-full">
         <h2 className="self-start text-xl leading-none text-sky-500">
           Thông báo chung / Site announcements

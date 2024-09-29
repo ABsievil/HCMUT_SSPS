@@ -21,7 +21,7 @@ export default function Header() {
 
   return (
     <div className={`sticky top-0 z-10 ${isSticky ? "header-transition" : "header-hidden"}`}>
-      <div className="flex justify-center items-center w-full h-40 bg-sky-50">
+      <div className="flex justify-center items-center w-full h-48 bg-sky-50">
         <div className="bg-[#B7E0FF] w-11/12 flex flex-col md:flex-row justify-between items-center py-3 mt-4">
           <div className="ml-4 md:ml-14 flex items-center">
             <a href="#">

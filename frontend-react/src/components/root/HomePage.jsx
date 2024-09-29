@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import MyComponent from "./Homepage/body/MyComponent";
-import Footer from "./Homepage/footer/Footer";
-import Header from "./Homepage/header/Header";
+import BoxAnnounce from "./Homepage/body/BoxAnnounce";
+import Footer from "./fragments/footer/Footer";
+import Header from "./fragments/header/Header";
 import ScrollToTopButton from "./fragments/ScrollToTopButton";
 import Preloader from "./fragments/Preloader"; // Import Preloader
 
@@ -39,7 +39,7 @@ export default function HomePage() {
       </div>
 
       {/* Announcement Section */}
-      <MyComponent />
+      <BoxAnnounce />
 
       {/* Footer Section */}
       <Footer />
