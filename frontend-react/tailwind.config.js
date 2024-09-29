@@ -12,6 +12,10 @@ export default {
         "text-gray-100": "var(--text-gray-100)",
         "text-gray-300": "var(--text-gray-300)",
       },
+      fontFamily: {
+        sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
+        // Bạn có thể thêm font chữ khác nếu muốn
+      },
     },
   },
   plugins: [],

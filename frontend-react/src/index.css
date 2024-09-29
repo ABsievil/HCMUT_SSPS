@@ -13,3 +13,7 @@
   --text-gray-100: rgba(244, 245, 247, 1);
   --text-gray-300: rgba(217, 219, 225, 1);
 }
+
+body {
+  @apply font-sans;
+}

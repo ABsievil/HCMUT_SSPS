@@ -160,7 +160,7 @@ select,
 optgroup,
 textarea {
 	color: #424646;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Inter', sans-serif;
 	font-weight:400;
 	font-size: 14px;
 	line-height: 24px;
@@ -168,9 +168,9 @@ textarea {
 h1, h2, h3, h4, h5, h6 {
 	font-weight: 700;
 	margin: 0;
+	font-family: 'Inter', sans-serif;
 }
 p {
-	color:#757575;
 	margin: 0;
 	line-height:24px;
 }
@@ -240,3 +240,34 @@ header{
 .slogan h1{
    color:#43B8FF;
 }
+
+.text-stroke-black {
+	-webkit-text-stroke: 2px black; 
+  }
+
+  .fixed {
+	position: fixed;
+	bottom: 20px; /* Đặt vị trí từ đáy trang */
+	right: 20px; /* Đặt vị trí từ bên phải */
+	z-index: 1000; /* Đảm bảo nút nằm trên tất cả các phần khác */
+  }
+  
+ 
+  /* styles.css hoặc file CSS tương ứng */
+
+@keyframes preloader-fx {
+	0% {
+	  transform: scale(0);
+	}
+	50% {
+	  transform: scale(1);
+	}
+	100% {
+	  transform: scale(0);
+	}
+  }
+  
+  .animate-preloader-fx {
+	animation: preloader-fx 1s infinite;
+  }
+  
