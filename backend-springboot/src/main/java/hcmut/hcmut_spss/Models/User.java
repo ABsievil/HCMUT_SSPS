@@ -1,5 +1,7 @@
 package hcmut.hcmut_spss.Models;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -19,15 +21,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "User_Account")
+@Table(name = "users")
 public class User {
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // private Long id;
+
+    // @Embedded
+    // private PersonalInformation information;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Embedded
-    private PersonalInformation information;
-
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
@@ -37,6 +40,35 @@ public class User {
     @Column(name = "email", nullable = false, unique = false)
     private String email;
 
+    @Column(name= "last_name")
+    private String last_name;
+
+    @Column(name= "middle_name")
+    private String middle_name;
+
+    @Column(name= "first_name")
+    private String first_name;
+
+    @Column(name= "date_of_birth")
+    private Date date;
+
+    @Column(name= "phone_number")
+    private String phone_number;
+
+    @Column(name= "role")
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(name= "student_id")
+    private String student_id;
+
+    @Column(name= "school_year")
+    private String school_year;
+
+    @Column(name= "faculty")
+    private String faculty;
+
+    @Column(name= "page_remain")
+    private Integer page_remain;
+
 }
