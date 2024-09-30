@@ -20,9 +20,9 @@ export default function Header() {
   }, []);
 
   return (
-    <div className={`sticky top-0 z-10 ${isSticky ? "header-transition" : "header-hidden"}`}>
-      <div className="flex justify-center items-center w-full h-48 bg-sky-50">
-        <div className="bg-[#B7E0FF] w-11/12 flex flex-col md:flex-row justify-between items-center py-3 mt-4">
+    <div className={`md:sticky top-0 z-10 ${isSticky ? 'shadow-lg bg-white' : 'bg-sky-50'}`}>
+      <div className="flex justify-center items-center w-full">
+        <div className={`bg-[#B7E0FF] w-11/12 flex flex-col md:flex-row justify-between items-center py-3 mb-4 mt-4 ${isSticky ? 'md:w-full md:mb-0 md:mt-0' : ''}`}>
           <div className="ml-4 md:ml-14 flex items-center">
             <a href="#">
               <img
@@ -35,10 +35,11 @@ export default function Header() {
               </h2>
             </a>
           </div>
-          <h1 className="text-sky-400 text-xl md:text-3xl font-black font-['Inter'] ml-12">
+          <h1 className="text-[#00697f] text-sm md:text-3xl font-black font-['Inter'] mx-4 mb-2 md:mt-0 md:ml-12">
             KHAI PHÓNG - TIÊN PHONG - SÁNG TẠO
           </h1>
-          <button className="bg-[#87CEEB] text-black px-6 py-2 mr-5 rounded-lg hover:bg-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-50 transition">
+          <button className="bg-[#87CEEB] text-black text-sm md:text-xl px-8 py-2 md:px-10 md:py-4 md:mr-5 rounded-xl hover:bg-sky-600 
+                 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-50 transition">
             Đăng nhập
           </button>
         </div>

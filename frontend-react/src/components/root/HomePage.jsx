@@ -25,18 +25,21 @@ export default function HomePage() {
       <Header />
 
       {/* Main Image Section */}
-      <div className="relative flex overflow-hidden flex-col pt-4 font-semibold bg-white">
+      <div className="relative flex overflow-hidden flex-col font-semibold bg-white">
         <img
           className="w-full h-full object-cover backdrop-blur-sm"
           src="src/images/slbktv-1.png"
           alt="Main"
         />
-        <div className="absolute top-[79px] shadow-lg p-6 ml-32">
-          <h2 className="text-[#B7E0FF] font-['Inter'] text-6xl font-black text-center leading-[72px] text-stroke-black">
+        <div className="absolute inset-0 flex justify-center items-center bg-black/15 ">
+          <h2 className=" text-2xl text-[#e0fffa]  font-['Inter'] md:text-6xl font-black text-center  
+                   text-stroke-black">
             Hệ thống máy in <br /> Trường Đại học Bách Khoa TP.Hồ Chí Minh
           </h2>
         </div>
       </div>
+
+
 
       {/* Announcement Section */}
       <BoxAnnounce />
