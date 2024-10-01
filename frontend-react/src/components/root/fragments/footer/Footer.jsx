@@ -1,12 +1,13 @@
 import React from "react";
 
+
 function Footer() {
   return (
     <footer className="flex flex-col w-full bg-white max-md:mt-10 max-md:max-w-full">
       {/* Main Content Section */}
       <div className="flex flex-wrap justify-around w-full py-8 bg-[#3A6D8C] text-white max-md:px-5 max-md:flex-col max-md:gap-10">
         {/* Technician Info */}
-        <div className="flex flex-col items-start max-md:w-full">
+        <div className="flex flex-col items-center md:items-start max-md:w-full">
           <h2 className="font-black font-[Inter] text-lg">Tổ kỹ thuật / Technician</h2>
           <p className="mt-4">
             Email :{" "}
@@ -20,7 +21,7 @@ function Footer() {
         </div>
 
         {/* Download App Section */}
-        <div className="flex flex-col items-start max-md:w-full">
+        <div className="flex flex-col items-center md:items-start max-md:w-full">
           <p className="font-bold text-lg">Tải ứng dụng</p>
           <div className="flex flex-col mt-4 gap-4">
             <img

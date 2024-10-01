@@ -4,6 +4,8 @@
 import React from "react";
 import Announcement from "./Announcement";
 
+
+
 function MyComponent() {
   const announcements = [
     {

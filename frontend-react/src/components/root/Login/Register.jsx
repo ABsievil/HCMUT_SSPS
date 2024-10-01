@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import "frontend-react/src/CSS/login.css";
-import "frontend-react/src/index.css";
+
 import HeaderMain from "../fragments/header/HeaderMain";
 import Footer from "../fragments/footer/Footer";
 const RegisterPage = () => {

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+
 export default function Header() {
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -20,17 +21,17 @@ export default function Header() {
   }, []);
 
   return (
-    <div className={`md:sticky top-0 z-10 ${isSticky ? 'shadow-lg bg-white' : 'bg-sky-50'}`}>
-      <div className="flex justify-center items-center w-full">
-        <div className={`bg-[#B7E0FF] w-11/12 flex flex-col md:flex-row justify-between items-center py-3 mb-4 mt-4 ${isSticky ? 'md:w-full md:mb-0 md:mt-0' : ''}`}>
+    <div className={`md:sticky top-0  z-10 ${isSticky ? 'shadow-lg bg-white' : 'bg-sky-50'}`}>
+      <div className="flex justify-center  items-center w-full">
+        <div className={`bg-[#B7E0FF] boder rounded-md md:rounded-none w-11/12 flex flex-col md:flex-row justify-between items-center py-3 mb-4 mt-4 ${isSticky ? 'md:w-full md:mb-0 md:mt-0' : ''}`}>
           <div className="ml-4 md:ml-14 flex items-center">
-            <a href="#">
+            <a href="#" className="no-underline">
               <img
                 className="w-16 h-16 md:w-20 md:h-20 object-cover backdrop-blur-sm"
                 src="src/images/hcmut-official-logo-1.png"
                 alt="HCMUT Official Logo"
               />
-              <h2 className="ml-2 md:ml-4 text-lg md:text-xl font-semibold">
+              <h2 className="ml-2 md:ml-4 text-lg md:text-xl font-semibold ">
                 SPSS
               </h2>
             </a>

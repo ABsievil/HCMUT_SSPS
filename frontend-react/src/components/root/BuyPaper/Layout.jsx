@@ -5,6 +5,7 @@ import React from "react";
 import HeaderMain from "../fragments/header/HeaderMain"
 import Sidebar from "../fragments/slidebar/Sidebar";
 import Footer from "../fragments/footer/Footer"
+
 function Layout({ children }) {
   return (
     <div className="flex overflow-hidden flex-col bg-white">

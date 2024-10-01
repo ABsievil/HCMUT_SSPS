@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import BoxAnnounce from "./Homepage/body/BoxAnnounce";
+import BoxAnnounce from "./Homepage/BoxAnnounce";
 import Footer from "./fragments/footer/Footer";
 import Header from "./fragments/header/Header";
 import ScrollToTopButton from "./fragments/ScrollToTopButton";
 import Preloader from "./fragments/Preloader"; // Import Preloader
+
 
 export default function HomePage() {
   const [loading, setLoading] = useState(true);

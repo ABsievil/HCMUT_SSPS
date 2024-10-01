@@ -1,5 +1,6 @@
 import React from "react";
 
+
 function Announcement({ image, title, author, date, content }) {
   return (
     <div className="flex flex-wrap gap-5 px-9 pt-5 pb-7 mt-9 bg-sky-200 max-md:px-5 max-md:mr-1">

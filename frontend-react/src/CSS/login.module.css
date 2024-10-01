@@ -6,13 +6,7 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: "Poppins", "san-serif";
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
+
 .logo {
   display: block;
   margin: 0 auto 20px;

@@ -4,6 +4,7 @@
 import React from "react";
 import Layout from "./BuyPaper/Layout";
 
+
 function PrintingPage() {
   return (
     <Layout>

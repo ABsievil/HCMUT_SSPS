@@ -1,8 +1,9 @@
 import React from "react";
 
+
 export default function HeaderMain() {
   return (
-    <div className="sticky top-0 z-10">
+    <div className="top-0 z-10">
       <div className="flex justify-center items-center w-full h-48 bg-sky-50">
         <div className="bg-[#B7E0FF] w-11/12 h-28 flex flex-col md:flex-row sm:h-40 justify-between items-center py-3 my-4 shadow-lg rounded-lg">
           <div className="ml-4 md:ml-14 flex items-center">

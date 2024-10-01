@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+
 const Preloader = () => {
     const [loading, setLoading] = useState(true);
     const [fadeOut, setFadeOut] = useState(false);
