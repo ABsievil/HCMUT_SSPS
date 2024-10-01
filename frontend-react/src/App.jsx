@@ -1,18 +1,16 @@
-// import { Routes, Route } from 'react-router-dom';
-// import Eshop from "../src/components/root/home/HomePage"
-// import Products from './components/root/products/Product';
-// import MyComponent from "./components/root/Homepage/body/MyComponent"
-import HomePage from "./components/root/HomePage"
-// import BuyPaper from "./components/root/BuyPaper"
+import { Routes, Route } from 'react-router-dom';
+import HomePage from "../src/components/root/HomePage"
+import PrintingSystem from "../src/components/root/PrintPage"
+import PrintingPage from "../src/components/root/BuyPaper"
+
 export default function App() {
   return (
     <div>
-      {/* <Routes>
-        <Route path="/" element={<Eshop />} />
-        <Route path="/products" element={<Products />} />
-      </Routes> */}
-      <HomePage></HomePage>
-      {/* <BuyPaper/> */}
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/print" element={<PrintingSystem />} />
+        <Route path="/buyPaper" element={<PrintingPage />} />
+      </Routes>
     </div>
   )
 }
