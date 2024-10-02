@@ -3,7 +3,7 @@ import HomePage from "../src/components/root/HomePage";
 import PrintingSystem from "../src/components/root/PrintPage";
 import PrintingPage from "../src/components/root/BuyPaper";
 import LoginPage from "../src/components/root/LoginPage";
-import RegisterPage from "./components/root/Login/Register";
+import RegisterPage from "../src/components/root/RegisterPage";
 export default function App() {
   return (
     <div>
