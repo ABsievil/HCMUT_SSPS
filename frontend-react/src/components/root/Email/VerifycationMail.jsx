@@ -26,7 +26,7 @@ function VerificationMail() {
             <a href="#" className="text-blue-700 hover:underline text-lg">Trở về</a>
             <div className="flex flex-col items-center">
               <span className="text-black text-lg">Tạo mật khẩu mới</span>
-              <span className="text-black text-lg">1/5</span>
+              <span className="text-black text-lg">1/3</span>
             </div>
           </div>
 
@@ -38,20 +38,20 @@ function VerificationMail() {
 
           <form onSubmit={handleSubmit} className="mb-6">
             {/* Email Input */}
-            <div className="flex items-center border border-gray-300 rounded-lg px-4 py-2 mb-4">
-              <img 
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Envelope_font_awesome.svg/1024px-Envelope_font_awesome.svg.png" 
-                alt="Email Icon" 
-                className="w-6 h-6 text-gray-700 mr-3"
-              />
-              <input 
-                id="emailInput" 
-                name="email" 
-                type="text" 
-                placeholder="Your email" 
-                required 
-                className="w-full focus:outline-none placeholder-gray-600 text-xl"
-              />
+            <div className="mb-4">
+              <label className="block mb-2 text-gray-700">Mật khẩu mới</label>
+              <div className="flex items-center rounded-md border border-gray-300 px-3 py-2">
+                <img 
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Envelope_font_awesome.svg/1024px-Envelope_font_awesome.svg.png" 
+                  alt="Icon" 
+                  className="w-6 h-6 text-gray-700 mr-2"
+                />
+                <input 
+                  type="password" 
+                  className="w-full px-2 py-1 focus:outline-none focus:border-blue-500"
+                  required 
+                />
+              </div>
             </div>
 
             <button 
