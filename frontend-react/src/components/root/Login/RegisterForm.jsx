@@ -19,8 +19,15 @@ function RegisForm() {
   };
 
   return (
-    <form className="flex flex-col max-w-full w-[495px]" onSubmit={handleSubmit}>
-      <a href="#" className="text-left text-blue-700 hover:underline text-lg">Trở về</a>
+    <form className="flex flex-col max-w-full w-[495px] p-6" onSubmit={handleSubmit}>
+      <div className="flex justify-between items-center mb-4">
+        <a href="/login" className="text-left text-blue-700 hover:underline text-lg">Trở về</a>
+        <div className="flex flex-col items-center">
+          <span className="text-black text-lg">Đăng ký</span>
+          <span className="text-black text-lg">1/2</span>
+        </div>
+      </div>
+
       <img 
         loading="lazy" 
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d7576939ba90f1483dc1b48490e69d0dc4888cc061d7e09535e09ea9924476c?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96" 
@@ -82,14 +89,14 @@ function RegisForm() {
           required 
           className="flex-auto rounded-md pl-2 py-2"
         />
-        <div className="absolute right-7 top-[35%] transform  cursor-pointer">
-            <img 
-              loading="lazy" 
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/735a7a2e8eb7d2e9e0457ba4b35ee642beb50ac75cfee040d5ebe13cdc0e8746?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96" 
-              alt="Show password" 
-              className="object-contain aspect-[1.04] w-[23px]" 
-            />
-          </div>
+        <div className="absolute right-7 top-[35%] transform cursor-pointer" onClick={togglePasswordVisibility}>
+          <img 
+            loading="lazy" 
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/735a7a2e8eb7d2e9e0457ba4b35ee642beb50ac75cfee040d5ebe13cdc0e8746?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96" 
+            alt="Show password" 
+            className="object-contain aspect-[1.04] w-[23px]" 
+          />
+        </div>
       </div>
 
       {/* Confirm Password Input */}
@@ -106,16 +113,16 @@ function RegisForm() {
           type={showConfirmPassword ? 'text' : 'password'} 
           placeholder="Nhập lại mật khẩu" 
           required 
-          className="flex-auto w-[375px] rounded-md pr-10 pl-4 py-3"
+          className="flex-auto rounded-md pl-2 py-2"
         />
-        <div className="absolute right-7 top-[35%] transform  cursor-pointer">
-            <img 
-              loading="lazy" 
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/735a7a2e8eb7d2e9e0457ba4b35ee642beb50ac75cfee040d5ebe13cdc0e8746?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96" 
-              alt="Show password" 
-              className="object-contain aspect-[1.04] w-[23px]" 
-            />
-          </div>
+        <div className="absolute right-7 top-[35%] transform cursor-pointer" onClick={toggleConfirmPasswordVisibility}>
+          <img 
+            loading="lazy" 
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/735a7a2e8eb7d2e9e0457ba4b35ee642beb50ac75cfee040d5ebe13cdc0e8746?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96" 
+            alt="Show password" 
+            className="object-contain aspect-[1.04] w-[23px]" 
+          />
+        </div>
       </div>
 
       <button 
@@ -126,7 +133,7 @@ function RegisForm() {
       </button>
 
       <p className="self-center mt-4 text-base">
-        Bạn đã có tài khoản? <a href="#" className="text-blue-700 underline">Login</a>
+        Bạn đã có tài khoản? <a href="/login" className="text-blue-700 underline">Login</a>
       </p>
     </form>
   );
