@@ -59,7 +59,7 @@ function RegisForm() {
       <div className="flex items-center px-4 py-3 mt-4 text-base font-medium bg-white rounded-xl border border-gray-300">
         <img 
           loading="lazy" 
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/0acec3f0c21c585b693aab238ddf1a6054cfa9ee7646ac7df643f1272897cf03?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96" 
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Envelope_font_awesome.svg/1024px-Envelope_font_awesome.svg.png"
           alt="icon" 
           className="object-contain shrink-0 w-6 h-6 mr-3" 
         />
