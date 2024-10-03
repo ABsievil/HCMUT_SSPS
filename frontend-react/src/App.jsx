@@ -8,6 +8,8 @@ import VerificationRegister from "./components/root/VerificationRegister";
 import VerificationMail from "./components/root/Email/VerifycationMail";
 import CheckCodeFromMail from "./components/root/Email/CheckCodeMail";
 import CreateNewPassword from "./components/root/Email/CreateNewPassword";
+import StudentPrintLog from "./components/root/StudentPrintLog";
+
 export default function App() {
   return (
     <div>
@@ -21,6 +23,8 @@ export default function App() {
         <Route path="/verifymail" element={<VerificationMail />} />
         <Route path="/codemail" element={<CheckCodeFromMail />} />
         <Route path="/newpassword" element={<CreateNewPassword />} />
+        <Route path="/printlog" element={<StudentPrintLog />} />
+
       </Routes>
     </div>
   );
