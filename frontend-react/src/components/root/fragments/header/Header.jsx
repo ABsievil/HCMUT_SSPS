@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 
 
 export default function Header() {
@@ -39,10 +40,12 @@ export default function Header() {
           <h1 className="text-[#00697f] text-sm md:text-3xl font-black font-['Inter'] mx-4 mb-2 md:mt-0 md:ml-12">
             KHAI PHÓNG - TIÊN PHONG - SÁNG TẠO
           </h1>
-          <button className="bg-[#87CEEB] text-black text-sm md:text-xl px-8 py-2 md:px-10 md:py-4 md:mr-5 rounded-xl hover:bg-sky-600 
+          <Link to="/login">
+            <div href="/login" className="bg-[#87CEEB] text-black text-sm md:text-xl px-8 py-2 md:px-10 md:py-4 md:mr-5 rounded-xl hover:bg-sky-600 
                  focus:outline-none focus:ring-2 focus:ring-sky-400 focus:ring-opacity-50 transition">
-            Đăng nhập
-          </button>
+              Đăng Nhập
+            </div>
+          </Link>
         </div>
       </div>
     </div>
