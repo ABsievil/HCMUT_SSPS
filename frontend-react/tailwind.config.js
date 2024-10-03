@@ -1,4 +1,13 @@
 /** @type {import('tailwindcss').Config} */
+
+const colors = {
+  themecolor1: '#B7E0FF',
+  themecolor2: '#3A6D8C',
+  themecolor3: '#2D5E82',
+  themecolor4: '#001F3F',
+};
+
+
 export default {
   content: [
     "./index.html",
@@ -6,12 +15,7 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        "default-white": "var(--default-white)",
-        "surface-overlay": "var(--surface-overlay)",
-        "text-gray-100": "var(--text-gray-100)",
-        "text-gray-300": "var(--text-gray-300)",
-      },
+      colors: colors,
       fontFamily: {
         sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
         // Bạn có thể thêm font chữ khác nếu muốn

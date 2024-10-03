@@ -13,7 +13,7 @@ const Table = () => {
     <div className="overflow-x-auto drop-shadow-lg">
       <table className="min-w-full bg-white">
         <thead>
-          <tr className="bg-purple-200">
+          <tr className="bg-themecolor1">
             <th className="px-6 py-3 text-left">ID máy in</th>
             <th className="px-6 py-3 text-left">MSSV</th>
             <th className="px-6 py-3 text-left">Ten tệp</th>
