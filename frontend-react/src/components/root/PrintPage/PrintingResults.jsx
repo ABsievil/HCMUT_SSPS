@@ -9,7 +9,7 @@ function PrintingResults() {
   ];
 
   return (
-    <section className="mt-16 max-md:mt-10 mb-12">
+    <section className="mt-16 max-md:mt-10 mb-12 mr-9">
       <h2 className="self-start mt-8 ml-7 text-xl font-semibold text-black max-md:ml-2.5">
         KẾT QUẢ XỬ LÝ
       </h2>
@@ -33,7 +33,7 @@ function PrintingResults() {
             <div className="w-1/4">{job.date}</div>
             <div className="w-[100px] flex justify-end"> {/* Thêm chiều rộng cố định cho nút */}
               {job.status !== "Đã in xong" && (
-                <button className="px-4 py-2 text-sm font-semibold text-white bg-red-500 rounded-lg">
+                <button className="px-4 py-2 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 rounded-lg">
                   Hủy
                 </button>
               )}

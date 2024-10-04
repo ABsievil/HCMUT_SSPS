@@ -3,18 +3,18 @@ import React from "react";
 
 function PrintingForm() {
   return (
-    <section className="flex flex-col mt-8 max-md:mt-10 max-md:max-w-full mx-20">
+    <section className="flex flex-col mt-20 max-md:mt-10 max-md:max-w-full mx-20">
       <div className="flex gap-52 max-md:flex-col"> {/* Tăng khoảng cách giữa hai bên */}
         {/* Phần chọn máy in và số bản in */}
-        <div className="flex flex-col w-6/12 max-md:w-full">
-          <img 
-            loading="lazy" 
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/c03e7cd16ef33d7f3d1a8b7b09546f4aeec9793f6296076ffc8be97a8c297571?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96" 
-            alt="Printer illustration" 
+        <div className="flex flex-col w-5/12 max-md:w-full">
+          <img
+            loading="lazy"
+            src="https://cdn.builder.io/api/v1/image/assets/TEMP/c03e7cd16ef33d7f3d1a8b7b09546f4aeec9793f6296076ffc8be97a8c297571?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
+            alt="Printer illustration"
             className="object-contain w-full h-auto max-md:mt-10"
           />
-          <div className="flex flex-col items-start mt-8 w-full">
-            <button className="px-6 py-4 text-base text-white rounded-lg bg-slate-600 w-full max-md:w-auto max-md:px-5">
+          <div className="flex flex-col items-center md:items-start mt-8 w-full">
+            <button className="px-6 py-4 text-base text-white rounded-lg bg-slate-600 hover:bg-slate-700  w-full max-md:w-auto max-md:px-5">
               Chọn máy in
             </button>
             <label htmlFor="printCopies" className="mt-6 text-xl text-black">
@@ -26,6 +26,17 @@ function PrintingForm() {
               className="w-full px-4 py-2 mt-4 text-xl border border-zinc-200 rounded-xl"
               defaultValue="100"
             />
+            <div className="flex mt-8">
+              <label htmlFor="paperSize" className="text-xl mr-6">
+                Khổ giấy
+              </label>
+              <select
+                id="paperSize"
+                className="px-3 py-0.5 text-xl bg-white border border-black rounded-xl"
+              >
+                <option>A4</option>
+              </select>
+            </div>
           </div>
         </div>
 
@@ -43,10 +54,10 @@ function PrintingForm() {
               <span>File.ex</span>
             </div>
           </div>
-          <button className="px-6 py-3 mt-6 text-xl text-white bg-slate-600 rounded-lg w-full max-md:px-5">
+          <button className="px-6 py-3 mt-6 text-xl text-white bg-slate-600 hover:bg-slate-700 rounded-lg w-full max-md:px-5">
             Tải tệp lên
           </button>
-          
+
           <label htmlFor="selectedPrinter" className="mt-6 text-xl text-black">
             Máy in đã chọn
           </label>
@@ -56,18 +67,6 @@ function PrintingForm() {
             className="w-full px-4 py-4 mt-4 text-xl border border-black rounded-xl"
             placeholder="ID máy in"
           />
-
-          <div className="flex flex-col mt-6">
-            <label htmlFor="paperSize" className="text-xl">
-              Khổ giấy
-            </label>
-            <select
-              id="paperSize"
-              className="px-4 py-3 mt-4 text-xl bg-white border border-black rounded-xl"
-            >
-              <option>A4</option>
-            </select>
-          </div>
 
           <label htmlFor="pagesToPrint" className="mt-6 text-xl text-black">
             Trang cần in
@@ -94,8 +93,8 @@ function PrintingForm() {
           </fieldset>
         </div>
       </div>
-      
-      <button className="self-center px-12 py-4 mt-12 text-base font-semibold text-white uppercase bg-blue-700 rounded-xl max-md:w-full">
+
+      <button className="self-center px-12 py-4 mt-16 text-base font-semibold text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-xl max-md:w-full">
         XÁC NHẬN
       </button>
     </section>

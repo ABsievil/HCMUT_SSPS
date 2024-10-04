@@ -10,7 +10,7 @@ function PrintingPage() {
     <Layout>
       <div className="flex flex-col mt-20 w-full max-md:mt-10 max-md:max-w-full">
         <div className="max-md:max-w-full">
-          <div className="flex gap-5 max-md:flex-col">
+          <div className="flex gap-5 max-md:flex-col ml-20px">
             <div className="flex flex-col w-[41%] max-md:ml-0 max-md:w-full">
               <div className="flex flex-col self-stretch my-auto w-full max-md:mt-10">
                 <div className="flex gap-5 w-2/3">
@@ -65,7 +65,7 @@ function PrintingPage() {
             </div>
           </div>
         </div>
-        <button className="flex flex-col justify-center self-center px-16 py-6 mb-10 mt-56 max-w-full text-sm font-semibold tracking-wide leading-6 text-center text-white uppercase bg-blue-700 rounded-3xl w-[210px] max-md:px-5 max-md:mt-10">
+        <button className="flex flex-col justify-center self-center px-12 py-4 mb-10 mt-36 max-w-full text-sm font-semibold tracking-wide leading-6 text-center text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-3xl w-[180px] max-md:px-5 max-md:mt-10">
           <div className="gap-2.5 self-stretch">XÁC NHẬN</div>
         </button>
       </div>

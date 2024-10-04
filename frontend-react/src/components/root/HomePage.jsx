@@ -1,26 +1,13 @@
 import React, { useState, useEffect } from "react";
-import BoxAnnounce from "./Homepage/BoxAnnounce";
 import Footer from "./fragments/footer/Footer";
 import Header from "./fragments/header/Header";
-import ScrollToTopButton from "./fragments/ScrollToTopButton";
-import Preloader from "./fragments/Preloader"; // Import Preloader
+import BoxAnnounce from './Homepage/BoxAnnounce'
+import ScrollToTopButton from "./fragments/scrollTop/ScrollToTopButton";
 
 
 export default function HomePage() {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // Giả lập thời gian tải hoặc thay thế bằng logic thực tế
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000); // 2 giây
-
-    return () => clearTimeout(timer); // Dọn dẹp timer
-  }, []);
-
   return (
     <div className="relative bg-white">
-      {loading && <Preloader />} {/* Hiển thị Preloader nếu đang tải */}
 
       {/* Header Section */}
       <Header />
