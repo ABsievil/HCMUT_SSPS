@@ -1,0 +1,20 @@
+--add printer --> ID, brand/manufacturer name, printer model, short description, and the location (campus name, building name, and room number)
+--enable printer --> state = true
+--disable printer --> state = false
+--edit printer location --> campus, bulding, room
+
+--information for printing --> choose attribute 1 function include: printer, page_size, number_page_of_file, number_side, number copy, file_type_accepted.
+--throw error when page_remain < total_pages_printing  --> check page_size (2 A4 = 1 A3...)
+
+--log printing for each student --> student ID, printer ID, file_name, time_start and time_end, total_pages for each page size.
+--log printing all student in -->period time(start, end), student, printer -->8 branch
+--student log --> period time + total pages printed
+
+--set default page every semester 
+---create Utility (semester, number_page_default, date, page_price) -->procedure apply this utility in date
+---edit file_type_accepted
+
+
+--buy A4-pages --> number_pages --> total payment
+
+--report auto create at the end of month, year
