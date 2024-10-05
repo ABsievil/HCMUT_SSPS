@@ -155,6 +155,19 @@ BEGIN
 END;
 $$;
 
+------------------
+-- Function returns accepted file for selected semester-- 
+CREATE OR REPLACE FUNCTION  file_of_semester(f_semester VARCHAR) 
+RETURNS TABLE (Accepted_file_types VARCHAR)
+LANGUAGE plpgsql
+AS $$
+BEGIN 
+	Return query
+	Select type_accepted from File_types_accepted where semester = f_semester; 
+END; $$; 
+
+select * from file_of_semester('232'); 
+------------------
 
 
 
