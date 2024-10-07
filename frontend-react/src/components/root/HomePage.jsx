@@ -22,7 +22,7 @@ export default function HomePage() {
         <div className="absolute inset-0 flex justify-center items-center bg-black/15 ">
           <h2 className=" text-2xl text-[#e0fffa]  font-['Inter'] md:text-6xl font-black text-center  
                    text-stroke-black">
-            Hệ thống máy in <br /> Trường Đại học Bách Khoa TP.Hồ Chí Minh
+            HỆ THỐNG MÁY IN <br /> TRƯỜNG ĐẠI HỌC BÁCH KHOA TP.HCM
           </h2>
         </div>
       </div>
