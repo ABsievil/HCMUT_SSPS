@@ -21,7 +21,7 @@ public class EmailController {
     @GetMapping("/sendEmail")
     public ResponseEntity<ResponseObject> sendEmailRequest(@RequestParam("toGmail") String gmail) {
         try {
-            emailSenderService.sendOTPEmail(gmail, "Authentication Code for SalesWebsite");
+            emailSenderService.sendOTPEmail(gmail, "Authentication Code for HCMUT_SPSS System");
             return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject("OK",  "Sent email Successfully", null));
         } catch (MessagingException e) {
