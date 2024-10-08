@@ -1,6 +1,6 @@
-package hcmut.hcmut_spss.config;
+package hcmut.hcmut_spss.PaymentConfig;
 
-import hcmut.hcmut_spss.config.VNPayUtil;
+import hcmut.hcmut_spss.PaymentConfig.VNPayUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

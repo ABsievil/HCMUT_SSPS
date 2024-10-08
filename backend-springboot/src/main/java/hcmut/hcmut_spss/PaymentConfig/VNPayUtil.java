@@ -1,4 +1,4 @@
-package hcmut.hcmut_spss.config;
+package hcmut.hcmut_spss.PaymentConfig;
 import jakarta.servlet.http.HttpServletRequest;
 
 import javax.crypto.Mac;
