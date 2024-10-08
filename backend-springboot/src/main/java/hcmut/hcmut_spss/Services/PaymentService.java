@@ -1,7 +1,7 @@
 package hcmut.hcmut_spss.Services;
 
-import hcmut.hcmut_spss.config.VNPAYConfig;
-import hcmut.hcmut_spss.config.VNPayUtil;
+import hcmut.hcmut_spss.PaymentConfig.VNPAYConfig;
+import hcmut.hcmut_spss.PaymentConfig.VNPayUtil;
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
