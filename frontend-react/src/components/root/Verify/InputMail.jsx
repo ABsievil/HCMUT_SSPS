@@ -1,13 +1,14 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
+import InputField from '../Login/InputField'; // Import the InputField component
 
 function VerificationMail() {
   const navigate = useNavigate(); // Khởi tạo navigate
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    // Xử lý logic thay đổi mật khẩu ở đây
-    console.log('Password reset form submitted');
+    // Xử lý logic gửi mã xác nhận ở đây
+    console.log('Verification email form submitted');
     
     // Điều hướng đến trang xác nhận mật khẩu mới
     navigate("/verify-newpass");
@@ -43,26 +44,19 @@ function VerificationMail() {
           </p>
 
           <form onSubmit={handleSubmit} className="mb-6">
-            {/* Email Input */}
-            <div className="mb-4">
-              <div className="flex items-center rounded-md border border-gray-300 py-2">
-                <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Envelope_font_awesome.svg/1024px-Envelope_font_awesome.svg.png" 
-                  alt="Icon" 
-                  className="w-6 h-6 text-gray-700 mr-2"
-                />
-                <input 
-                  type="email" // Giữ nguyên kiểu email
-                  className="w-full px-2 py-1 focus:outline-none focus:border-blue-500"
-                  placeholder='Email'
-                  required 
-                />
-              </div>
-            </div>
+            {/* Email Input using InputField */}
+            <InputField
+              id="emailInput"
+              name="email"
+              type="email"
+              placeholder="Email"
+              required
+              icon="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Envelope_font_awesome.svg/1024px-Envelope_font_awesome.svg.png" // Email icon
+            />
 
             <button 
               type="submit" 
-              className="w-full py-3 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition duration-300"
+              className="w-full py-3 mt-6 bg-blue-700 text-white rounded-md hover:bg-blue-800 transition duration-300"
             >
               Tiếp tục
             </button>
