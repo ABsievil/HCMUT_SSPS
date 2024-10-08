@@ -29,7 +29,7 @@ export default function App() {
         <Route path="/print" element={<PrintingSystem />} />
         <Route path="/buyPaper" element={<PrintingPage />} />
         <Route path="/printlog" element={<StudentPrintLog />} />
-        <Route path="/account-infor" element={<AccountInformation/>} />
+        <Route path="/account" element={<AccountInformation/>} />
       </Routes>
     </div>
   );
