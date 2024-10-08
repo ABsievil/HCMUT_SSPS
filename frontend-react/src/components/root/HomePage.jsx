@@ -20,7 +20,7 @@ export default function HomePage() {
           alt="Main"
         />
         <div className="absolute inset-0 flex justify-center items-center bg-black/15 ">
-          <h2 className=" text-2xl text-[#d9f5fc]  font-['Inter'] md:text-5xl font-black text-center  
+          <h2 className=" text-2xl text-[#e0fffa]  font-['Inter'] md:text-6xl font-black text-center  
                    text-stroke-black">
             HỆ THỐNG MÁY IN <br /> TRƯỜNG ĐẠI HỌC BÁCH KHOA TP.HCM
           </h2>

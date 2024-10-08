@@ -8,8 +8,8 @@ function RegisPage() {
     <div>
       <HeaderMain />
       <div className="flex overflow-hidden flex-col items-center bg-white">
-        <main className="flex flex-col justify-center items-center px-7 py-4 my-7 max-w-full bg-zinc-200 w-[650px] max-md:px-5 max-md:mt-10">
-          <RegisForm />
+        <main className="flex flex-col justify-center items-center p-10 my-20 max-w-full bg-zinc-200 w-[750px] max-md:px-5 max-md:mt-10">
+            <RegisForm />
         </main>
       </div>
       <Footer />
