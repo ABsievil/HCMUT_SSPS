@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <!-- Favicon -->
+	<link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="/css/login.css" />
+    <script src="/js/payment.js"></script>
+</head>
+<body>
+    <div class="payment">
+        <h1>Payment System</h1>
+        <form id="paymentForm">
+            <label for="paymentAmount">payment Amount:</label>
+            <input name="paymentAmount" id="paymentAmount" type="text" required/>
+            <br>
+            <label for="bank">Bank (rcm: NCB):</label>
+            <input name="bank" id="bank" type="bank" required/>
+            <br> <br>
+            <button type="submit" value="submit">Submit</button>
+
+            <div th:if="${param.error}" class="message">
+                Invalid paymentAmount and bank.
+            </div>
+        </form>
+    </div>
+
+    <a href="/home" class ="back">BACK!</a>
+</body>
+</html>

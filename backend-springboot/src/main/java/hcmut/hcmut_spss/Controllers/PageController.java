@@ -55,5 +55,9 @@ public class PageController {
             return "homePage";
         }
 
+        @GetMapping("/payment")
+        String paymentPage(){
+            return "payment";
+        }
     }
 }
