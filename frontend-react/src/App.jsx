@@ -10,6 +10,7 @@ import Verification from "./components/root/Verification";
 import VerificationMail from "./components/root/Email/VerifycationMail";
 import CreateNewPassword from "./components/root/Email/CreateNewPassword";
 import StudentPrintLog from "./components/root/StudentPrintLog";
+import AccountInformation from "./components/root/AccountInformation";
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/print" element={<PrintingSystem />} />
         <Route path="/buyPaper" element={<PrintingPage />} />
         <Route path="/printlog" element={<StudentPrintLog />} />
+        <Route path="/account-infor" element={<AccountInformation/>} />
       </Routes>
     </div>
   );
