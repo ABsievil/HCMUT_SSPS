@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom"; // Import useLocation
+import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation và useNavigate
 import SidebarItem from "./SidebarItem";
 
 const sidebarItems = [
@@ -37,6 +37,7 @@ const sidebarItems = [
 
 function Sidebar() {
   const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
+  const navigate = useNavigate(); // Khởi tạo useNavigate
   const [highlightedItem, setHighlightedItem] = useState(0); // Chọn item đầu tiên mặc định
 
   // Cập nhật highlightedItem dựa trên đường dẫn hiện tại
@@ -46,8 +47,13 @@ function Sidebar() {
     setHighlightedItem(currentIndex !== -1 ? currentIndex : 0); // Nếu không tìm thấy, mặc định về 0
   }, [location.pathname]); // Chạy effect khi đường dẫn thay đổi
 
+  const handleLogout = () => {
+    localStorage.removeItem("user"); // Xóa savedEmail
+    navigate("/login"); // Điều hướng về trang đăng nhập
+  };
+
   return (
-    <aside className="flex flex-col w-[20%] max-md:ml-0 max-md:w-full">
+    <aside className="flex flex-col w-[17%] max-md:ml-0 max-md:w-full">
       <div className="flex flex-col grow items-center px-1 pt-3.5 pb-80 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20 max-md:mt-10">
         <img
           loading="lazy"
@@ -64,7 +70,7 @@ function Sidebar() {
               text={item.text}
               isHighlighted={highlightedItem === index}
               link={item.link}
-              onClick={() => setHighlightedItem(index)} 
+              onClick={item.text === "Đăng xuất" ? handleLogout : () => setHighlightedItem(index)} // Gọi handleLogout khi bấm "Đăng xuất"
             />
           ))}
         </nav>

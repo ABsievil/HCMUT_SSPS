@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
 
 function Verification({ isNewPass = false }) {
   const navigate = useNavigate(); // Khởi tạo navigate
   const [otp, setOtp] = useState(Array(6).fill('')); // Mảng lưu mã OTP
+  const [email, setEmail] = useState(''); // Trạng thái lưu email
+
+  useEffect(() => {
+    // Lấy email từ localStorage khi thành phần được mount
+    const storedEmail = localStorage.getItem('user');
+    if (storedEmail) {
+      setEmail(storedEmail); // Cập nhật trạng thái email
+    }
+  }, []);
 
   const handleChange = (index, value) => {
     if (value.match(/^[0-9]$/) || value === '') { // Kiểm tra chỉ cho phép số từ 0-9
@@ -57,7 +66,7 @@ function Verification({ isNewPass = false }) {
           {/* Verification Form */}
           <h2 className="text-2xl font-semibold mb-4">Kiểm tra Mail của bạn</h2>
           <p className="text-gray-600 mb-6">
-            Chúng tôi đã gửi một mã gồm 6 số đến <span className="font-medium text-blue-700">username@gmail.com</span>. Hãy nhập đúng mã vào ô bên dưới.
+            Chúng tôi đã gửi một mã gồm 6 số đến <span className="font-medium text-blue-700">{email}</span>. Hãy nhập đúng mã vào ô bên dưới.
           </p>
 
           {/* OTP Input */}

@@ -6,15 +6,6 @@ const PersonalInfoForm = () => {
       <h2 className="text-2xl font-bold mb-4 justify-center flex">THÔNG TIN CÁ NHÂN</h2>
       <div className="grid grid-cols-2 gap-4 mb-4">
 
-        <div>
-          <label className="block text-gray-700">HỌ</label>
-          <div className="bg-gray-100 p-2 rounded">Peter</div>
-        </div>
-
-        <div>
-          <label className="block text-gray-700">TÊN</label>
-          <div className="bg-gray-100 p-2 rounded">Griffin</div>
-        </div>
 
         <div className="mb-4">
           <label className="block text-gray-700">MÃ SỐ SINH VIÊN</label>
@@ -31,11 +22,6 @@ const PersonalInfoForm = () => {
           <div className="bg-gray-100 p-2 rounded">100</div>
         </div>
 
-      </div>
-      <div className="flex justify-center">
-        <button className="w-1/3 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-            xác nhận
-        </button>
       </div>
     </div>
   );
