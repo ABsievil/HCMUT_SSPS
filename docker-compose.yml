@@ -1,0 +1,64 @@
+version: '3.8'
+services:
+  app:
+    image: 'hcmut_spss:0.0.1'
+    build:
+      context: ./backend-springboot
+      dockerfile: Dockerfile
+    container_name: hcmut_spss-app
+    ports:
+      - "8090:8090"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/SPSS_System
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1245
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SERVER_PORT=8090
+      - APP_URL=http://localhost:8090
+    networks:
+      - postgres-network
+    volumes:
+      - ./src/main/resources/static:/app/static
+          
+  frontend:
+    image: 'hcmut_spss-frontend:0.0.1' 
+    build:
+      context: ./frontend-react
+      dockerfile: Dockerfile
+    container_name: react-frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - app
+    environment:
+      - CHOKIDAR_USERPOLLING=true
+      - VITE_API_URL=http://localhost:8090
+    networks:
+      - postgres-network
+    volumes:
+      - ./frontend-react:/app
+      - /app/node_modules
+          
+  db:
+    image: 'hcmut_spss-postgres:latest'
+    container_name: hcmut_spss-postgres-container
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=SPSS_System
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1245
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+
+networks:
+  postgres-network:
+    driver: bridge
+
+volumes:
+  postgres-data:
