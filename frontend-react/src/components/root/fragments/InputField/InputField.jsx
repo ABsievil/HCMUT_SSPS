@@ -16,7 +16,7 @@ function InputField({
   onChange      // Nhận onChange từ props
 }) {
   return (
-    <div className="flex items-center px-4 py-2 mt-4 text-base font-medium bg-white rounded-xl border border-gray-300 relative">
+    <div className="flex items-center px-4 py-2 mt-4 w-full text-base font-medium bg-white rounded-xl border border-gray-300 relative">
       {icon && (
         <img
           loading="lazy"
