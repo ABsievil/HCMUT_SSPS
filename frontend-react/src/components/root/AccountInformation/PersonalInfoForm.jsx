@@ -22,6 +22,11 @@ const PersonalInfoForm = () => {
           <div className="bg-gray-100 p-2 rounded">100</div>
         </div>
 
+        <div className="mb-4">
+          <label className="block text-gray-700">TỔNG SỐ TRANG IN ĐÃ DÙNG</label>
+          <div className="bg-gray-100 p-2 rounded">240</div>
+        </div>
+
       </div>
     </div>
   );
