@@ -2,9 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx'
-import "frontend-react/src/CSS/style.module.css";
-import "frontend-react/src/CSS/login.module.css";
-import "frontend-react/src/index.css";
+import "./CSS/style.module.css";
+import "./CSS/login.module.css";
+import "./index.css";
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
