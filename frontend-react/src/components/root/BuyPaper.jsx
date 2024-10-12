@@ -9,7 +9,7 @@ function PrintingPage() {
 
   return (
     <Layout>
-      <div className="flex flex-col mt-20 w-full max-md:mt-10 max-md:max-w-full">
+      <div className="flex flex-col mt-20 w-full max-md:mt-10 max-md:max-w-full px-6">
         <div className="max-md:max-w-full">
           <div className="flex gap-5 max-md:flex-col ml-20px">
             <div className="flex flex-col w-[41%] max-md:ml-0 max-md:w-full">

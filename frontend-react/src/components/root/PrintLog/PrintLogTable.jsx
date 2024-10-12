@@ -1,7 +1,7 @@
 import React from 'react';
 import PrintLogFilter from './PrintLogFilter';
 
-const Table = () => {
+const Table = ({type}) => {
   const rows = [
     { id: 1234, name: 'congthuc.doc', startTime: '12:20', endTime: "12:59", date: '26/09/2024' },
     { id: 1234, name: 'congthuc.doc', startTime: '12:20', endTime: "12:59", date: '26/09/2024' },
@@ -12,13 +12,13 @@ const Table = () => {
   ];
 
   return (
-    <div className="pr-10 overflow-x-auto drop-shadow-lg">
-      
+    <div className="overflow-x-auto drop-shadow-lg mx-10 py-4">
+
       <h1 className="text-center text-xl font-bold mt-10 mb-5">
-        LỊCH SỬ IN CỦA BẠN
+        LỊCH SỬ IN CỦA {type === "student" ? "SINH VIÊN" : type === "admin" ? "HỆ THỐNG" : "BẠN"}
       </h1>
 
-      <PrintLogFilter/>
+      <PrintLogFilter type={type} />
 
       <table className="min-w-full bg-white mt-3">
         <thead>

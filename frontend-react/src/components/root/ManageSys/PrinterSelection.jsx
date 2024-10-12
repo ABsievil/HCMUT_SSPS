@@ -37,13 +37,13 @@ RadioButton.propTypes = {
 };
 
 const SectionTitle = React.memo(({ children }) => (
-    <h3 className="mt-6 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
+    <h3 className="mt-8 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
         {children}
     </h3>
 ));
 
 const Button = React.memo(({ children, className, ...props }) => (
-    <button 
+    <button
         className={`px-4 py-2 text-base text-center text-white bg-slate-600 rounded-full hover:bg-slate-700 transition-colors ${className}`}
         {...props}
     >
@@ -82,9 +82,9 @@ const PrinterSelection = () => {
 
     return (
         <div className="max-w-4xl mx-auto">
-            <SectionTitle>CHỌN MÁY IN</SectionTitle>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-24">
                 <div>
+                    <SectionTitle>CHỌN MÁY IN</SectionTitle>
                     <div className='flex gap-4'>
                         <Select id="printerId" options={printerOptions} className="flex-grow" />
                         <Button>Thêm máy in</Button>
@@ -93,12 +93,11 @@ const PrinterSelection = () => {
                         <RadioButton id="active" label="Đang hoạt động" name="printerStatus" />
                         <RadioButton id="inactive" label="Dừng hoạt động" name="printerStatus" />
                     </div>
-                    <SectionTitle>SỐ TRANG CUNG CẤP ĐỊNH KỲ</SectionTitle>
-                    <InputField
-                        id="periodicSupply"
-                        type="number"
-                        defaultValue="50"
-                    />
+                    <SectionTitle>LOẠI TỆP ĐƯỢC TẢI LÊN</SectionTitle>
+                    <div className="flex  items-center gap-4 mt-4 w-full">
+                        <Select id="fileType" options={fileTypeOptions} className="flex-grow py-2 border rounded" />
+                        <Button>Thêm loại tệp</Button>
+                    </div>
                 </div>
                 <div>
                     <SectionTitle>NGÀY CUNG CẤP ĐỊNH KỲ</SectionTitle>
@@ -108,12 +107,16 @@ const PrinterSelection = () => {
                         type="date"
                         defaultValue="2018-10-12"
                     />
+                    <SectionTitle>SỐ TRANG CUNG CẤP ĐỊNH KỲ</SectionTitle>
+                    <InputField
+                        id="periodicSupply"
+                        type="number"
+                        defaultValue="50"
+                        onInput={(e) => {
+                            e.target.value = Math.max(0, parseInt(e.target.value) || 0);
+                        }}
+                    />
                 </div>
-            </div>
-            <SectionTitle>LOẠI TỆP ĐƯỢC TẢI LÊN</SectionTitle>
-            <div className="flex flex-wrap items-center gap-4 mt-4">
-                <Select id="fileType" options={fileTypeOptions} className="flex-grow py-2 border rounded" />
-                <Button>Thêm loại tệp</Button>
             </div>
         </div>
     );

@@ -3,7 +3,7 @@ import PrinterSelection from './PrinterSelection';
 
 function SystemInfo() {
   return (
-    <section className="flex flex-col py-20 w-3/4 mx-auto rounded-md bg-slate-100 max-md:mt-10 max-md:max-w-full">
+    <section className="flex flex-col py-20 w-4/5 md:w-3/5 mx-auto rounded-md bg-slate-100 max-md:mt-10 max-md:max-w-full">
       <h2 className="self-center text-2xl font-black leading-tight text-center text-neutral-800">
         THÔNG TIN HỆ THỐNG
       </h2>

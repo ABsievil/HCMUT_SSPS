@@ -54,7 +54,7 @@ function Sidebar() {
 
   return (
     <aside className="flex flex-col w-[17%] max-md:ml-0 max-md:w-full">
-      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-80 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20 max-md:mt-10">
+      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-24 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20 ">
         <img
           loading="lazy"
           src="src/images/ellipse-1.png"

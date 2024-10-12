@@ -33,7 +33,7 @@ function PrintingForm() {
 
   return (
     <section className="flex flex-col mt-20 max-md:mt-10 max-md:max-w-full mx-8 lg:mx-20">
-      <div className="flex gap-10 lg:gap-20 max-md:flex-col max-w-[1024px] mx-auto">
+      <div className="flex gap-10 md:gap-32 max-md:flex-col max-w-[1024px] mx-auto">
         {/* Phần chọn máy in và số bản in */}
         <div className="flex flex-col w-full lg:w-5/12">
           <img
@@ -54,7 +54,7 @@ function PrintingForm() {
               Chọn máy in
             </button>
 
-            <div className="flex flex-col mt-8">
+            <div className="flex flex-col items-center md:items-start mt-8 w-full">
               <label htmlFor="filesToPrint" className="text-xl font-medium">
                 Tệp đang chọn
               </label>

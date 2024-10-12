@@ -6,7 +6,7 @@ import ChangePassword from './AccountInformation/ChangePassword';
 function AccountInformation() {
   return (
     <Layout>
-      <div className='flex flex-col gap-4 my-auto'>
+      <div className='flex flex-col gap-4 my-5'>
         <PersonalInfoForm />
         <ChangePassword />
       </div>
