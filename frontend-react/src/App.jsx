@@ -11,6 +11,7 @@ import InputMail from "./components/root/Verify/InputMail";
 import CreateNewPassword from "./components/root/CreateNewPassword";
 import StudentPrintLog from "./components/root/StudentPrintLog";
 import AccountInformation from "./components/root/AccountInformation";
+import ManageSystem from './components/root/ManageSystem'
 
 export default function App() {
   return (
@@ -26,10 +27,12 @@ export default function App() {
         <Route path="/verify-newpass" element={<Verification isNewPass={true} />} />
         <Route path="/newpassword" element={<CreateNewPassword />} />
 
+        <Route path="/account" element={<AccountInformation/>} />
         <Route path="/print" element={<PrintingSystem />} />
         <Route path="/buyPaper" element={<PrintingPage />} />
         <Route path="/printlog" element={<StudentPrintLog />} />
-        <Route path="/account" element={<AccountInformation/>} />
+        <Route path="/manage" element={<ManageSystem/>} />
+
       </Routes>
     </div>
   );

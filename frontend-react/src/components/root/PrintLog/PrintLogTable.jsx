@@ -14,13 +14,13 @@ const Table = () => {
   return (
     <div className="pr-10 overflow-x-auto drop-shadow-lg">
       
-      <h1 className="text-center text-xl font-bold my-5">
+      <h1 className="text-center text-xl font-bold mt-10 mb-5">
         LỊCH SỬ IN CỦA BẠN
       </h1>
 
       <PrintLogFilter/>
 
-      <table className="min-w-full bg-white">
+      <table className="min-w-full bg-white mt-3">
         <thead>
           <tr className="bg-themecolor1">
             <th className="px-6 py-3 text-left">ID máy in</th>
