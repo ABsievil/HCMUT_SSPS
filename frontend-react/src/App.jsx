@@ -10,8 +10,11 @@ import Verification from "./components/root/Verify/Verification";
 import InputMail from "./components/root/Verify/InputMail";
 import CreateNewPassword from "./components/root/CreateNewPassword";
 import StudentPrintLog from "./components/root/StudentPrintLog";
+import AdminPrintLog from './components/root/AdminPrintLog';
 import AccountInformation from "./components/root/AccountInformation";
 import ProtectedRoute from "./components/root/Login/ProtectedRouter";
+import ManageSystem from './components/root/ManageSystem'
+
 
 export default function App() {
   return (
@@ -57,6 +60,22 @@ export default function App() {
           element={
             <ProtectedRoute>
               <AccountInformation />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/adminprintlog" 
+          element={
+            <ProtectedRoute>
+              <AdminPrintLog />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/manage" 
+          element={
+            <ProtectedRoute>
+              <ManageSystem/>
             </ProtectedRoute>
           } 
         />

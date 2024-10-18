@@ -2,13 +2,13 @@ import React from 'react';
 import Layout from "./fragments/layout/Layout";
 import Table from './PrintLog/PrintLogTable';
 
-function StudentPrintLog()
-{
-    return(
+function AdminPrintLog() {
+    return (
         <Layout>
-            <Table></Table>
+            <Table type="student" />
+            <Table type="admin" />
         </Layout>
-    )
+    );
 }
 
-export default StudentPrintLog;
+export default AdminPrintLog;

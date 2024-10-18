@@ -3,11 +3,11 @@ import React from "react";
 export default function HeaderMain() {
   return (
     <div className="top-0 z-10">
-        <div className="bg-[#B7E0FF] w-full h-20 flex flex-col md:flex-row md:h-24 justify-between items-center py-1 shadow-lg ">
+        <div className="bg-[#B7E0FF] w-full h-24 flex flex-col md:flex-row justify-between items-center py-3 shadow-lg ">
         <div className="ml-2 md:ml-10 flex items-center">
             <a href="/" className="no-underline flex items-center">
               <img
-                className="w- h-12 md:w-16 md:h-16 object-cover backdrop-blur-sm"
+                className="h-12 md:w-16 md:h-16 object-cover backdrop-blur-sm"
                 src="src/images/hcmut-official-logo-1.png"
                 alt="HCMUT Official Logo"
               />

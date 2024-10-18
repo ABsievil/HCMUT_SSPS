@@ -25,8 +25,8 @@ const sidebarItems = [
   },
   {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/73dd0575c4ff34141b69921c28e0c0be6cbe1dbfebcfbe5828db94ee29ff575b?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
-    text: "Cài đăt hệ thống",
-    link: "/settings"
+    text: "Cài đặt hệ thống",
+    link: "/manage"
   },
   {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9e6254714a807272e104cd11bfb80c4546f8c63032d7d5999b464192ba5220d9?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
@@ -54,7 +54,7 @@ function Sidebar() {
 
   return (
     <aside className="flex flex-col w-[17%] max-md:ml-0 max-md:w-full">
-      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-80 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20 max-md:mt-10">
+      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-24 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20 ">
         <img
           loading="lazy"
           src="src/images/ellipse-1.png"

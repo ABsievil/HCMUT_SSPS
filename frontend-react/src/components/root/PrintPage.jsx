@@ -11,7 +11,7 @@ function PrintingSystem() {
       <HeaderMain />
       <main className="flex gap-5 w-full max-md:flex-col max-md:max-w-full">
         <Sidebar />
-        <div className="flex flex-col ml-6 max-md:ml-12 max-md:w-full w-full">
+        <div className="flex flex-col  max-md:w-full w-full px-6">
           <PrintingForm />
           <PrintingResults />
         </div>
