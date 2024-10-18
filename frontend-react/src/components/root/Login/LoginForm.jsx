@@ -14,7 +14,7 @@ function LoginForm() {
     if (savedUser) {
       const { email: savedEmail, password: savedPassword } = JSON.parse(savedUser);
       if (savedEmail && savedPassword !== "") {
-        setEmail(savedEmail); 
+        setEmail(savedEmail);
         // Automatically navigate to "/print" if there is a saved email
         navigate("/print");
       }
@@ -52,11 +52,11 @@ function LoginForm() {
       <InputField
         id="emailInput"
         name="email"
-        type="text"
+        type="text" 
         placeholder="Email/MSSV"
         required
-        value={email} // Bind the input to the email state
-        onChange={(e) => setEmail(e.target.value)} // Update email state
+        value={email} 
+        onChange={(e) => setEmail(e.target.value)} 
         icon="https://cdn.builder.io/api/v1/image/assets/TEMP/0acec3f0c21c585b693aab238ddf1a6054cfa9ee7646ac7df643f1272897cf03?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
       />
 
@@ -67,8 +67,8 @@ function LoginForm() {
         type={showPassword ? "text" : "password"}
         placeholder="Mật khẩu"
         required
-        value={password} 
-        onChange={(e) => setPassword(e.target.value)} 
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         icon="https://cdn.builder.io/api/v1/image/assets/TEMP/26d9c5399a667e190537f967c908e5b53fea2716a5b94db02389112e242bc353?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
         showPasswordToggle
         showPassword={showPassword}
