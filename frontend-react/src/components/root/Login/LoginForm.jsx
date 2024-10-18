@@ -31,7 +31,46 @@ function LoginForm() {
     } else {
       localStorage.removeItem("user");
     }
-    navigate("/print");
+
+
+    // Call api set jwt token
+    const reqJson = {
+      username: email, // Using the email state as username
+      password: password, // Using the password state
+    };
+    
+    fetch(
+        `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/authenticate`,
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(reqJson),
+            credentials: 'include' // Đảm bảo rằng cookie được gửi kèm theo yêu cầu
+        }
+    )
+    .then(response => response.json())
+    .then(data => {
+        if(data.status=="OK"){
+            //redirectToNewPage("/home");
+            navigate('/print'); 
+        }
+        else if(data.status=="ERROR"){
+            navigate('/login?error=true'); 
+            console.error('Error:', error);
+        }
+    })
+    .catch(error => {
+        if (error instanceof AuthenticationException) {
+            navigate('/login?error=true'); 
+            console.error('Error:', error);
+        } 
+        else {
+            navigate('/login?error=true'); 
+            console.error('Error:', error);
+        }
+    });
   };
 
   const togglePasswordVisibility = () => {
