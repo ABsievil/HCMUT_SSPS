@@ -5,7 +5,7 @@ import Table from './PrintLog/PrintLogTable';
 function AdminPrintLog() {
     return (
         <Layout>
-            <Table type="student" />
+            <Table type="student-admin" />
             <Table type="admin" />
         </Layout>
     );

@@ -1,34 +1,45 @@
 import React, { useState, useEffect } from "react";
-import InputField from "../fragments/InputField/InputField"; // Import InputField component
+import InputField from "../fragments/InputField/InputField";
+import PrinterSelectionForm from "./PrinterSelectionForm";
 
 function PrintingForm() {
-  // Đặt số trang có sẵn là hằng số
-  var TOTAL_PAGES = 100; // Tổng số trang có sẵn
+  const TOTAL_PAGES = 100;
   const [remainingPages, setRemainingPages] = useState(TOTAL_PAGES);
   const [missingPages, setMissingPages] = useState(0);
   const [printCopies, setPrintCopies] = useState(1);
   const [pagesToPrint, setPagesToPrint] = useState(0);
+  const [selectedPrinter, setSelectedPrinter] = useState('');
+  const [showPrinterForm, setShowPrinterForm] = useState(false);
+  const [pagesPerSide, setPagesPerSide] = useState(1);
+  const [selectedFile, setSelectedFile] = useState(null); 
 
   useEffect(() => {
-    const calculatedMissingPages = pagesToPrint * printCopies - TOTAL_PAGES;
-    setMissingPages(calculatedMissingPages > 0 ? calculatedMissingPages : 0);
-  }, [pagesToPrint, printCopies]);
+    const totalPagesNeeded = (pagesToPrint * printCopies) / pagesPerSide;
+    setMissingPages(totalPagesNeeded > TOTAL_PAGES ? totalPagesNeeded - TOTAL_PAGES : 0);
+    setRemainingPages(TOTAL_PAGES - totalPagesNeeded >= 0 ? TOTAL_PAGES - totalPagesNeeded : 0);
+  }, [pagesToPrint, printCopies, pagesPerSide]);
 
   const handlePrintCopiesChange = (event) => {
-    const copies = Math.max(parseInt(event.target.value, 10) || 0, 0); // Đảm bảo số bản in không âm
+    const copies = Math.max(parseInt(event.target.value, 10) || 0, 0);
     setPrintCopies(copies);
   };
 
   const handlePagesToPrintChange = (event) => {
-    const pages = Math.max(parseInt(event.target.value, 10) || 0, 0); // Đảm bảo số trang không âm
+    const pages = Math.max(parseInt(event.target.value, 10) || 0, 0);
     setPagesToPrint(pages);
+  };
 
-    // Tính toán số trang còn lại
-    const totalPagesNeeded = pages * printCopies;
-    const newRemainingPages = TOTAL_PAGES - totalPagesNeeded;
+  const handleSelectPrinter = (printerId) => {
+    setSelectedPrinter(printerId);
+  };
 
-    // Cập nhật số trang còn lại
-    setRemainingPages(newRemainingPages >= 0 ? newRemainingPages : 0);
+  const handlePagesPerSideChange = (event) => {
+    setPagesPerSide(parseInt(event.target.value, 10));
+  };
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setSelectedFile(file);
   };
 
   return (
@@ -42,30 +53,46 @@ function PrintingForm() {
             alt="Printer illustration"
             className="object-contain w-4/5 h-auto max-md:mt-10 mx-auto"
           />
+
           <div className="flex flex-col items-center md:items-start mt-8 w-full">
             <label htmlFor="selectedPrinter" className="mt-6 text-xl font-medium text-black">
               Máy in đã chọn
             </label>
-            <div className="flex gap-4 w-full p-2 mt-2 bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500 cursor-not-allowed">
-              <span>2211185</span>
+            <div className="flex gap-4 w-full p-2 mt-2 bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500">
+              {selectedPrinter ? (
+                <span>{`${selectedPrinter.name} (ID: ${selectedPrinter.id}, Vị trí: ${selectedPrinter.location})`}</span>
+              ) : (
+                <span className="text-gray-500">Chưa chọn máy in</span>
+              )}
             </div>
 
-            <button className="px-6 py-4 mt-4 text-base font-semibold text-white rounded-lg bg-slate-600 hover:bg-slate-700 w-full max-md:px-5">
+            <button
+              className="px-6 py-4 mt-4 text-base font-semibold text-white rounded-lg bg-slate-600 hover:bg-slate-700 w-full max-md:px-5"
+              onClick={() => setShowPrinterForm(true)}
+            >
               Chọn máy in
             </button>
-
-            <div className="flex flex-col items-center md:items-start mt-8 w-full">
-              <label htmlFor="filesToPrint" className="text-xl font-medium">
-                Tệp đang chọn
-              </label>
-              <div className="flex gap-4 p-2 mt-2 w-full bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500 cursor-not-allowed">
-                <span>File.doc</span>
-              </div>
-            </div>
-            <button className="px-6 py-3 mt-6 text-base font-semibold text-white bg-slate-600 hover:bg-slate-700 rounded-lg w-full max-md:px-5">
-              Tải tệp lên
-            </button>
           </div>
+
+          <div className="flex flex-col items-center md:items-start mt-8 w-full">
+            <label htmlFor="fileUpload" className="text-xl font-medium">
+              Tệp đang chọn
+            </label>
+            <div className="flex gap-4 p-2 mt-2 w-full bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500">
+              {selectedFile ? (
+                <span>{selectedFile.name}</span>
+              ) : (
+                <span className="text-gray-500">Chưa chọn tệp</span>
+              )}
+            </div>
+          </div>
+          <input
+            type="file"
+            id="fileUpload"
+            className="mt-4"
+            onChange={handleFileChange}
+            accept=".doc,.docx,.pdf" 
+          />
         </div>
 
         {/* Phần thông tin in */}
@@ -133,11 +160,23 @@ function PrintingForm() {
             <legend className="text-xl font-medium text-black">Số trang mỗi mặt</legend>
             <div className="flex flex-col gap-4 mt-4 border border-gray-300 rounded-lg shadow-sm">
               <label className="flex items-center gap-2 p-3 bg-white rounded-t-lg">
-                <input type="radio" name="pagesPerSide" value="1" defaultChecked />
+                <input
+                  type="radio"
+                  name="pagesPerSide"
+                  value="1"
+                  checked={pagesPerSide === 1}
+                  onChange={handlePagesPerSideChange}
+                />
                 <span>1 trang</span>
               </label>
               <label className="flex items-center gap-2 p-3 bg-white rounded-b-lg">
-                <input type="radio" name="pagesPerSide" value="2" />
+                <input
+                  type="radio"
+                  name="pagesPerSide"
+                  value="2"
+                  checked={pagesPerSide === 2}
+                  onChange={handlePagesPerSideChange}
+                />
                 <span>2 trang</span>
               </label>
             </div>
@@ -148,6 +187,13 @@ function PrintingForm() {
       <button className="self-center px-12 py-4 mt-12 text-base font-semibold text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-xl max-md:w-full shadow-lg">
         XÁC NHẬN
       </button>
+
+      {showPrinterForm && (
+        <PrinterSelectionForm
+          onSelectPrinter={handleSelectPrinter}
+          onClose={() => setShowPrinterForm(false)}
+        />
+      )}
     </section>
   );
 }

@@ -50,9 +50,9 @@ function PrintingResults() {
           {/* Row for total pages and print button */}
           <tfoot className="bg-themecolor1 text-gray-900 font-semibold rounded-b-lg">
             <tr>
-              <td colSpan="3" className="px-5 py-3 text-left">Tổng số trang cần in:</td>
-              <td className="px-5 py-3 text-center">{totalPages}</td>
-              <td colSpan="2" className="px-5 py-3 text-right">
+              <td colSpan="2" className="px-5 py-3 text-left">Tổng số trang cần in:</td>
+              <td colSpan="1" className="px-5 py-3 text-center">{totalPages}</td>
+              <td colSpan="3" className="px-5 py-3 text-center">
                 <button className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
                   In ngay
                 </button>

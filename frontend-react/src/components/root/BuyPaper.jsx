@@ -67,7 +67,7 @@ function PrintingPage() {
           </div>
         </div>
 
-        <button className="flex flex-col justify-center self-center px-12 py-4 mt-10 max-w-full text-sm font-semibold tracking-wide leading-6 text-center text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-3xl w-[180px] max-md:px-5 max-md:mt-10">
+        <button className="flex flex-col justify-center self-center px-12 py-4 my-10 max-w-full text-sm font-semibold tracking-wide leading-6 text-center text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-3xl w-[180px] max-md:px-5 max-md:mt-10">
           <div className="gap-2.5 self-stretch">XÁC NHẬN</div>
         </button>
       </div>

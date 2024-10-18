@@ -39,7 +39,7 @@ function InputField({
         required={required}
         value={value}
         onChange={onChange}
-        className="flex-auto rounded-md pl-2 py-1 outline-none"
+        className="flex-auto rounded-md pl-3 py-1 outline-none"
         aria-label={placeholder || name}
       />
       {showPasswordToggle && (
