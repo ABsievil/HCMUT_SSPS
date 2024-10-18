@@ -34,15 +34,13 @@ function LoginForm() {
 
 
     // Call api set jwt token
-    const baseUrl = "http://localhost:8090";
-    
     const reqJson = {
       username: email, // Using the email state as username
       password: password, // Using the password state
     };
     
     fetch(
-        `${baseUrl}/api/authenticate`,
+        `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/authenticate`,
         {
             method: 'POST',
             headers: {
