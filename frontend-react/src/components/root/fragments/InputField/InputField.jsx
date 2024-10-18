@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 function InputField({ 
   id, 
   name, 
-  type, 
+  type = "text", 
   placeholder, 
-  required, 
+  required = false, 
   icon, 
-  showPasswordToggle, 
-  showPassword, 
-  onTogglePassword, 
+  showPasswordToggle = false, 
+  showPassword = false, 
+  onTogglePassword = () => {}, 
   value,        
   onChange      
 }) {
@@ -58,7 +58,7 @@ function InputField({
 
 InputField.propTypes = {
   id: PropTypes.string,
-  name: PropTypes.string.isRequired,
+  name: PropTypes.string,
   type: PropTypes.string,
   placeholder: PropTypes.string,
   required: PropTypes.bool,
@@ -66,16 +66,8 @@ InputField.propTypes = {
   showPasswordToggle: PropTypes.bool,
   showPassword: PropTypes.bool,
   onTogglePassword: PropTypes.func,
-  value: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
-
-InputField.defaultProps = {
-  type: "text",
-  required: false,
-  showPasswordToggle: false,
-  showPassword: false,
-  onTogglePassword: () => {},
+  value: PropTypes.string,
+  onChange: PropTypes.func,
 };
 
 export default InputField;

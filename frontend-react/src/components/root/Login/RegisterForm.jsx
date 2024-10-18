@@ -11,10 +11,6 @@ function RegisForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    
-    // Save the email to localStorage
-    localStorage.setItem("user", JSON.stringify({ email,password:""}));
-    
     navigate("/verify");
   };
 

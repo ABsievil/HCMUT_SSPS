@@ -90,7 +90,7 @@ function PrintingForm() {
                 <InputField
                   id="pagesToPrint"
                   type="number"
-                  value={pagesToPrint}
+                  value={pagesToPrint.toString()}
                   onChange={handlePagesToPrintChange}
                   placeholder="e.g. 20"
                 />
@@ -110,7 +110,7 @@ function PrintingForm() {
             <InputField
               id="printCopies"
               type="number"
-              value={printCopies}
+              value={printCopies.toString()}
               onChange={handlePrintCopiesChange}
               placeholder="Số bản in"
             />

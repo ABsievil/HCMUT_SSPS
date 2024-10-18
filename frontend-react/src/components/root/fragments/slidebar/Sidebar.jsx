@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; // Import useLocation và useNavigate
+import Cookies from 'js-cookie';
 import SidebarItem from "./SidebarItem";
 
 const sidebarItems = [
@@ -48,7 +49,7 @@ function Sidebar() {
   }, [location.pathname]); // Chạy effect khi đường dẫn thay đổi
 
   const handleLogout = () => {
-    localStorage.removeItem("user"); // Xóa savedEmail
+    Cookies.remove("jwt"); // Xóa savedEmail
     navigate("/login"); // Điều hướng về trang đăng nhập
   };
 
