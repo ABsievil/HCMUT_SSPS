@@ -76,7 +76,7 @@ public class AuthController {
 
               // Thiết lập cookie chứa JWT token
               Cookie cookie = new Cookie("jwt", token);
-              cookie.setHttpOnly(true); // Đảm bảo js ko truy cập được jwt, -> tăng tính bảo mật, giảm XSS
+            //   cookie.setHttpOnly(true); // Đảm bảo js ko truy cập được jwt, -> tăng tính bảo mật, giảm XSS
             //   cookie.setSecure(true); // Đảm bảo bạn đang sử dụng HTTPS
               cookie.setPath("/");
               cookie.setMaxAge(3600); // Thời gian tồn tại của cookie là 1 giờ
