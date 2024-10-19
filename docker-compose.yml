@@ -9,18 +9,16 @@ services:
     restart: always
     ports:
       - "8090:8090"
-    depends_on:
-      - db
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/SPSS_System
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=1245
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://hcmut-spss.postgres.database.azure.com:5432/postgres?user=lemonHV&password=mtv123@@&sslmode=require
+      - SPRING_DATASOURCE_USERNAME=lemonHV
+      - SPRING_DATASOURCE_PASSWORD=mtv123@@
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
       - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
       - SERVER_PORT=8090
       - APP_URL=http://localhost:8090
-    networks:
-      - postgres-network
     volumes:
       - ./src/main/resources/static:/app/static
           
@@ -37,30 +35,10 @@ services:
     environment:
       - CHOKIDAR_USERPOLLING=true
       - VITE_API_URL=http://localhost:8090
-    networks:
-      - postgres-network
     volumes:
       - ./frontend-react:/app
       - /app/node_modules
-          
-  db:
-    image: 'postgres:latest'
-    restart: always
-    container_name: hcmut_spss-postgres-container
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_DB=SPSS_System
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1245
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    networks:
-      - postgres-network
 
 networks:
-  postgres-network:
+  default:
     driver: bridge
-
-volumes:
-  postgres-data:
