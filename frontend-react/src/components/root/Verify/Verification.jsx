@@ -1,18 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
 
-function Verification({ isNewPass = false }) {
+function Verification({ isNewPass = false, email = '' }) { // Nhận email từ prop
   const navigate = useNavigate(); // Khởi tạo navigate
   const [otp, setOtp] = useState(Array(6).fill('')); // Mảng lưu mã OTP
-  const [email, setEmail] = useState(''); // Trạng thái lưu email
-
-  useEffect(() => {
-    // Lấy email từ localStorage khi thành phần được mount
-    const storedEmail = localStorage.getItem('user');
-    if (storedEmail) {
-      setEmail(storedEmail); // Cập nhật trạng thái email
-    }
-  }, []);
 
   const handleChange = (index, value) => {
     if (value.match(/^[0-9]$/) || value === '') { // Kiểm tra chỉ cho phép số từ 0-9

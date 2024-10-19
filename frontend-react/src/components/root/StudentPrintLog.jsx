@@ -6,7 +6,7 @@ function StudentPrintLog()
 {
     return(
         <Layout>
-            <Table></Table>
+            <Table type="student"/>
         </Layout>
     )
 }

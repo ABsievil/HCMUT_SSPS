@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import InputField from '../fragments/InputField/InputField'; // Import InputField
 
@@ -8,30 +8,8 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    // Retrieve the saved user from localStorage when the component mounts
-    const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      const { email: savedEmail, password: savedPassword } = JSON.parse(savedUser);
-      if (savedEmail && savedPassword !== "") {
-        setEmail(savedEmail);
-        // Automatically navigate to "/print" if there is a saved email
-        navigate("/print");
-      }
-    }
-  }, [navigate]); // Add navigate to the dependency array
-
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    // Save email and password to localStorage if "Remember Me" is checked
-    const rememberMe = event.target.rememberMe.checked;
-    if (rememberMe) {
-      localStorage.setItem("user", JSON.stringify({ email, password }));
-    } else {
-      localStorage.removeItem("user");
-    }
-
 
     // Call api set jwt token
     const reqJson = {
@@ -53,7 +31,6 @@ function LoginForm() {
     .then(response => response.json())
     .then(data => {
         if(data.status=="OK"){
-            //redirectToNewPage("/home");
             navigate('/print'); 
         }
         else if(data.status=="ERROR"){
@@ -115,15 +92,7 @@ function LoginForm() {
       />
 
       <div className="flex flex-col pl-2.5 mt-6 w-full">
-        <div className="flex gap-6 w-full">
-          <label className="flex flex-1 gap-2 text-sm text-zinc-500">
-            <input
-              type="checkbox"
-              name="rememberMe"
-              className="w-3 bg-white rounded border-2 border-gray-500"
-            />
-            Nhớ đăng nhập
-          </label>
+        <div className="flex gap-6 w-full justify-end">
           <a href="/verifymail" className="text-sm text-blue-700 font-bold">
             Quên mật khẩu?
           </a>

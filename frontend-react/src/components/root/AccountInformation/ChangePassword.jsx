@@ -65,8 +65,8 @@ function ChangePassword() {
       </div>
 
       <div className="flex justify-center">
-        <button className="w-1/3 bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600">
-          xác nhận
+        <button className="self-center px-12 py-4 text-base font-semibold text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-xl max-md:w-full shadow-lg">
+          XÁC NHẬN
         </button>
       </div>
     </div>

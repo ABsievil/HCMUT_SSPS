@@ -8,10 +8,7 @@ function VerificationMail() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
-  
-    // Lưu email và mật khẩu rỗng vào localStorage dưới dạng JSON
-    localStorage.setItem('user', JSON.stringify({ email, password: '' }));
-  
+    
     console.log('Verification email form submitted with email:', email);
     
     // Điều hướng đến trang xác nhận mật khẩu mới

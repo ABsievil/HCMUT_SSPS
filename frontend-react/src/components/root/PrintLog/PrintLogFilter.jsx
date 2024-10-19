@@ -14,7 +14,7 @@ const PrintLogFilter = ({ type }) => {
   return (
     <div className="p-4">
       <div className="flex justify-center items-center space-x-4">
-        {type === "student" && (
+        {type === "student-admin" && (
           <div className='flex flex-col'>
             <label htmlFor="MSSV" className="block text-sm font-medium text-gray-700">
               MSSV
