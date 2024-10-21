@@ -1,5 +1,7 @@
 HELP.md
 target/
+!target/hcmut_spss.jar
+!target/hcmut_spss.jar.original
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
