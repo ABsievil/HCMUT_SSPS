@@ -46,13 +46,23 @@ CREATE TABLE Printed_turn (
 	page_size VARCHAR(2),
 	number_side INT,
 	number_copy INT, 
-	number_pages_purchase INT DEFAULT 0,
 	PRIMARY KEY (username, printer_id, printing_date, time_start, time_end, file_name, file_type, number_pages_of_file, page_size, number_side, number_copy, number_pages_purchase),
 	FOREIGN KEY (username, printer_id) REFERENCES Printing(username, printer_id),
 	CONSTRAINT check_number_side CHECK (number_side > 0),
 	CONSTRAINT check_number_copy CHECK (number_copy > 0)
 );
 
+
+CREATE TABLE Purchase_transaction (
+	username VARCHAR(50),
+	transaction_id SERIAL,
+	purchase_pages INT NOT NULL,
+	purchase_date DATE,
+	purchase_time TIME,
+	PRIMARY KEY (username, transaction_id),
+	FOREIGN KEY (username) REFERENCES Users(username),
+	CONSTRAINT check_purchase_pages CHECK (purchase_pages > 0)
+);
 
 CREATE TABLE Utility (
 	semester VARCHAR(3) PRIMARY KEY,
