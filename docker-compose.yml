@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app:
-    image: 'hcmut_spss:0.0.1'
+    image: 'hcmut_spss:0.0.2'
     build:
       context: ./backend-springboot
       dockerfile: Dockerfile
@@ -10,7 +10,7 @@ services:
     ports:
       - "8090:8090"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://hcmut-spss.postgres.database.azure.com:5432/postgres?user=lemonHV&password=mtv123@@&sslmode=require
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://hcmut.postgres.database.azure.com:5432/SPSS?user=lemonHV&password=mtv123@@&sslmode=require
       - SPRING_DATASOURCE_USERNAME=lemonHV
       - SPRING_DATASOURCE_PASSWORD=mtv123@@
       - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
