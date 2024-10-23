@@ -30,8 +30,8 @@ CREATE TABLE Printing (
 	username VARCHAR(50),
 	printer_id INT,
 	PRIMARY KEY (username, printer_id),
-	FOREIGN KEY (username) REFERENCES Users(username),
-	FOREIGN KEY (printer_id) REFERENCES Printer(printer_id)
+	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE,
+	FOREIGN KEY (printer_id) REFERENCES Printer(printer_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Printed_turn (
@@ -46,8 +46,8 @@ CREATE TABLE Printed_turn (
 	page_size VARCHAR(2),
 	number_side INT,
 	number_copy INT, 
-	PRIMARY KEY (username, printer_id, printing_date, time_start, time_end, file_name, file_type, number_pages_of_file, page_size, number_side, number_copy, number_pages_purchase),
-	FOREIGN KEY (username, printer_id) REFERENCES Printing(username, printer_id),
+	PRIMARY KEY (username, printer_id, printing_date, time_start, time_end, file_name, file_type, number_pages_of_file, page_size, number_side, number_copy),
+	FOREIGN KEY (username, printer_id) REFERENCES Printing(username, printer_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT check_number_side CHECK (number_side > 0),
 	CONSTRAINT check_number_copy CHECK (number_copy > 0)
 );
@@ -60,7 +60,7 @@ CREATE TABLE Purchase_transaction (
 	purchase_date DATE,
 	purchase_time TIME,
 	PRIMARY KEY (username, transaction_id),
-	FOREIGN KEY (username) REFERENCES Users(username),
+	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT check_purchase_pages CHECK (purchase_pages > 0)
 );
 
@@ -75,5 +75,5 @@ CREATE TABLE File_types_accepted (
 	semester VARCHAR(3),
 	type_accepted VARCHAR(10),
 	PRIMARY KEY (semester, type_accepted),
-	FOREIGN KEY (semester) REFERENCES Utility(semester)
+	FOREIGN KEY (semester) REFERENCES Utility(semester) ON DELETE CASCADE ON UPDATE CASCADE
 );
