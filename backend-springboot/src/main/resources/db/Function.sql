@@ -3,14 +3,14 @@
 CREATE FUNCTION Printer_information()
 RETURNS TABLE (
 	printer_id INT,
-	branch_name VARCHAR,
+	brand_name VARCHAR,
 	printer_model VARCHAR,
 	description VARCHAR,
 	campus VARCHAR,
 	building VARCHAR,
 	room VARCHAR,
 	state BOOLEAN
-) 
+)
 LANGUAGE plpgsql
 AS $$
 BEGIN
@@ -22,60 +22,60 @@ SELECT printer_id, branch_name, campus, building, room FROM Printer_information(
 
 -------------NUMBER PAGE NEED TO BUY-------------
 
-CREATE FUNCTION Check_page_main (v_username VARCHAR, number_page_printing INT, page_size VARCHAR)  
-RETURNS INT
-LANGUAGE plpgsql
-AS $$
-DECLARE 
-    user_page INT := 0; -- số trang còn lại của user
-    printing_page INT := 0; -- số trang cần in
-    purchase_page INT := 0; -- số trang cần mua
-BEGIN
-    -- quy đổi số trang cần in = number_page_printing * type (A1 = 8, A2 = 4, A3 = 2, A4 = 1, A5 = 0.5)
-    IF page_size = 'A1' THEN
-        printing_page := number_page_printing * 8;
-    ELSIF page_size = 'A2' THEN
-        printing_page := number_page_printing * 4;
-    ELSIF page_size = 'A3' THEN
-        printing_page := number_page_printing * 2;
-    ELSIF page_size = 'A4' THEN
-        printing_page := number_page_printing * 1; -- Thêm điều kiện cho A4
-    ELSIF page_size = 'A5' THEN
-        printing_page := number_page_printing * 0.5;
-    ELSE
-        RAISE EXCEPTION 'Invalid page size: %', page_size; -- Xử lý trường hợp không hợp lệ
-    END IF;
+-- CREATE FUNCTION Check_page_main (v_username VARCHAR, number_page_printing INT, page_size VARCHAR)  
+-- RETURNS INT
+-- LANGUAGE plpgsql
+-- AS $$
+-- DECLARE 
+--     user_page INT := 0; -- số trang còn lại của user
+--     printing_page INT := 0; -- số trang cần in
+--     purchase_page INT := 0; -- số trang cần mua
+-- BEGIN
+--     -- quy đổi số trang cần in = number_page_printing * type (A1 = 8, A2 = 4, A3 = 2, A4 = 1, A5 = 0.5)
+--     IF page_size = 'A1' THEN
+--         printing_page := number_page_printing * 8;
+--     ELSIF page_size = 'A2' THEN
+--         printing_page := number_page_printing * 4;
+--     ELSIF page_size = 'A3' THEN
+--         printing_page := number_page_printing * 2;
+--     ELSIF page_size = 'A4' THEN
+--         printing_page := number_page_printing * 1; -- Thêm điều kiện cho A4
+--     ELSIF page_size = 'A5' THEN
+--         printing_page := number_page_printing * 0.5;
+--     ELSE
+--         RAISE EXCEPTION 'Invalid page size: %', page_size; -- Xử lý trường hợp không hợp lệ
+--     END IF;
 
-    -- lấy số trang còn lại của user
-    SELECT page_remain INTO user_page
-    FROM users 
-    WHERE username = v_username;
+--     -- lấy số trang còn lại của user
+--     SELECT page_remain INTO user_page
+--     FROM users 
+--     WHERE username = v_username;
 
-    IF user_page IS NULL THEN
-        RAISE EXCEPTION 'User not found: %', v_username; -- Kiểm tra nếu người dùng không tồn tại
-    END IF;
+--     IF user_page IS NULL THEN
+--         RAISE EXCEPTION 'User not found: %', v_username; -- Kiểm tra nếu người dùng không tồn tại
+--     END IF;
 
-    IF printing_page < user_page THEN
-        purchase_page := 0;
-        UPDATE users 
-        SET page_remain = user_page - printing_page
-        WHERE username = v_username;
-    ELSIF printing_page = user_page THEN
-        purchase_page := 0;
-        UPDATE users 
-        SET page_remain = 0
-        WHERE username = v_username;
-    ELSE
-        purchase_page := printing_page - user_page;
-        UPDATE users 
-        SET page_remain = 0
-        WHERE username = v_username;
-        RAISE NOTICE 'You must buy % page', purchase_page;
-    END IF;
+--     IF printing_page < user_page THEN
+--         purchase_page := 0;
+--         UPDATE users 
+--         SET page_remain = user_page - printing_page
+--         WHERE username = v_username;
+--     ELSIF printing_page = user_page THEN
+--         purchase_page := 0;
+--         UPDATE users 
+--         SET page_remain = 0
+--         WHERE username = v_username;
+--     ELSE
+--         purchase_page := printing_page - user_page;
+--         UPDATE users 
+--         SET page_remain = 0
+--         WHERE username = v_username;
+--         RAISE NOTICE 'You must buy % page', purchase_page;
+--     END IF;
 
-    RETURN purchase_page;
-END;
-$$;
+--     RETURN purchase_page;
+-- END;
+-- $$;
 
 -------------LOG OF PRINTING-------------
 
@@ -157,6 +157,7 @@ $$;
 
 ------------------
 -- Function returns accepted file for selected semester-- 
+-- Support for print page
 CREATE OR REPLACE FUNCTION  file_of_semester(f_semester VARCHAR) 
 RETURNS TABLE (Accepted_file_types VARCHAR)
 LANGUAGE plpgsql
