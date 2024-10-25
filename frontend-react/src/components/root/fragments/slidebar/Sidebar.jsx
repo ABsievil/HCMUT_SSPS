@@ -36,26 +36,42 @@ const sidebarItems = [
   },
 ];
 
-function Sidebar() {
-  const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
-  const navigate = useNavigate(); // Khởi tạo useNavigate
-  const [highlightedItem, setHighlightedItem] = useState(0); // Chọn item đầu tiên mặc định
+const Sidebar = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [highlightedItem, setHighlightedItem] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Cập nhật highlightedItem dựa trên đường dẫn hiện tại
   useEffect(() => {
     const currentPath = location.pathname;
     const currentIndex = sidebarItems.findIndex(item => item.link === currentPath);
-    setHighlightedItem(currentIndex !== -1 ? currentIndex : 0); // Nếu không tìm thấy, mặc định về 0
-  }, [location.pathname]); // Chạy effect khi đường dẫn thay đổi
+    setHighlightedItem(currentIndex !== -1 ? currentIndex : 0);
+  }, [location.pathname]);
+
+  const handleItemClick = (index, link) => {
+    if (highlightedItem === index) return;
+
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setHighlightedItem(index);
+      if (link === "/logout") {
+        handleLogout();
+      } else {
+        navigate(link);
+      }
+      setIsLoading(false);
+    }, 300); // 300ms delay for loading effect
+  };
 
   const handleLogout = () => {
-    Cookies.remove("jwt"); // Xóa savedEmail
-    navigate("/login"); // Điều hướng về trang đăng nhập
+    Cookies.remove("jwt");
+    navigate("/login");
   };
 
   return (
     <aside className="flex flex-col w-[17%] max-md:ml-0 max-md:w-full">
-      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-24 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20 ">
+      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-24 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20">
         <img
           loading="lazy"
           src="src/images/ellipse-1.png"
@@ -63,7 +79,7 @@ function Sidebar() {
           className="object-contain rounded-full aspect-square w-[70px]"
         />
         <div className="mt-1.5">User name</div>
-        <nav className="flex flex-col self-stretch mt-8 w-full">
+        <nav className={`flex flex-col self-stretch mt-8 w-full ${isLoading ? 'pointer-events-none opacity-50' : ''}`}>
           {sidebarItems.map((item, index) => (
             <SidebarItem
               key={index}
@@ -71,13 +87,13 @@ function Sidebar() {
               text={item.text}
               isHighlighted={highlightedItem === index}
               link={item.link}
-              onClick={item.text === "Đăng xuất" ? handleLogout : () => setHighlightedItem(index)} // Gọi handleLogout khi bấm "Đăng xuất"
+              onClick={() => handleItemClick(index, item.link)}
             />
           ))}
         </nav>
       </div>
     </aside>
   );
-}
+};
 
 export default Sidebar;

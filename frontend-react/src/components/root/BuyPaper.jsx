@@ -39,8 +39,8 @@ function PrintingPage() {
                   <InputField
                     type="number"
                     id="quantity"
-                    value={quantity}
-                    onChange={(e) => setQuantity(Math.max(0, e.target.value))}
+                    defaultValue={quantity}
+                    min={0}
                   />
                 </div>
 

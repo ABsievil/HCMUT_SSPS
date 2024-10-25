@@ -12,8 +12,10 @@ function InputField({
   showPasswordToggle = false, 
   showPassword = false, 
   onTogglePassword = () => {}, 
-  value,        
-  onChange      
+  value,
+  defaultValue,        
+  onChange,
+  min      
 }) {
   return (
     <div className="flex items-center px-4 py-2 mt-4 w-full text-base font-medium bg-white rounded-xl border border-gray-300 relative">
@@ -38,9 +40,11 @@ function InputField({
         placeholder={placeholder}
         required={required}
         value={value}
+        defaultValue={defaultValue}
         onChange={onChange}
         className="flex-auto rounded-md pl-3 py-1 outline-none"
         aria-label={placeholder || name}
+        min={min}
       />
       {showPasswordToggle && (
         <button 

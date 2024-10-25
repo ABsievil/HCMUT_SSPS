@@ -4,27 +4,25 @@
 import React from "react";
 import Announcement from "./Announcement";
 
-
-
 function MyComponent() {
   const announcements = [
     {
       image:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/dcedbf42f83034ba4155906249658680caebcfe759c53c305b0c5f66ad4fc9a4?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
-      title: "THÔNG BÁO VỀ VIỆC ĐỔI HỆ THỐNG BKeL",
+      title: "Máy in đã được thêm ở tòa H6-405",
       author: "Phòng Đào Tạo",
       date: "Thứ Tư, 3 tháng 1 2024, 3:12 PM",
       content:
-        'Kể từ ngày 03/01/2024, nhà trường sẽ thay thế hệ thống BKeL cũ ( <a href="https://e-learning.hcmut.edu.vn/" class="leading-4 text-black underline" target="_blank">e-learning.hcmut.edu.vn</a>) bằng hệ thống BKeL mới (<a href="https://lms.hcmut.edu.vn/" class="leading-4 text-black underline" target="_blank">lms.hcmut.edu.vn</a>). Các bạn sinh viên sử dụng hệ thống BKeL mới cho các môn học từ học kỳ 2 năm học 2023-2024 (HK232). Sinh viên vẫn xem được thông tin các học kỳ trước trên trang BKeL cũ. Sinh viên cần cập nhật địa chỉ <a href="https://lms.hcmut.edu.vn/" class="leading-4 text-black underline" target="_blank">lms.hcmut.edu.vn</a> hệ thống BKeL mới trên App Moodle để có thể sử dụng trên điện thoại.<br />Trân trọng.<br />Phòng Đào tạo.',
+        'Thông báo: Máy in đã được thêm ở tòa H6-405 để phục vụ các nhu cầu in ấn của sinh viên. Để biết thêm chi tiết, vui lòng liên hệ phòng đào tạo.',
     },
     {
       image:
         "https://cdn.builder.io/api/v1/image/assets/TEMP/dcedbf42f83034ba4155906249658680caebcfe759c53c305b0c5f66ad4fc9a4?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
-      title: "Thông báo về việc cài đặt Moodle Mobile :",
+      title: "Thông báo về việc cài đặt Moodle Mobile",
       author: "User Admin",
       date: "Thứ Sáu, 8 tháng 12 2023, 3:22 PM",
       content:
-        'Để thuận tiện trong việc theo dõi thông báo, tin nhắn trên BKeL cán bộ và sinh viên hãy cài đặt ứng dụng Moodle trên điện thoại di động theo hướng dẫn sau: - Bước 1 : Trên điện thoại mở ứng dụng CH Play (Android) hoặc App Store (Iphone), tìm từ khóa Moodle - Bước 2 : Sau khi cài đặt thành công, mở ứng dụng Moodle và nhập <a href="https://lms.hcmut.edu.vn/" class="leading-5 underline" target="_blank">https://lms.hcmut.edu.vn</a> vào phần Địa chỉ trang web và nhấn kết nối. - Bước 3 : Đăng nhập tài khoản trường để kết nối vào hệ thống BKeL trên ứng dụng Moodle của điện thoại..',
+        'Để thuận tiện trong việc theo dõi thông báo, tin nhắn trên BKeL cán bộ và sinh viên hãy cài đặt ứng dụng Moodle trên điện thoại di động theo hướng dẫn sau: - Bước 1 : Trên điện thoại mở ứng dụng CH Play (Android) hoặc App Store (Iphone), tìm từ khóa Moodle - Bước 2 : Sau khi cài đặt thành công, mở ứng dụng Moodle và nhập <a href="https://lms.hcmut.edu.vn/" class="leading-5 underline" target="_blank">https://lms.hcmut.edu.vn</a> vào phần Địa chỉ trang web và nhấn kết nối. - Bước 3 : Đăng nhập tài khoản trường để kết nối vào hệ thống BKeL trên ứng dụng Moodle của điện thoại.',
     },
   ];
 
