@@ -21,19 +21,19 @@ VALUES ('matruongvu', '$2a$10$TzDeitFt5kFI6nQgLPqJfelouc08AWJAr4tQZyr96X6nal7pw4
 	   ('truongvoky', '$2a$10$TzDeitFt5kFI6nQgLPqJfelouc08AWJAr4tQZyr96X6nal7pw4oBi', 'Truong', 'Vo', 'Ky', 'kytruong@hcmut.edu.vn', '2002-11-07', '0969431926', 'USER', '2011245', '5', 'Electric', 10),
 	   ('admin', '$2a$10$AsNfKKDEVY45NA6WTBX1gufLDnSadPxuA7RYcZ9PMu0nmxkV0GWOa', 'Hoang', 'Duoc', 'Su', 'adminprinting@gmail.com', '2001-04-01', '0927152562', 'ADMIN', null, null, null, null);
 
-INSERT INTO Printer
-VALUES (1, 'HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '105'),
-	   (2, 'Canon', 'imageCLASS MF445dw', 'May in phun, may in laser, may in anh', '02', 'H1', '105'),
-	   (3, 'HP', 'LaserJet Pro M404dn', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '106'),
-	   (4, 'Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H2', '202'),
-	   (5, 'HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H2', '202'),
-	   (6, 'Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H2', '202'),
-	   (7, 'Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H3', '104'),
-	   (8, 'Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
-	   (9, 'Brother', 'MFC-L2750DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
-	   (10, 'HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H6', '605'),
-	   (11, 'Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H6', '109'),
-	   (12, 'Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H6', '109');
+INSERT INTO Printer (brand_name, printer_model, description, campus, building, room)
+VALUES ('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '105'),
+	   ('Canon', 'imageCLASS MF445dw', 'May in phun, may in laser, may in anh', '02', 'H1', '105'),
+	   ('HP', 'LaserJet Pro M404dn', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '106'),
+	   ('Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H2', '202'),
+	   ('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H2', '202'),
+	   ('Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H2', '202'),
+	   ('Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H3', '104'),
+	   ('Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
+	   ('Brother', 'MFC-L2750DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
+	   ('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H6', '605'),
+	   ('Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H6', '109'),
+	   ('Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H6', '109');
 
 INSERT INTO Printing 
 VALUES ('matruongvu', 1),
