@@ -32,7 +32,7 @@ const SectionTitle = React.memo(({ children }) => (
 
 const Button = React.memo(({ children, className, ...props }) => (
     <button
-        className={`px-4 py-2 text-base text-white bg-slate-600 rounded-full hover:bg-slate-700 transition-colors ${className}`}
+        className={`px-4 py-3 text-base text-white bg-slate-600 rounded-full hover:bg-slate-700 transition-colors ${className}`}
         {...props}
     >
         {children}
@@ -42,7 +42,7 @@ const Button = React.memo(({ children, className, ...props }) => (
 const Select = React.memo(({ id, options, className, ...props }) => (
     <select
         id={id}
-        className={`border border-gray-300 rounded-md p-2 ${className}`}
+        className={`border border-gray-300 rounded-md p-1 ${className}`}
         {...props}
     >
         {options.map(option => (
@@ -53,7 +53,7 @@ const Select = React.memo(({ id, options, className, ...props }) => (
 
 const AddPrinter = () => {
     const [selectedPrinter, setSelectedPrinter] = useState(printerData[0]);
-    
+
     const printerOptions = printerData.map((printer) => ({
         value: printer.id,
         label: `${printer.name} - ${printer.location} (${printer.status})`
@@ -72,39 +72,39 @@ const AddPrinter = () => {
     };
 
     return (
-        <div className="w-10/12 mx-auto bg-white shadow-md rounded-lg p-6">
+        <div className="w-4/5 md:w-1/2 bg-white shadow-md rounded-lg p-6">
             <h2 className="text-2xl font-bold mb-4 text-center">Thêm máy in</h2>
-            <div className="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <SectionTitle>CHỌN MÁY IN</SectionTitle>
-                    <div className='flex gap-4'>
-                        <Select
-                            id="printerId"
-                            options={printerOptions}
-                            className="flex-grow"
-                            onChange={handlePrinterChange}
-                        />
-                        <Button>Thêm máy in</Button>
-                    </div>
-                    <div className="mt-4 space-y-2">
-                        <RadioButton
-                            id="active"
-                            label="Kích hoạt"
-                            name="printerStatus"
-                            checked={selectedPrinter?.status === 'Sẵn sàng'}
-                            onChange={() => handleStatusChange('Sẵn sàng')}
-                        />
-                        <RadioButton
-                            id="inactive"
-                            label="Dừng hoạt động"
-                            name="printerStatus"
-                            checked={selectedPrinter?.status === 'Đang bảo trì'}
-                            onChange={() => handleStatusChange('Đang bảo trì')}
-                        />
-                    </div>
+            <div>
+                <SectionTitle>CHỌN MÁY IN</SectionTitle>
+                <div className='flex gap-4 flex-wrap'>
+                    <Select
+                        id="printerId"
+                        options={printerOptions}
+                        onChange={handlePrinterChange}
+                        className="w-1/2"
+                    />
+                    <Button>Thêm máy in</Button>
+                </div>
+                <div className="mt-4 space-y-2">
+                    <RadioButton
+                        id="active"
+                        label="Kích hoạt"
+                        name="printerStatus"
+                        checked={selectedPrinter?.status === 'Sẵn sàng'}
+                        onChange={() => handleStatusChange('Sẵn sàng')}
+                    />
+                    <RadioButton
+                        id="inactive"
+                        label="Dừng hoạt động"
+                        name="printerStatus"
+                        checked={selectedPrinter?.status === 'Đang bảo trì'}
+                        onChange={() => handleStatusChange('Đang bảo trì')}
+                    />
                 </div>
             </div>
-            <Button className="mt-10 w-full max-md:px-5 max-md:mt-6">XÁC NHẬN</Button>
+            <div className="flex justify-center mt-10">
+                <Button className="w-1/3">XÁC NHẬN</Button>
+            </div>
         </div>
     );
 };

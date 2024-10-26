@@ -154,15 +154,15 @@ const Table = ({ type }) => {
 
       <PrintLogFilter type={type} />
 
-      <table className="min-w-full bg-white mt-3">
+      <table className="w-full md:w-4/5 bg-white mt-3 m-auto">
         <thead>
           <tr className="bg-themecolor1">
-            {type === 'admin' && <th className="px-6 py-3 text-left">MSSV</th>}
-            <th className="px-6 py-3 text-left">ID máy in</th>
-            <th className="px-6 py-3 text-left">Tên tệp</th>
-            <th className="px-6 py-3 text-left">Giờ bắt đầu</th>
-            <th className="px-6 py-3 text-left">Giờ kết thúc</th>
-            <th className="px-6 py-3 text-left">Ngày đăng ký</th>
+            {type === 'admin' && <th className="py-3 text-center">MSSV</th>}
+            <th className=" py-3 text-center">ID máy in</th>
+            <th className=" py-3 text-center">Tên tệp</th>
+            <th className=" py-3 text-center">Giờ bắt đầu</th>
+            <th className=" py-3 text-center">Giờ kết thúc</th>
+            <th className=" py-3 text-center">Ngày đăng ký</th>
           </tr>
         </thead>
         <tbody>
@@ -170,17 +170,17 @@ const Table = ({ type }) => {
             <tr 
               key={index} 
               className={`
-                ${index % 2 === 0 ? 'bg-white' : 'bg-purple-100'}
-                hover:bg-gray-100 cursor-pointer transition-colors duration-150
+                ${index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-purple-100 hover:bg-purple-200'}
+                 cursor-pointer transition-colors duration-150
               `}
               onClick={() => handleRowClick(row)}
             >
-              {type === 'admin' && <td className="px-6 py-4">{row.mssv}</td>}
-              <td className="px-6 py-4">{row.printerId}</td>
-              <td className="px-6 py-4">{row.name}</td>
-              <td className="px-6 py-4">{row.startTime}</td>
-              <td className="px-6 py-4">{row.endTime}</td>
-              <td className="px-6 py-4">{row.date}</td>
+              {type === 'admin' && <td className="py-4 text-center">{row.mssv}</td>}
+              <td className=" py-4 text-center">{row.printerId}</td>
+              <td className=" py-4 text-center">{row.name}</td>
+              <td className=" py-4 text-center">{row.startTime}</td>
+              <td className=" py-4 text-center">{row.endTime}</td>
+              <td className=" py-4 text-center">{row.date}</td>
             </tr>
           ))}
         </tbody>

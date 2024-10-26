@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 
-function PrintingResults() {
+function PrintingResults({ setPrintingData }) {
   const [checkedJobs, setCheckedJobs] = useState({});
 
   const printJobs = [
@@ -13,7 +13,10 @@ function PrintingResults() {
   const totalPages = printJobs.reduce((sum, job) => {
     return sum + (checkedJobs[job.id] ? parseInt(job.totalPage, 10) : 0);
   }, 0);
-
+  const handleUpdate = () => {
+    // Gọi setPrintingData để cập nhật state ở PrintingSystem
+    setPrintingData(totalPages);
+  };
   const handleCheckboxChange = (id) => {
     setCheckedJobs((prev) => ({
       ...prev,
@@ -49,10 +52,10 @@ function PrintingResults() {
                 <td className="px-5 py-3 text-center">{job.totalPage}</td>
                 <td className="px-5 py-3 text-center">{job.date}</td>
                 <td className="px-5 py-3 text-center">
-                  <input 
-                    type="checkbox" 
-                    checked={!!checkedJobs[job.id]} 
-                    onChange={() => handleCheckboxChange(job.id)} 
+                  <input
+                    type="checkbox"
+                    checked={!!checkedJobs[job.id]}
+                    onChange={() => handleCheckboxChange(job.id)}
                   />
                 </td>
                 <td className="px-5 py-3 text-center">
@@ -71,7 +74,8 @@ function PrintingResults() {
               <td className="px-5 py-3 text-center">{totalPages}</td>
               <td className="px-5 py-3 text-center"></td>
               <td className="px-5 py-3 text-center">
-                <button className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
+                <button className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+                  onClick={handleUpdate}>
                   In ngay
                 </button>
               </td>
