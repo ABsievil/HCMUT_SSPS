@@ -151,23 +151,23 @@ VALUES
 	   ('tranthuyduong', 12, '2024-09-23', '08:06:24', '08:07:55', 'de thi he dieu hanh', '.docx', 20, 'A4', 2, 3),
 	   ('truongvoky', 11, '2024-09-19', '12:06:24', '12:07:55', 'de thi vat li 1', '.docx', 20, 'A4', 2, 4);
 
-INSERT INTO Purchase_transaction 
-VALUES ('nguyenmanhhung', 1, 5, '2024-08-21', '09:32:21'),
-	   ('nguyencaocuong', 2, 15 '2024-05-21', '09:42:11'),
-	   ('huynhnga', 3, 6, '2024-05-10', '09:20:02'),
-	   ('huynhnga', 4, 10, '2024-05-12', '10:21:46'),
-	   ('honhattri', 5, 5, '2024-09-19', '14:49:33'),
-	   ('honhattri', 6, 19, '2024-09-24', '08:09:12'),
-	   ('honhattri', 7, 25, '2024-09-27', '18:09:14'),
-	   ('honhattri', 8, 5, '2024-09-27', '18:14:03'),
+INSERT INTO Purchase_transaction (username, purchase_pages, purchase_date, purchase_time) 
+	VALUES('nguyenmanhhung', 5, '2024-08-21', '09:32:21'),
+	   ('nguyencaocuong',15, '2024-05-21', '09:42:11'),
+	   ('huynhnga', 6, '2024-05-10', '09:20:02'),
+	   ('huynhnga',  10, '2024-05-12', '10:21:46'),
+	   ('honhattri', 5, '2024-09-19', '14:49:33'),
+	   ('honhattri', 19, '2024-09-24', '08:09:12's),
+	   ('honhattri', 25, '2024-09-27', '18:09:14'),
+	   ('honhattri', 5, '2024-09-27', '18:14:03'),
 
-	   ('nguyenphuonghang', 9, 6, '2024-09-21', '11:05:12'),
-	   ('nguyenphuonghang', 10, 6, '2024-09-25', '13:45:24'),
-	   ('nguyenphuonghang', 11, 10, '2024-09-25', '13:47:02'),
-	   ('nguyenphuonghang', 12, 9, '2024-09-26', '16:14:29'),
-	   ('nguyenphuonghang', 13, 10, '2024-09-26', '16:16:32'),
-	   ('nguyenphuonghang', 14, 5, '2024-08-21', '09:32:21'),
-	   ('nguyenphuonghang', 15, 5, '2024-08-21', '09:32:21');
+	   ('nguyenphuonghang', 6, '2024-09-21', '11:05:12'),
+	   ('nguyenphuonghang', 6, '2024-09-25', '13:45:24'),
+	   ('nguyenphuonghang', 10, '2024-09-25', '13:47:02'),
+	   ('nguyenphuonghang',  9, '2024-09-26', '16:14:29'),
+	   ('nguyenphuonghang', 10, '2024-09-26', '16:16:32'),
+	   ('nguyenphuonghang', 5, '2024-08-21', '09:32:21'),
+	   ('nguyenphuonghang', 5, '2024-08-21', '09:32:21');
 
 
 
