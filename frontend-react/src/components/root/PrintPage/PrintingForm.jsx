@@ -2,50 +2,70 @@ import React, { useState, useEffect } from "react";
 import InputField from "../fragments/InputField/InputField";
 import PrinterSelectionForm from "./PrinterSelectionForm";
 
+const TOTAL_PAGES = 100;
+const VALID_FILE_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+];
+
 function PrintingForm() {
-  const TOTAL_PAGES = 100;
-  const [remainingPages, setRemainingPages] = useState(TOTAL_PAGES);
-  const [missingPages, setMissingPages] = useState(0);
-  const [printCopies, setPrintCopies] = useState(1);
-  const [pagesToPrint, setPagesToPrint] = useState(0);
-  const [selectedPrinter, setSelectedPrinter] = useState('');
-  const [showPrinterForm, setShowPrinterForm] = useState(false);
-  const [pagesPerSide, setPagesPerSide] = useState(1);
-  const [selectedFile, setSelectedFile] = useState(null); 
+  const [formState, setFormState] = useState({
+    remainingPages: TOTAL_PAGES,
+    missingPages: 0,
+    printCopies: 1,
+    pagesToPrint: 0,
+    selectedPrinter: null,
+    showPrinterForm: false,
+    pagesPerSide: 1,
+    selectedFile: null,
+    paperSize: 'A4'
+  });
+
+  const calculateActualPages = (pages, copies, perSide) => {
+    if (pages <= 0 || copies <= 0) return 0;
+    return Math.ceil((pages * copies) / perSide);
+  };
 
   useEffect(() => {
-    const totalPagesNeeded = (pagesToPrint * printCopies) / pagesPerSide;
-    setMissingPages(totalPagesNeeded > TOTAL_PAGES ? totalPagesNeeded - TOTAL_PAGES : 0);
-    setRemainingPages(TOTAL_PAGES - totalPagesNeeded >= 0 ? TOTAL_PAGES - totalPagesNeeded : 0);
-  }, [pagesToPrint, printCopies, pagesPerSide]);
+    const actualPagesNeeded = calculateActualPages(formState.pagesToPrint, formState.printCopies, formState.pagesPerSide);
+    const missing = Math.max(actualPagesNeeded - TOTAL_PAGES, 0);
+    const remaining = Math.max(TOTAL_PAGES - actualPagesNeeded, 0);
 
-  const handlePrintCopiesChange = (event) => {
-    const copies = Math.max(parseInt(event.target.value, 10) || 0, 0);
-    setPrintCopies(copies);
+    setFormState(prev => ({
+      ...prev,
+      missingPages: missing,
+      remainingPages: remaining
+    }));
+  }, [formState.pagesToPrint, formState.printCopies, formState.pagesPerSide]);
+
+  const handleInputChange = (field, value) => {
+    const processedValue = ['printCopies', 'pagesToPrint'].includes(field)
+      ? Math.max(parseInt(value, 10) || 0, 0)
+      : value;
+
+    setFormState(prev => ({
+      ...prev,
+      [field]: processedValue
+    }));
   };
 
-  const handlePagesToPrintChange = (event) => {
-    const pages = Math.max(parseInt(event.target.value, 10) || 0, 0);
-    setPagesToPrint(pages);
-  };
-
-  const handleSelectPrinter = (printerId) => {
-    setSelectedPrinter(printerId);
-  };
-
-  const handlePagesPerSideChange = (event) => {
-    setPagesPerSide(parseInt(event.target.value, 10));
-  };
-
-  const handleFileChange = (event) => {
+  const handleFileUpload = (event) => {
     const file = event.target.files[0];
-    setSelectedFile(file);
+    if (file && VALID_FILE_TYPES.includes(file.type)) {
+      setFormState(prev => ({
+        ...prev,
+        selectedFile: file
+      }));
+      // TODO: Add logic to count pages in the file using PDF.js or similar.
+    } else {
+      alert('Chỉ chấp nhận file PDF hoặc Word (.doc, .docx)');
+    }
   };
 
   return (
     <section className="flex flex-col mt-20 max-md:mt-10 max-md:max-w-full mx-8 lg:mx-20">
       <div className="flex gap-10 md:gap-32 max-md:flex-col max-w-[1024px] mx-auto">
-        {/* Phần chọn máy in và số bản in */}
         <div className="flex flex-col w-full lg:w-5/12">
           <img
             loading="lazy"
@@ -53,145 +73,120 @@ function PrintingForm() {
             alt="Printer illustration"
             className="object-contain w-4/5 h-auto max-md:mt-10 mx-auto"
           />
-
           <div className="flex flex-col items-center md:items-start mt-8 w-full">
-            <label htmlFor="selectedPrinter" className="mt-6 text-xl font-medium text-black">
-              Máy in đã chọn
-            </label>
+            <label className="mt-6 text-xl font-medium text-black">Máy in đã chọn</label>
             <div className="flex gap-4 w-full p-2 mt-2 bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500">
-              {selectedPrinter ? (
-                <span>{`${selectedPrinter.name} (ID: ${selectedPrinter.id}, Vị trí: ${selectedPrinter.location})`}</span>
+              {formState.selectedPrinter ? (
+                <span>{`${formState.selectedPrinter.name} (ID: ${formState.selectedPrinter.id})`}</span>
               ) : (
                 <span className="text-gray-500">Chưa chọn máy in</span>
               )}
             </div>
-
             <button
-              className="px-6 py-4 mt-4 text-base font-semibold text-white rounded-lg bg-slate-600 hover:bg-slate-700 w-full max-md:px-5"
-              onClick={() => setShowPrinterForm(true)}
+              className="px-6 py-4 mt-4 text-base font-semibold text-white rounded-lg bg-slate-600 hover:bg-slate-700 w-full transition-colors duration-200"
+              onClick={() => handleInputChange('showPrinterForm', true)}
             >
               Chọn máy in
             </button>
           </div>
 
           <div className="flex flex-col items-center md:items-start mt-8 w-full">
-            <label htmlFor="fileUpload" className="text-xl font-medium">
-              Tệp đang chọn
-            </label>
+            <label htmlFor="fileUpload" className="text-xl font-medium">Tệp đang chọn</label>
             <div className="flex gap-4 p-2 mt-2 w-full bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500">
-              {selectedFile ? (
-                <span>{selectedFile.name}</span>
+              {formState.selectedFile ? (
+                <span>{formState.selectedFile.name}</span>
               ) : (
                 <span className="text-gray-500">Chưa chọn tệp</span>
               )}
             </div>
+            <input
+              type="file"
+              id="fileUpload"
+              className="mt-4 w-full"
+              onChange={handleFileUpload}
+              accept=".doc,.docx,.pdf"
+            />
           </div>
-          <input
-            type="file"
-            id="fileUpload"
-            className="mt-4"
-            onChange={handleFileChange}
-            accept=".doc,.docx,.pdf" 
-          />
         </div>
 
-        {/* Phần thông tin in */}
         <div className="flex flex-col w-full lg:w-6/12">
-          <h2 className="self-center text-2xl font-extrabold text-stone-900">
-            THÔNG TIN IN
-          </h2>
-
+          <h2 className="self-center text-2xl font-extrabold text-stone-900">THÔNG TIN IN</h2>
           <div className="flex gap-6 mt-8">
             <div className="mb-4">
               <label className="block text-gray-700 font-medium">SỐ TRANG IN CÓ SẴN</label>
-              <div className="bg-gray-100 p-2 rounded text-lg font-semibold text-center">{TOTAL_PAGES}</div>
-            </div>
-          </div>
-
-          <div className="flex w-full">
-            <div>
-              <label htmlFor="pagesToPrint" className="text-xl font-medium text-black">
-                Số trang cần in
-              </label>
-              <div className="flex items-center">
-                <InputField
-                  id="pagesToPrint"
-                  type="number"
-                  value={pagesToPrint.toString()}
-                  onChange={handlePagesToPrintChange}
-                  placeholder="e.g. 20"
-                />
+              <div className="bg-gray-100 p-2 rounded text-lg font-semibold text-center">
+                {TOTAL_PAGES}
               </div>
-              <h2
-                className={`text-red-600 text-lg max-h-0 ${missingPages > 0 && remainingPages === 0 ? '' : 'hidden'}`}
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <div>
+              <label className="text-xl font-medium text-black">Số trang cần in</label>
+              <InputField
+                type="number"
+                value={formState.pagesToPrint.toString()}
+                onChange={(e) => handleInputChange('pagesToPrint', e.target.value)}
+                placeholder="Nhập số trang cần in"
+                min="0"
+              />
+            </div>
+
+            <div>
+              <label className="text-xl font-medium text-black">Số bản in</label>
+              <InputField
+                type="number"
+                value={formState.printCopies.toString()}
+                onChange={(e) => handleInputChange('printCopies', e.target.value)}
+                placeholder="Nhập số bản in"
+                min="1"
+              />
+            </div>
+
+            <div className="flex items-center gap-4">
+              <label className="text-xl font-medium">Khổ giấy</label>
+              <select
+                value={formState.paperSize}
+                onChange={(e) => handleInputChange('paperSize', e.target.value)}
+                className="px-3 py-2 text-lg bg-white border border-gray-300 rounded-xl shadow-sm focus:ring focus:ring-slate-500"
               >
-                Bạn còn thiếu {missingPages} trang
-              </h2>
+                <option value="A4">A4</option>
+                <option value="A3">A3</option>
+              </select>
             </div>
-          </div>
 
-          <div className="flex mt-12 flex-wrap">
-            <label htmlFor="printCopies" className="mr-4 text-xl font-medium text-black">
-              Số bản in
-            </label>
-            <InputField
-              id="printCopies"
-              type="number"
-              value={printCopies.toString()}
-              onChange={handlePrintCopiesChange}
-              placeholder="Số bản in"
-            />
+            <fieldset className="mt-4">
+              <legend className="text-xl font-medium text-black">Số trang mỗi mặt</legend>
+              <div className="flex flex-col gap-2 mt-2 border border-gray-300 rounded-lg shadow-sm">
+                {[1, 2].map((value) => (
+                  <label key={value} className="flex items-center gap-2 p-3 bg-white hover:bg-gray-50">
+                    <input
+                      type="radio"
+                      name="pagesPerSide"
+                      value={value}
+                      checked={formState.pagesPerSide === value}
+                      onChange={(e) => handleInputChange('pagesPerSide', parseInt(e.target.value, 10))}
+                      className="text-blue-600 focus:ring-blue-500"
+                    />
+                    <span>{value} trang</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
           </div>
-
-          <div className="flex mt-8 items-center">
-            <label htmlFor="paperSize" className="text-xl mr-6 font-medium">
-              Khổ giấy
-            </label>
-            <select
-              id="paperSize"
-              className="px-3 py-0.5 text-xl bg-white border border-gray-300 rounded-xl shadow-sm focus:ring focus:ring-slate-500"
-            >
-              <option>A4</option>
-              <option>A3</option>
-            </select>
-          </div>
-
-          <fieldset className="mt-8">
-            <legend className="text-xl font-medium text-black">Số trang mỗi mặt</legend>
-            <div className="flex flex-col gap-4 mt-4 border border-gray-300 rounded-lg shadow-sm">
-              <label className="flex items-center gap-2 p-3 bg-white rounded-t-lg">
-                <input
-                  type="radio"
-                  name="pagesPerSide"
-                  value="1"
-                  checked={pagesPerSide === 1}
-                  onChange={handlePagesPerSideChange}
-                />
-                <span>1 trang</span>
-              </label>
-              <label className="flex items-center gap-2 p-3 bg-white rounded-b-lg">
-                <input
-                  type="radio"
-                  name="pagesPerSide"
-                  value="2"
-                  checked={pagesPerSide === 2}
-                  onChange={handlePagesPerSideChange}
-                />
-                <span>2 trang</span>
-              </label>
-            </div>
-          </fieldset>
         </div>
       </div>
 
-      <button className="self-center px-12 py-4 mt-12 text-base font-semibold text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-xl max-md:w-full shadow-lg">
+      <button
+        className="self-center px-12 py-4 mt-12 text-base font-semibold text-white uppercase rounded-xl max-md:w-full shadow-lg transition-colors duration-200 bg-blue-700 hover:bg-blue-800"
+      >
         XÁC NHẬN
       </button>
 
-      {showPrinterForm && (
+      {formState.showPrinterForm && (
         <PrinterSelectionForm
-          onSelectPrinter={handleSelectPrinter}
-          onClose={() => setShowPrinterForm(false)}
+          onSelectPrinter={(printer) => handleInputChange('selectedPrinter', printer)}
+          onClose={() => handleInputChange('showPrinterForm', false)}
         />
       )}
     </section>

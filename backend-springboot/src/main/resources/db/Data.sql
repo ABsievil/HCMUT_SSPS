@@ -21,19 +21,19 @@ VALUES ('matruongvu', '$2a$10$TzDeitFt5kFI6nQgLPqJfelouc08AWJAr4tQZyr96X6nal7pw4
 	   ('truongvoky', '$2a$10$TzDeitFt5kFI6nQgLPqJfelouc08AWJAr4tQZyr96X6nal7pw4oBi', 'Truong', 'Vo', 'Ky', 'kytruong@hcmut.edu.vn', '2002-11-07', '0969431926', 'USER', '2011245', '5', 'Electric', 10),
 	   ('admin', '$2a$10$AsNfKKDEVY45NA6WTBX1gufLDnSadPxuA7RYcZ9PMu0nmxkV0GWOa', 'Hoang', 'Duoc', 'Su', 'adminprinting@gmail.com', '2001-04-01', '0927152562', 'ADMIN', null, null, null, null);
 
-INSERT INTO Printer
-VALUES (1, 'HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '105'),
-	   (2, 'Canon', 'imageCLASS MF445dw', 'May in phun, may in laser, may in anh', '02', 'H1', '105'),
-	   (3, 'HP', 'LaserJet Pro M404dn', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '106'),
-	   (4, 'Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H2', '202'),
-	   (5, 'HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H2', '202'),
-	   (6, 'Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H2', '202'),
-	   (7, 'Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H3', '104'),
-	   (8, 'Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
-	   (9, 'Brother', 'MFC-L2750DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
-	   (10, 'HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H6', '605'),
-	   (11, 'Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H6', '109'),
-	   (12, 'Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H6', '109');
+INSERT INTO Printer (brand_name, printer_model, description, campus, building, room)
+VALUES ('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '105'),
+	   ('Canon', 'imageCLASS MF445dw', 'May in phun, may in laser, may in anh', '02', 'H1', '105'),
+	   ('HP', 'LaserJet Pro M404dn', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '106'),
+	   ('Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H2', '202'),
+	   ('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H2', '202'),
+	   ('Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H2', '202'),
+	   ('Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H3', '104'),
+	   ('Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
+	   ('Brother', 'MFC-L2750DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H3', '302'),
+	   ('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H6', '605'),
+	   ('Brother', 'MFC-J995DW', 'May in laser, may in phun, may in da chuc nang', '02', 'H6', '109'),
+	   ('Epson', 'WorkForce Pro WF-4740', 'May in phun, may in anh, may in chuyen dung cho nganh cong nghiep', '02', 'H6', '109');
 
 INSERT INTO Printing 
 VALUES ('matruongvu', 1),
@@ -151,23 +151,23 @@ VALUES
 	   ('tranthuyduong', 12, '2024-09-23', '08:06:24', '08:07:55', 'de thi he dieu hanh', '.docx', 20, 'A4', 2, 3, TRUE),
 	   ('truongvoky', 11, '2024-09-19', '12:06:24', '12:07:55', 'de thi vat li 1', '.docx', 20, 'A4', 2, 4, TRUE);
 
-INSERT INTO Purchase_transaction 
-VALUES ('nguyenmanhhung', 1, 5, '2024-08-21', '09:32:21'),
-	   ('nguyencaocuong', 2, 15 '2024-05-21', '09:42:11'),
-	   ('huynhnga', 3, 6, '2024-05-10', '09:20:02'),
-	   ('huynhnga', 4, 10, '2024-05-12', '10:21:46'),
-	   ('honhattri', 5, 5, '2024-09-19', '14:49:33'),
-	   ('honhattri', 6, 19, '2024-09-24', '08:09:12'),
-	   ('honhattri', 7, 25, '2024-09-27', '18:09:14'),
-	   ('honhattri', 8, 5, '2024-09-27', '18:14:03'),
+INSERT INTO Purchase_transaction (username, purchase_pages, purchase_date, purchase_time) 
+	VALUES('nguyenmanhhung', 5, '2024-08-21', '09:32:21'),
+	   ('nguyencaocuong',15, '2024-05-21', '09:42:11'),
+	   ('huynhnga', 6, '2024-05-10', '09:20:02'),
+	   ('huynhnga',  10, '2024-05-12', '10:21:46'),
+	   ('honhattri', 5, '2024-09-19', '14:49:33'),
+	   ('honhattri', 19, '2024-09-24', '08:09:12's),
+	   ('honhattri', 25, '2024-09-27', '18:09:14'),
+	   ('honhattri', 5, '2024-09-27', '18:14:03'),
 
-	   ('nguyenphuonghang', 9, 6, '2024-09-21', '11:05:12'),
-	   ('nguyenphuonghang', 10, 6, '2024-09-25', '13:45:24'),
-	   ('nguyenphuonghang', 11, 10, '2024-09-25', '13:47:02'),
-	   ('nguyenphuonghang', 12, 9, '2024-09-26', '16:14:29'),
-	   ('nguyenphuonghang', 13, 10, '2024-09-26', '16:16:32'),
-	   ('nguyenphuonghang', 14, 5, '2024-08-21', '09:32:21'),
-	   ('nguyenphuonghang', 15, 5, '2024-08-21', '09:32:21');
+	   ('nguyenphuonghang', 6, '2024-09-21', '11:05:12'),
+	   ('nguyenphuonghang', 6, '2024-09-25', '13:45:24'),
+	   ('nguyenphuonghang', 10, '2024-09-25', '13:47:02'),
+	   ('nguyenphuonghang',  9, '2024-09-26', '16:14:29'),
+	   ('nguyenphuonghang', 10, '2024-09-26', '16:16:32'),
+	   ('nguyenphuonghang', 5, '2024-08-21', '09:32:21'),
+	   ('nguyenphuonghang', 5, '2024-08-21', '09:32:21');
 
 
 

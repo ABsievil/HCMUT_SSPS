@@ -1,13 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 
 function PrintingResults() {
+  const [checkedJobs, setCheckedJobs] = useState({});
+
   const printJobs = [
     { id: "12345", fileName: "congthuc.doc", totalPage: "100", date: "26/09/2024 2:22" },
     { id: "12346", fileName: "baitap.pdf", totalPage: "100", date: "26/09/2024 3:15" },
     { id: "12347", fileName: "doan.docx", totalPage: "100", date: "26/09/2024 4:30" },
   ];
-  const totalPages = printJobs.reduce((sum, job) => sum + parseInt(job.totalPage, 10), 0);
+
+  const totalPages = printJobs.reduce((sum, job) => {
+    return sum + (checkedJobs[job.id] ? parseInt(job.totalPage, 10) : 0);
+  }, 0);
+
+  const handleCheckboxChange = (id) => {
+    setCheckedJobs((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   return (
     <section className="mt-16 max-md:mt-10 mb-12 mr-9">
@@ -28,8 +40,8 @@ function PrintingResults() {
           </thead>
           <tbody>
             {printJobs.map((job, index) => (
-              <tr 
-                key={index} 
+              <tr
+                key={index}
                 className={`${index % 2 === 0 ? 'bg-white' : 'bg-purple-100'}`}
               >
                 <td className="px-5 py-3 text-center">{job.id}</td>
@@ -37,7 +49,11 @@ function PrintingResults() {
                 <td className="px-5 py-3 text-center">{job.totalPage}</td>
                 <td className="px-5 py-3 text-center">{job.date}</td>
                 <td className="px-5 py-3 text-center">
-                  <input type="checkbox" />
+                  <input 
+                    type="checkbox" 
+                    checked={!!checkedJobs[job.id]} 
+                    onChange={() => handleCheckboxChange(job.id)} 
+                  />
                 </td>
                 <td className="px-5 py-3 text-center">
                   <button className="text-red-500 hover:text-red-700">
@@ -50,13 +66,16 @@ function PrintingResults() {
           {/* Row for total pages and print button */}
           <tfoot className="bg-themecolor1 text-gray-900 font-semibold rounded-b-lg">
             <tr>
-              <td colSpan="2" className="px-5 py-3 text-left">Tổng số trang cần in:</td>
-              <td colSpan="1" className="px-5 py-3 text-center">{totalPages}</td>
-              <td colSpan="3" className="px-5 py-3 text-center">
+              <td className="px-5 py-3 text-center">Tổng số trang đã chọn:</td>
+              <td className="px-5 py-3 truncate text-center"></td>
+              <td className="px-5 py-3 text-center">{totalPages}</td>
+              <td className="px-5 py-3 text-center"></td>
+              <td className="px-5 py-3 text-center">
                 <button className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg">
                   In ngay
                 </button>
               </td>
+              <td className="px-5 py-3 text-center"></td>
             </tr>
           </tfoot>
         </table>
