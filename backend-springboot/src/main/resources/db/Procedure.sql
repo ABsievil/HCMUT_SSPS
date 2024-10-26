@@ -48,7 +48,7 @@ begin
 	Raise notice 'Add utility success';
 end; $$;
 
-call add_utility('233',100,'2024-12-15',2500)
+-- call add_utility('233',100,'2024-12-15',2500)
 
 ---------- --------------
 -- Edit default file type -- 
@@ -60,7 +60,7 @@ Begin
 	 Raise notice 'Update file type success';
 End; $$; 
 
-call delete_file_type('232','.pdf')
+-- call delete_file_type('232','.pdf')
 
 CREATE OR REPLACE PROCEDURE insert_file_type(p_semester VARCHAR, p_type_accepted VARCHAR)
 LANGUAGE plpgsql
@@ -70,6 +70,6 @@ Begin
 	Raise notice 'Update file type success'; 
 End;$$; 
 
-call insert_file_type('232','.pdf')
+-- call insert_file_type('232','.pdf')
 
 ------------------
