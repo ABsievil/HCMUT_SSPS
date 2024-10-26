@@ -20,7 +20,7 @@ BEGIN
 END;
 $$;
 
-CALL enable_printer(10);
+-- CALL enable_printer(10);
 
 CREATE PROCEDURE Disable_printer(v_printer_id INT)
 LANGUAGE plpgsql
@@ -33,18 +33,7 @@ BEGIN
 END;
 $$;
 
-CALL disable_printer(10);
-
-CREATE PROCEDURE Change_location_printer(v_printer_id INT, v_campus VARCHAR, v_building VARCHAR, v_room VARCHAR)
-LANGUAGE plpgsql
-AS $$
-BEGIN
-	UPDATE Printer 
-	SET campus = v_campus, v_building = building, v_room = room
-	WHERE printer_id = v_printer_id;
-	RAISE NOTICE 'Location of printer was changed';
-END;
-$$;
+-- CALL disable_printer(10);
 
 -- Set default utility for every semester --  
 CREATE  OR REPLACE PROCEDURE add_utility(p_semester VARCHAR, p_default_pages INT, p_date_reset_default DATE, p_page_price INT)
