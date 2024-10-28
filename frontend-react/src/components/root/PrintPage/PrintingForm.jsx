@@ -127,6 +127,15 @@ function PrintingForm({ printingData }) {
     console.log(comparisonResult);
   }, [comparisonResult]);
 
+  // New handler for printer selection
+  const handlePrinterSelect = useCallback((printer) => {
+    setFormState(prev => ({
+      ...prev,
+      selectedPrinter: printer,
+      showPrinterForm: false
+    }));
+  }, []);
+
   // Memoized form sections
   const renderPrintingInfo = useMemo(() => (
     <div className="flex flex-col w-full lg:w-6/12">
@@ -228,7 +237,12 @@ function PrintingForm({ printingData }) {
         Xác nhận in
       </button>
       
-      {formState.showPrinterForm && <PrinterSelectionForm />}
+      {formState.showPrinterForm && (
+        <PrinterSelectionForm
+          onSelectPrinter={handlePrinterSelect}
+          onClose={() => handleInputChange('showPrinterForm', false)}
+        />
+      )}
     </section>
   );
 }
