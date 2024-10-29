@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Footer from "./fragments/footer/Footer";
 import Header from "./fragments/header/Header";
 import BoxAnnounce from './Homepage/BoxAnnounce'

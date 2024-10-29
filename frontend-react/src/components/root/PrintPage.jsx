@@ -15,9 +15,9 @@ function PrintingSystem() {
       <main className="flex gap-5 w-full max-md:flex-col max-md:max-w-full">
         <Sidebar />
         <div className="flex flex-col max-md:w-full w-full px-6">
-          {/* Truyền biến vào PrintingForm */}
+          
           <PrintingForm printingData={printingData} />
-          {/* Truyền hàm setPrintingData để cập nhật state từ PrintingResults */}
+         
           <PrintingResults setPrintingData={setPrintingData} />
         </div>
       </main>

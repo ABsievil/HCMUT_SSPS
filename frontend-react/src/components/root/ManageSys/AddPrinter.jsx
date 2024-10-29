@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
-
-// Mock printer data
-const printerData = [
-    { id: '1234', name: 'HP LaserJet Pro M404dn', location: 'Phòng H6-101', status: 'Sẵn sàng', type: 'Laser' },
-    { id: '1245', name: 'Epson WorkForce Pro WF-3720', location: 'Phòng H2-202', status: 'Đang bảo trì', type: 'Inkjet' },
-    { id: '3456', name: 'Brother HL-L2350DW', location: 'Phòng H3-303', status: 'Sẵn sàng', type: 'Canon' },
-    { id: '2234', name: 'HP LaserJet Pro M404dn', location: 'Phòng H1-101', status: 'Sẵn sàng', type: 'Laser' },
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { selectAvailablePrinters, updatePrinterStatus } from '../../../store/printersSlice';
 
 const RadioButton = React.memo(({ id, label, name, checked, onChange }) => (
     <div className="flex items-center p-2 rounded-lg">
@@ -52,24 +46,25 @@ const Select = React.memo(({ id, options, className, ...props }) => (
 ));
 
 const AddPrinter = () => {
-    const [selectedPrinter, setSelectedPrinter] = useState(printerData[0]);
+    const dispatch = useDispatch();
+    const availablePrinters = useSelector(selectAvailablePrinters);
+    
+    const [selectedPrinterId, setSelectedPrinterId] = useState(availablePrinters[0]?.id || '');
 
-    const printerOptions = printerData.map((printer) => ({
+    const printerOptions = availablePrinters.map((printer) => ({
         value: printer.id,
         label: `${printer.name} - ${printer.location} (${printer.status})`
     }));
 
     const handlePrinterChange = (event) => {
-        const selectedId = event.target.value;
-        const printer = printerData.find(p => p.id === selectedId);
-        setSelectedPrinter(printer || null);
+        setSelectedPrinterId(event.target.value);
     };
 
     const handleStatusChange = (status) => {
-        if (selectedPrinter) {
-            setSelectedPrinter({ ...selectedPrinter, status });
-        }
+        dispatch(updatePrinterStatus({ id: selectedPrinterId, status }));
     };
+
+    const selectedPrinter = availablePrinters.find(printer => printer.id === selectedPrinterId);
 
     return (
         <div className="w-4/5 md:w-1/2 bg-white shadow-md rounded-lg p-6">
@@ -80,6 +75,7 @@ const AddPrinter = () => {
                     <Select
                         id="printerId"
                         options={printerOptions}
+                        value={selectedPrinterId}
                         onChange={handlePrinterChange}
                         className="w-1/2"
                     />
