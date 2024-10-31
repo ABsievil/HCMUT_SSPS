@@ -29,7 +29,7 @@ function PrintingResults({ setPrintingData }) {
   };
 
   return (
-    <section className="mt-16 max-md:mt-10 mb-12 mr-9">
+    <section className="mt-6 max-md:mt-10 mb-12 mr-9">
       <h2 className="self-start ml-7 text-xl font-semibold text-black max-md:ml-2.5">
         KẾT QUẢ XỬ LÝ
       </h2>

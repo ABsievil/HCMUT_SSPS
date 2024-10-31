@@ -1,14 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo } from "react";
-import InputField from "../fragments/InputField/InputField";
-import PrinterSelectionForm from "./PrinterSelectionForm";
+import React, { useState, useEffect, useCallback } from "react";
+import { Printer, File, Copy, Layout, AlertCircle } from "lucide-react";
+import PrinterSelectionForm from './PrinterSelectionForm'
+import {  useSelector } from 'react-redux';
+import { selectFileTypes } from '../../../store/fileTypeSlice';
 
-// Constants moved outside component
 const TOTAL_PAGES = 100;
-const VALID_FILE_TYPES = [
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-];
 
 const PAPER_SIZES = {
   A4: 'A4',
@@ -17,48 +13,143 @@ const PAPER_SIZES = {
 
 const PAGES_PER_SIDE_OPTIONS = [1, 2];
 
-// Separate components for better organization
+// Input component with consistent styling
+const StyledInput = React.memo(({ label, error, ...props }) => (
+  <div className="space-y-2">
+    <label className="text-lg font-medium text-gray-700">{label}</label>
+    <input
+      {...props}
+      className={`
+        w-full px-4 py-3 rounded-lg border
+        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
+        transition duration-200
+        ${error ? 'border-red-500 bg-red-50' : 'border-gray-300'}
+      `}
+    />
+    {error && (
+      <p className="text-sm text-red-600 mt-1">{error}</p>
+    )}
+  </div>
+));
+
+// PrinterInfo Component with enhanced UI
 const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter }) => (
-  <div className="flex flex-col items-center md:items-start mt-8 w-full">
-    <label className="mt-6 text-xl font-medium text-black">Máy in đã chọn</label>
-    <div className="flex gap-4 w-full p-2 mt-2 bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500">
+  <div className="space-y-4">
+    <div className="flex items-center gap-2">
+      <Printer className="w-6 h-6 text-gray-600" />
+      <h3 className="text-xl font-medium text-gray-800">Máy in đã chọn</h3>
+    </div>
+
+    <div className={`
+      p-4 rounded-lg border-2 transition-all duration-200
+      ${selectedPrinter
+        ? 'border-green-200 bg-green-50'
+        : 'border-gray-200 bg-gray-50'}
+    `}>
       {selectedPrinter ? (
-        <span>{`${selectedPrinter.name} (ID: ${selectedPrinter.id})`}</span>
+        <div className="flex items-center justify-between">
+          <span className="font-medium text-gray-700">
+            {selectedPrinter.name}
+          </span>
+          <span className="text-sm text-gray-500">
+            ID: {selectedPrinter.id}
+          </span>
+        </div>
       ) : (
         <span className="text-gray-500">Chưa chọn máy in</span>
       )}
     </div>
+
     <button
-      className="px-6 py-4 mt-4 text-base font-semibold text-white rounded-lg bg-slate-600 hover:bg-slate-700 w-full transition-colors duration-200"
       onClick={onSelectPrinter}
+      className="w-full px-6 py-3 flex items-center justify-center gap-2
+        text-white bg-blue-600 rounded-lg
+        hover:bg-blue-700 active:bg-blue-800
+        transition duration-200 transform hover:scale-[1.02]"
     >
-      Chọn máy in
+      <Printer className="w-5 h-5" />
+      <span>Chọn máy in</span>
     </button>
   </div>
 ));
 
-const FileUpload = React.memo(({ selectedFile, onFileUpload }) => (
-  <div className="flex flex-col items-center md:items-start mt-8 w-full">
-    <label htmlFor="fileUpload" className="text-xl font-medium">Tệp đang chọn</label>
-    <div className="flex gap-4 p-2 mt-2 w-full bg-gray-200 border border-gray-300 rounded-xl shadow-sm text-gray-500">
-      {selectedFile ? (
-        <span>{selectedFile.name}</span>
-      ) : (
-        <span className="text-gray-500">Chưa chọn tệp</span>
-      )}
-    </div>
-    <input
-      type="file"
-      id="fileUpload"
-      className="mt-4 w-full"
-      onChange={onFileUpload}
-      accept=".doc,.docx,.pdf"
-    />
-  </div>
-));
+// Enhanced FileUpload component
+const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
+  const fileTypes = useSelector(selectFileTypes); // Get file types from Redux
+  const acceptedFileTypes = fileTypes.map(type => type.value).join(','); // Create a string for the input accept attribute
+  const dragRef = React.useRef(null);
+  const [isDragging, setIsDragging] = React.useState(false);
 
+  const handleDrag = useCallback((e, isDragging) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(isDragging);
+  }, []);
+
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    
+    const files = e.dataTransfer.files;
+    if (files.length) {
+      onFileUpload({ target: { files: [files[0]] } });
+    }
+  }, [onFileUpload]);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <File className="w-6 h-6 text-gray-600" />
+        <h3 className="text-xl font-medium text-gray-800">Tệp cần in</h3>
+      </div>
+
+      <div
+        ref={dragRef}
+        onDragEnter={e => handleDrag(e, true)}
+        onDragOver={e => handleDrag(e, true)}
+        onDragLeave={e => handleDrag(e, false)}
+        onDrop={handleDrop}
+        className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}`}
+      >
+        <div className="flex flex-col items-center gap-3">
+          <input
+            type="file"
+            id="fileUpload"
+            className="hidden"
+            onChange={onFileUpload}
+            accept={acceptedFileTypes} // Use accepted file types from Redux
+          />
+          
+          {selectedFile ? (
+            <div className="flex items-center gap-2">
+              <File className="w-5 h-5 text-blue-500" />
+              <span className="font-medium">{selectedFile.name}</span>
+            </div>
+          ) : (
+            <>
+              <File className="w-12 h-12 text-gray-400" />
+              <div className="text-center">
+                <label htmlFor="fileUpload" className="text-blue-600 hover:text-blue-700 cursor-pointer">
+                  Chọn tệp
+                </label>
+                <span className="text-gray-600"> hoặc kéo thả vào đây</span>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 text-sm text-gray-500">
+        <AlertCircle className="w-4 h-4" />
+        <span>Định dạng hỗ trợ: {fileTypes.map(type => type.label).join(', ')}</span> {/* Display file types */}
+      </div>
+    </div>
+  );
+});
+
+// Main PrintingForm component
 function PrintingForm({ printingData }) {
-  // Initial state using a reducer pattern
   const [formState, setFormState] = useState({
     remainingPages: TOTAL_PAGES,
     missingPages: 0,
@@ -71,179 +162,206 @@ function PrintingForm({ printingData }) {
     paperSize: PAPER_SIZES.A4,
   });
 
-  // Memoized comparison result
-  const comparisonResult = useMemo(() => ({
-    isSmaller: printingData < TOTAL_PAGES,
-    isLarger: printingData > TOTAL_PAGES,
-    isEqual: printingData === TOTAL_PAGES,
-  }), [printingData]);
+  const [errors, setErrors] = useState({});
 
-  // Memoized page calculation
-  const calculateActualPages = useCallback((pages, copies, perSide) => {
-    if (pages <= 0 || copies <= 0) return 0;
-    return Math.ceil((pages * copies) / perSide);
-  }, []);
+  // Validation
+  const validateForm = useCallback(() => {
+    const newErrors = {};
 
-  // Effect for page calculations
-  useEffect(() => {
-    const actualPagesNeeded = calculateActualPages(
-      formState.pagesToPrint,
-      formState.printCopies,
-      formState.pagesPerSide
-    );
-    
-    setFormState(prev => ({
-      ...prev,
-      missingPages: Math.max(actualPagesNeeded - TOTAL_PAGES, 0),
-      remainingPages: Math.max(TOTAL_PAGES - actualPagesNeeded, 0)
-    }));
-  }, [formState.pagesToPrint, formState.printCopies, formState.pagesPerSide, calculateActualPages]);
-
-  // Memoized handlers
-  const handleInputChange = useCallback((field, value) => {
-    const processedValue = ['printCopies', 'pagesToPrint'].includes(field)
-      ? Math.max(parseInt(value, 10) || 0, 0)
-      : value;
-
-    setFormState(prev => ({
-      ...prev,
-      [field]: processedValue
-    }));
-  }, []);
-
-  const handleFileUpload = useCallback((event) => {
-    const file = event.target.files[0];
-    if (file && VALID_FILE_TYPES.includes(file.type)) {
-      setFormState(prev => ({
-        ...prev,
-        selectedFile: file
-      }));
-    } else {
-      alert('Chỉ chấp nhận file PDF hoặc Word (.doc, .docx)');
+    if (!formState.selectedPrinter) {
+      newErrors.printer = 'Vui lòng chọn máy in';
     }
+    if (!formState.selectedFile) {
+      newErrors.file = 'Vui lòng chọn tệp cần in';
+    }
+    if (formState.pagesToPrint <= 0) {
+      newErrors.pagesToPrint = 'Số trang phải lớn hơn 0';
+    }
+    if (formState.printCopies <= 0) {
+      newErrors.printCopies = 'Số bản in phải lớn hơn 0';
+    }
+    if (formState.missingPages > 0) {
+      newErrors.pages = `Thiếu ${formState.missingPages} trang để in`;
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  }, [formState]);
+
+  // Handlers
+  const handleInputChange = useCallback((field, value) => {
+    setFormState(prev => ({
+      ...prev,
+      [field]: value
+    }));
   }, []);
 
   const handlePrint = useCallback(() => {
-    console.log(comparisonResult);
-  }, [comparisonResult]);
+    if (validateForm()) {
+      console.log('Printing:', formState);
+    }
+  }, [formState, validateForm]);
 
-  // New handler for printer selection
-  const handlePrinterSelect = useCallback((printer) => {
+  // Calculate pages effect
+  useEffect(() => {
+    const actualPages = Math.ceil(
+      (formState.pagesToPrint * formState.printCopies) / formState.pagesPerSide
+    );
+
     setFormState(prev => ({
       ...prev,
-      selectedPrinter: printer,
-      showPrinterForm: false
+      missingPages: Math.max(actualPages - TOTAL_PAGES, 0),
+      remainingPages: Math.max(TOTAL_PAGES - actualPages, 0)
     }));
-  }, []);
-
-  // Memoized form sections
-  const renderPrintingInfo = useMemo(() => (
-    <div className="flex flex-col w-full lg:w-6/12">
-      <h2 className="self-center text-2xl font-extrabold text-stone-900">THÔNG TIN IN</h2>
-      <div className="flex gap-6 mt-8">
-        <div className="mb-4">
-          <label className="block text-gray-700 font-medium">SỐ TRANG IN CÓ SẴN</label>
-          <div className="bg-gray-100 p-2 rounded text-lg font-semibold text-center">
-            {TOTAL_PAGES}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <div>
-          <label className="text-xl font-medium text-black">Số trang cần in</label>
-          <InputField
-            type="number"
-            value={formState.pagesToPrint.toString()}
-            onChange={(e) => handleInputChange('pagesToPrint', e.target.value)}
-            placeholder="Nhập số trang cần in"
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label className="text-xl font-medium text-black">Số bản in</label>
-          <InputField
-            type="number"
-            value={formState.printCopies.toString()}
-            onChange={(e) => handleInputChange('printCopies', e.target.value)}
-            placeholder="Nhập số bản in"
-            min="1"
-          />
-        </div>
-
-        <div className="flex items-center gap-4">
-          <label className="text-xl font-medium">Khổ giấy</label>
-          <select
-            value={formState.paperSize}
-            onChange={(e) => handleInputChange('paperSize', e.target.value)}
-            className="px-3 py-2 text-lg bg-white border border-gray-300 rounded-xl shadow-sm focus:ring focus:ring-slate-500"
-          >
-            {Object.values(PAPER_SIZES).map(size => (
-              <option key={size} value={size}>{size}</option>
-            ))}
-          </select>
-        </div>
-
-        <fieldset className="mt-4">
-          <legend className="text-xl font-medium text-black">Số trang mỗi mặt</legend>
-          <div className="flex flex-col gap-2 mt-2 border border-gray-300 rounded-lg shadow-sm">
-            {PAGES_PER_SIDE_OPTIONS.map((value) => (
-              <label key={value} className="flex items-center gap-2 p-3 bg-white hover:bg-gray-50">
-                <input
-                  type="radio"
-                  name="pagesPerSide"
-                  value={value}
-                  checked={formState.pagesPerSide === value}
-                  onChange={(e) => handleInputChange('pagesPerSide', parseInt(e.target.value, 10))}
-                  className="text-blue-600 focus:ring-blue-500"
-                />
-                <span>{value} trang</span>
-              </label>
-            ))}
-          </div>
-        </fieldset>
-      </div>
-    </div>
-  ), [formState.pagesToPrint, formState.printCopies, formState.paperSize, formState.pagesPerSide, handleInputChange]);
+  }, [formState.pagesToPrint, formState.printCopies, formState.pagesPerSide]);
 
   return (
-    <section className="flex flex-col mt-20 max-md:mt-10 max-md:max-w-full mx-8 lg:mx-20">
-      <div className="flex gap-10 md:gap-32 max-md:flex-col max-w-[1024px] mx-auto">
-        <div className="flex flex-col w-full lg:w-5/12">
+    <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="grid md:grid-cols-2 gap-20">
+        {/* Left Column */}
+        <div className="space-y-8">
           <img
-            loading="lazy"
             src="https://cdn.builder.io/api/v1/image/assets/TEMP/c03e7cd16ef33d7f3d1a8b7b09546f4aeec9793f6296076ffc8be97a8c297571"
             alt="Printer illustration"
-            className="object-contain w-4/5 h-auto max-md:mt-10 mx-auto"
+            className="w-32 mx-auto"
           />
+
           <PrinterInfo
             selectedPrinter={formState.selectedPrinter}
             onSelectPrinter={() => handleInputChange('showPrinterForm', true)}
           />
+
           <FileUpload
             selectedFile={formState.selectedFile}
-            onFileUpload={handleFileUpload}
+            onFileUpload={(e) => handleInputChange('selectedFile', e.target.files[0])}
           />
         </div>
 
-        {renderPrintingInfo}
+        {/* Right Column */}
+        <div className="space-y-8">
+          <div className="flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-gray-900">Thông tin in ấn</h2>
+            <div className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
+              Số trang có sẵn: {TOTAL_PAGES}
+            </div>
+          </div>
+
+          <div className="space-y-6">
+            <StyledInput
+              label="Số trang cần in"
+              type="number"
+              value={formState.pagesToPrint}
+              onChange={(e) => handleInputChange('pagesToPrint', parseInt(e.target.value) || 0)}
+              min="1"
+              placeholder="Nhập số trang"
+              error={errors.pagesToPrint}
+            />
+
+            <StyledInput
+              label="Số bản in"
+              type="number"
+              value={formState.printCopies}
+              onChange={(e) => handleInputChange('printCopies', parseInt(e.target.value) || 1)}
+              min="1"
+              placeholder="Nhập số bản in"
+              error={errors.printCopies}
+            />
+
+            <div className="space-y-2">
+              <label className="text-lg font-medium text-gray-700">Khổ giấy</label>
+              <div className="grid grid-cols-2 gap-4">
+                {Object.values(PAPER_SIZES).map(size => (
+                  <label
+                    key={size}
+                    className={`
+                      flex items-center justify-center p-3
+                      border rounded-lg cursor-pointer
+                      transition duration-200
+                      ${formState.paperSize === size
+                        ? 'bg-blue-500 text-white border-blue-500'
+                        : 'bg-white border-gray-300 hover:border-blue-400'}
+                    `}
+                  >
+                    <input
+                      type="radio"
+                      name="paperSize"
+                      value={size}
+                      checked={formState.paperSize === size}
+                      onChange={(e) => handleInputChange('paperSize', e.target.value)}
+                      className="hidden"
+                    />
+                    <Layout className="w-5 h-5 mr-2" />
+                    {size}
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-lg font-medium text-gray-700">Số trang mỗi mặt</label>
+              <div className="grid grid-cols-2 gap-4">
+                {PAGES_PER_SIDE_OPTIONS.map(value => (
+                  <label
+                    key={value}
+                    className={`
+                      flex items-center justify-center p-3
+                      border rounded-lg cursor-pointer
+                      transition duration-200
+                      ${formState.pagesPerSide === value
+                        ? 'bg-blue-500 text-white border-blue-500'
+                        : 'bg-white border-gray-300 hover:border-blue-400'}
+                    `}
+                  >
+                    <input
+                      type="radio"
+                      name="pagesPerSide"
+                      value={value}
+                      checked={formState.pagesPerSide === value}
+                      onChange={(e) => handleInputChange('pagesPerSide', parseInt(e.target.value))}
+                      className="hidden"
+                    />
+                    <Copy className="w-5 h-5 mr-2" />
+                    {value} trang
+                  </label>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {formState.missingPages > 0 && (
+            <Alert variant="destructive">
+              <AlertCircle className="w-4 h-4" />
+              <AlertDescription>
+                Bạn cần thêm {formState.missingPages} trang để hoàn thành việc in
+              </AlertDescription>
+            </Alert>
+          )}
+        </div>
       </div>
 
-      <button
-        className="self-center px-12 py-4 mt-8 text-lg font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors duration-200"
-        onClick={handlePrint}
-      >
-        Xác nhận in
-      </button>
-      
+      <div className="mt-12 flex justify-center">
+        <button
+          onClick={handlePrint}
+          disabled={Object.keys(errors).length > 0}
+          className="px-8 py-4 text-lg font-medium text-white bg-blue-600 rounded-lg
+            hover:bg-blue-700 active:bg-blue-800 
+            disabled:bg-gray-400 disabled:cursor-not-allowed
+            transition duration-200 transform hover:scale-[1.02]"
+        >
+          Xác nhận thông tin
+        </button>
+      </div>
+
       {formState.showPrinterForm && (
         <PrinterSelectionForm
-          onSelectPrinter={handlePrinterSelect}
+          onSelectPrinter={(printer) => {
+            handleInputChange('selectedPrinter', printer);
+            handleInputChange('showPrinterForm', false);
+          }}
           onClose={() => handleInputChange('showPrinterForm', false)}
         />
       )}
-    </section>
+    </div>
   );
 }
 
