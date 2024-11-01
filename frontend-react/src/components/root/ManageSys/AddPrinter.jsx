@@ -47,9 +47,9 @@ const Button = React.memo(({ children, variant = 'primary', className = '', icon
 });
 
 const Select = React.memo(({ label, options, error, icon: Icon, ...props }) => (
-    <div className="space-y-2">
+    <div className="space-y-4">
         {label && (
-            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <label className="mt-8 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">{label}</label>
         )}
         <div className="relative">
             {Icon && (
@@ -222,7 +222,7 @@ const AddPrinter = () => {
     const selectedPrinter = availablePrinters.find(printer => printer.id === selectedPrinterId);
 
     return (
-        <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8">
+        <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8 h-full">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-4">
@@ -244,8 +244,8 @@ const AddPrinter = () => {
                             icon={Printer}
                         />
 
-                        <div className="space-y-4">
-                            <h3 className="font-medium text-gray-700 flex items-center gap-2">
+                        <div className="space-y-6">
+                            <h3 className="mt-8 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800 flex gap-2">
                                 <Settings />
                                 Trạng thái hoạt động
                             </h3>

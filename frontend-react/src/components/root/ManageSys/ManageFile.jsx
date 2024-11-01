@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFileType, removeFileType, selectFileTypes } from '../../../store/fileTypeSlice';
+import { File } from "lucide-react";
 
 const SectionTitle = React.memo(({ children }) => (
     <h3 className="mt-8 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
@@ -93,7 +94,11 @@ const ManageFile = () => {
 
     return (
         <div className="w-4/5 md:w-1/2 mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8">
-            <h2 className="text-2xl font-bold mb-4 text-center">Điều chỉnh in ấn</h2>
+
+            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                <File />
+                Điều chỉnh in ấn
+            </h2>
 
             <SectionTitle>NGÀY CUNG CẤP ĐỊNH KỲ</SectionTitle>
             <input
@@ -117,9 +122,9 @@ const ManageFile = () => {
             <SectionTitle>LOẠI TỆP ĐƯỢC TẢI LÊN</SectionTitle>
             <div className="flex flex-col gap-4 mt-4">
                 <div className="flex items-center gap-4 w-full">
-                    <Select 
-                        id="fileType" 
-                        options={fileTypes} 
+                    <Select
+                        id="fileType"
+                        options={fileTypes}
                         className="w-1/2"
                         value={selectedFileType}
                         onChange={(e) => setSelectedFileType(e.target.value)}
@@ -136,7 +141,7 @@ const ManageFile = () => {
 
                 <div className="flex flex-wrap gap-2">
                     {fileTypes.map(type => (
-                        <div 
+                        <div
                             key={type.value}
                             className="flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full"
                         >

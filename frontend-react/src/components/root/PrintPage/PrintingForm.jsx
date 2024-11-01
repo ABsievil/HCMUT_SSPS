@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { Printer, File, Copy, Layout, AlertCircle } from "lucide-react";
+import { Printer, File, Copy, Layout, AlertCircle, X } from "lucide-react";
 import PrinterSelectionForm from './PrinterSelectionForm'
-import {  useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectFileTypes } from '../../../store/fileTypeSlice';
 
 const TOTAL_PAGES = 100;
@@ -75,8 +75,8 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter }) => (
 
 // Enhanced FileUpload component
 const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
-  const fileTypes = useSelector(selectFileTypes); // Get file types from Redux
-  const acceptedFileTypes = fileTypes.map(type => type.value).join(','); // Create a string for the input accept attribute
+  const fileTypes = useSelector(selectFileTypes);
+  const acceptedFileTypes = fileTypes.map(type => type.value).join(',');
   const dragRef = React.useRef(null);
   const [isDragging, setIsDragging] = React.useState(false);
 
@@ -97,6 +97,11 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
     }
   }, [onFileUpload]);
 
+  const handleRemoveFile = useCallback((e) => {
+    e.stopPropagation();
+    onFileUpload({ target: { files: [] } });
+  }, [onFileUpload]);
+
   return (
     <div className="space-y-4">
       <div className="flex items-center gap-2">
@@ -110,7 +115,9 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
         onDragOver={e => handleDrag(e, true)}
         onDragLeave={e => handleDrag(e, false)}
         onDrop={handleDrop}
-        className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'}`}
+        className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${
+          isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+        }`}
       >
         <div className="flex flex-col items-center gap-3">
           <input
@@ -118,13 +125,22 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
             id="fileUpload"
             className="hidden"
             onChange={onFileUpload}
-            accept={acceptedFileTypes} // Use accepted file types from Redux
+            accept={acceptedFileTypes}
           />
           
           {selectedFile ? (
-            <div className="flex items-center gap-2">
-              <File className="w-5 h-5 text-blue-500" />
-              <span className="font-medium">{selectedFile.name}</span>
+            <div className="flex items-center gap-3 w-full">
+              <div className="flex-1 flex items-center gap-2">
+                <File className="w-5 h-5 text-blue-500" />
+                <span className="font-medium truncate">{selectedFile.name}</span>
+              </div>
+              <button
+                onClick={handleRemoveFile}
+                className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-red-500 transition-colors duration-200"
+                title="Gỡ tệp"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           ) : (
             <>
@@ -142,7 +158,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
 
       <div className="flex items-center gap-2 text-sm text-gray-500">
         <AlertCircle className="w-4 h-4" />
-        <span>Định dạng hỗ trợ: {fileTypes.map(type => type.label).join(', ')}</span> {/* Display file types */}
+        <span>Định dạng hỗ trợ: {fileTypes.map(type => type.label).join(', ')}</span>
       </div>
     </div>
   );
@@ -217,7 +233,7 @@ function PrintingForm({ printingData }) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <div className="grid md:grid-cols-2 gap-20">
+      <div className="grid md:grid-cols-2 gap-36">
         {/* Left Column */}
         <div className="space-y-8">
           <img
@@ -342,7 +358,6 @@ function PrintingForm({ printingData }) {
       <div className="mt-12 flex justify-center">
         <button
           onClick={handlePrint}
-          disabled={Object.keys(errors).length > 0}
           className="px-8 py-4 text-lg font-medium text-white bg-blue-600 rounded-lg
             hover:bg-blue-700 active:bg-blue-800 
             disabled:bg-gray-400 disabled:cursor-not-allowed
