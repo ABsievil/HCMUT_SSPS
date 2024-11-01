@@ -22,7 +22,7 @@ public class PrinterService {
     public ResponseEntity<ResponseObject> FNC_getPrinter_information(){
         try {
             List<PrinterDTO> printerInforList = jdbcTemplate.query(
-            "SELECT printer_id, branch_name, printer_model, description, campus, building, room, state FROM Printer_information()", new PrinterRowMapper());
+            "SELECT * FROM Printer_information()", new PrinterRowMapper());
 
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("OK", "Query to get Printer_information() successfully", printerInforList));

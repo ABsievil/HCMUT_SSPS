@@ -9,7 +9,7 @@ public class PrinterPartialRowMapper implements RowMapper<PrinterDTO> {
     public PrinterDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         PrinterDTO printerDTO = new PrinterDTO();
         printerDTO.setPrinter_id(rs.getInt("printer_id"));
-        printerDTO.setBranch_name(rs.getString("branch_name"));
+        printerDTO.setBrand_name(rs.getString("brand_name"));
         printerDTO.setPrinter_model(rs.getString("printer_model"));
         printerDTO.setDescription(null);
         printerDTO.setCampus(rs.getString("campus"));
