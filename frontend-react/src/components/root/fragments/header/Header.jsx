@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from 'react-router-dom';
 
-
 export default function Header() {
   const [isSticky, setIsSticky] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -9,8 +8,8 @@ export default function Header() {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsSticky(scrollY > 0); 
-      setIsVisible(scrollY === 0); 
+      setIsSticky(scrollY > 0);
+      setIsVisible(scrollY === 0);
     };
 
     window.addEventListener("scroll", handleScroll);

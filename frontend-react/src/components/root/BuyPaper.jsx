@@ -1,50 +1,103 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import Layout from "./fragments/layout/Layout";
 import InputField from "./fragments/InputField/InputField";
 
-function PrintingPage() {
+const PAPER_TYPES = {
+  A4: { label: "A4", price: 1500 }, // 1500 VND per page
+  A3: { label: "A3", price: 3000 }, // 3000 VND per page
+} 
+
+const Button = ({ children, onClick, className = "" }) => (
+  <button
+    onClick={onClick}
+    className={`px-12 py-4 text-sm font-semibold tracking-wide text-white 
+    uppercase bg-blue-700 hover:bg-blue-800 rounded-3xl transition-colors 
+    duration-200 ${className}`}
+  >
+    {children}
+  </button>
+);
+
+const Select = ({ value, onChange, options, label, id }) => (
+  <div className="flex gap-5 w-full items-center">
+    <label htmlFor={id} className="text-xl text-black">
+      {label}
+    </label>
+    <div className="flex-1">
+      <select
+        id={id}
+        value={value}
+        onChange={onChange}
+        className="w-full text-xl text-black bg-white rounded-xl border border-black p-2"
+      >
+        {Object.entries(options).map(([key, { label }]) => (
+          <option key={key} value={key}>
+            {label}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+);
+
+const PrintingPage = () => {
   const [quantity, setQuantity] = useState(100);
-  const [totalAmount, setTotalAmount] = useState("150.000 VNĐ");
   const [paperType, setPaperType] = useState("A4");
+
+  // Calculate total amount using useMemo to prevent unnecessary recalculations
+  const totalAmount = useMemo(() => {
+    const amount = quantity * PAPER_TYPES[paperType].price;
+    return new Intl.NumberFormat("vi-VN", {
+      style: "currency",
+      currency: "VND",
+    }).format(amount);
+  }, [quantity, paperType]);
+
+  const handleQuantityChange = (e) => {
+    const value = parseInt(e.target.value);
+    setQuantity(value >= 0 ? value : 0);
+  };
+
+  const handleSubmit = () => {
+    // Handle form submission
+    console.log({
+      quantity,
+      paperType,
+      totalAmount,
+    });
+  };
 
   return (
     <Layout>
-      <div className="flex flex-col mt-20 w-full max-md:mt-10 max-md:max-w-full px-6">
-        <div className="max-md:max-w-full">
-          <div className="flex gap-5 max-md:flex-col ml-20px">
-            <div className="flex flex-col w-[41%] max-md:ml-0 max-md:w-full">
-              <div className="flex flex-col self-stretch my-auto w-full max-md:mt-10">
+      <div className="container mx-auto px-6 py-10">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+          {/* Form Section */}
+          <div className="md:col-span-5">
+            <div className="space-y-8">
+              <Select
+                id="paperType"
+                label="Loại giấy in:"
+                value={paperType}
+                onChange={(e) => setPaperType(e.target.value)}
+                options={PAPER_TYPES}
+              />
 
-                <div className="flex gap-5 w-full">
-                  <label htmlFor="paperType" className="grow my-auto text-xl leading-snug text-black">
-                    Loại giấy in:
-                  </label>
-                  <div className="flex flex-auto whitespace-nowrap bg-white rounded-xl border border-black border-solid">
-                    <select
-                      id="paperType"
-                      value={paperType}
-                      onChange={(e) => setPaperType(e.target.value)}
-                      className="ml-auto text-xl text-black bg-transparent rounded-xl border-none w-full"
-                    >
-                      <option value="A4">A4</option>
-                      <option value="A3">A3</option>
-                    </select>
-                  </div>
-                </div>
+              <div className="flex gap-5 items-center">
+                <label htmlFor="quantity" className="text-xl text-black">
+                  Số lượng:
+                </label>
+                <InputField
+                  type="number"
+                  id="quantity"
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  min={0}
+                  className="flex-1"
+                />
+              </div>
 
-                <div className="flex gap-10 mt-20 text-xl leading-snug text-black max-md:mt-10">
-                  <label htmlFor="quantity" className="my-auto">
-                    Số lượng:
-                  </label>
-                  <InputField
-                    type="number"
-                    id="quantity"
-                    defaultValue={quantity}
-                    min={0}
-                  />
-                </div>
-
-                <label htmlFor="totalAmount" className="self-start mt-20 text-xl leading-snug text-black max-md:mt-10">
+              <div className="space-y-2">
+                <label htmlFor="totalAmount" className="block text-xl text-black">
                   Số tiền cần thanh toán
                 </label>
                 <InputField
@@ -52,27 +105,32 @@ function PrintingPage() {
                   id="totalAmount"
                   value={totalAmount}
                   readOnly
+                  className="w-full"
                 />
               </div>
             </div>
+          </div>
 
-            <div className="flex flex-col ml-5 w-[59%] max-md:ml-0 max-md:w-full">
-              <img
-                loading="lazy"
-                src="https://cdn.builder.io/api/v1/image/assets/TEMP/0a3f32bd116ec870a5a0033720b078688ccb180bcad345877fab489633d1539a?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
-                alt="Printing preview"
-                className="object-contain grow w-full aspect-[1.69] max-md:mt-10 max-md:max-w-full"
-              />
-            </div>
+          {/* Preview Section */}
+          <div className="md:col-span-7">
+            <img
+              loading="lazy"
+              src="https://cdn.builder.io/api/v1/image/assets/TEMP/0a3f32bd116ec870a5a0033720b078688ccb180bcad345877fab489633d1539a?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
+              alt="Printing preview"
+              className="w-full h-auto rounded-lg shadow-lg"
+            />
           </div>
         </div>
 
-        <button className="flex flex-col justify-center self-center px-12 py-4 my-10 max-w-full text-sm font-semibold tracking-wide leading-6 text-center text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-3xl w-[180px] max-md:px-5 max-md:mt-10">
-          <div className="gap-2.5 self-stretch">XÁC NHẬN</div>
-        </button>
+        {/* Submit Button */}
+        <div className="flex justify-center mt-10">
+          <Button onClick={handleSubmit}>
+            <span>Xác nhận</span>
+          </Button>
+        </div>
       </div>
     </Layout>
   );
-}
+};
 
 export default PrintingPage;

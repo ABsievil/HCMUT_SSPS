@@ -1,24 +1,20 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { selectAvailablePrinters } from '../../../store/printersSlice';
 
 const PrintLogFilter = ({ type }) => {
-  const printerData = useMemo(() => [
-    { id: '1234', name: 'HP LaserJet Pro M404dn', location: 'Phòng H6-101', status: 'Sẵn sàng', type: 'Laser' },
-    { id: '1245', name: 'Epson WorkForce Pro WF-3720', location: 'Phòng H2-202', status: 'Đang bảo trì', type: 'Inkjet' },
-    { id: '3456', name: 'Brother HL-L2350DW', location: 'Phòng H3-303', status: 'Sẵn sàng', type: 'Canon' },
-    { id: '2234', name: 'HP LaserJet Pro M404dn', location: 'Phòng H1-101', status: 'Sẵn sàng', type: 'Laser' },
-  ], []);
-
+  const availablePrinters = useSelector(selectAvailablePrinters);
+  
   const [printerId, setPrinterId] = useState('');
   const [startDate, setStartDate] = useState('2018-10-12');
   const [endDate, setEndDate] = useState('2018-10-12');
   const [MSSV, setMSSV] = useState('');
 
-  const handleMSSVChange = (e) => {
-    setMSSV(e.target.value);
-  };
+  const handleMSSVChange = (e) => setMSSV(e.target.value);
+  const handlePrinterChange = (e) => setPrinterId(e.target.value === 'reset' ? '' : e.target.value);
 
   const renderInputField = (label, value, onChange, type = "text") => (
-    <div className='flex flex-col'>
+    <div className="flex flex-col">
       <label className="block text-sm font-medium text-gray-700">{label}</label>
       <input
         type={type}
@@ -28,11 +24,6 @@ const PrintLogFilter = ({ type }) => {
       />
     </div>
   );
-
-  const handlePrinterChange = (e) => {
-    const value = e.target.value;
-    setPrinterId(value === 'reset' ? '' : value); // Đặt lại printerId nếu lựa chọn là 'reset'
-  };
 
   return (
     <div className="p-4">
@@ -47,9 +38,9 @@ const PrintLogFilter = ({ type }) => {
             onChange={handlePrinterChange}
             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
           >
-            <option value="reset" >Tên máy in</option>
-            {printerData.length > 0 ? (
-              printerData.map(printer => (
+            <option value="reset">Tên máy in</option>
+            {availablePrinters.length > 0 ? (
+              availablePrinters.map(printer => (
                 <option key={printer.id} value={printer.id}>
                   {printer.name} - {printer.location} - {printer.status}
                 </option>

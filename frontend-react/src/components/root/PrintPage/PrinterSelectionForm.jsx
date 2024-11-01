@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Search, CircleAlert, X } from 'lucide-react';
 import InputField from "../fragments/InputField/InputField";
+import { selectAvailablePrinters } from '../../../store/printersSlice';
 
 const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
-  const [selectedPrinter, setSelectedPrinter] = useState(null); // Đổi về null
+  const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [showPrinterDetails, setShowPrinterDetails] = useState(false);
   const [detailedPrinter, setDetailedPrinter] = useState(null);
 
-  const availablePrinters = [
-    { id: '1234', name: 'HP LaserJet Pro M404dn', location: 'Phòng H6-101', status: 'Sẵn sàng', type: 'Laser' },
-    { id: '1245', name: 'Epson WorkForce Pro WF-3720', location: 'Phòng H2-202', status: 'Đang bảo trì', type: 'Inkjet' },
-    { id: '3456', name: 'Brother HL-L2350DW', location: 'Phòng H3-303', status: 'Sẵn sàng', type: 'Canon' },
-    { id: '2234', name: 'HP LaserJet Pro M404dn', location: 'Phòng H1-101', status: 'Sẵn sàng', type: 'Laser' },
-  ];
+  const availablePrinters = useSelector(selectAvailablePrinters);
 
   const filteredPrinters = availablePrinters.filter(printer =>
     printer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -21,12 +18,12 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
     printer.location.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handlePrinterSelect = (printer) => { // Chỉnh sửa để nhận cả đối tượng máy in
+  const handlePrinterSelect = (printer) => {
     setSelectedPrinter(printer);
   };
 
   const handleConfirm = () => {
-    onSelectPrinter(selectedPrinter); // Gửi toàn bộ đối tượng máy in
+    onSelectPrinter(selectedPrinter);
     onClose();
   };
 
@@ -55,9 +52,10 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
           {filteredPrinters.map((printer) => (
             <div
               key={printer.id}
-              className={`p-3 border rounded-lg cursor-pointer flex justify-between items-center transition-colors ${selectedPrinter && selectedPrinter.id === printer.id ? 'bg-blue-100 border-blue-500' : 'hover:bg-gray-100'
-                }`}
-              onClick={() => handlePrinterSelect(printer)} // Gọi hàm với đối tượng máy in
+              className={`p-3 border rounded-lg cursor-pointer flex justify-between items-center transition-colors ${
+                selectedPrinter && selectedPrinter.id === printer.id ? 'bg-blue-100 border-blue-500' : 'hover:bg-gray-100'
+              }`}
+              onClick={() => handlePrinterSelect(printer)}
             >
               <div className="flex flex-col">
                 <p className="font-medium">{printer.name}</p>
