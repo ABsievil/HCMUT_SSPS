@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PrinterDTO {
     private Integer printer_id;
-    private String branch_name;
+    private String brand_name;
     private String printer_model;
     private String description;
     private String campus;

@@ -17,7 +17,7 @@ BEGIN
 END;
 $$;
 
--- SELECT printer_id, branch_name, campus, building, room FROM Printer_information();
+-- SELECT printer_id, brand_name, printer_model, description, campus, building, room, state FROM Printer_information(); 
 
 -------------LOG OF PRINTING-------------
 

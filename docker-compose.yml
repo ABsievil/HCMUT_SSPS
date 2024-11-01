@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   app:
-    image: 'hcmut_spss:0.0.2'
+    image: 'hcmut_spss:0.2.2'
     build:
       context: ./backend-springboot
       dockerfile: Dockerfile
