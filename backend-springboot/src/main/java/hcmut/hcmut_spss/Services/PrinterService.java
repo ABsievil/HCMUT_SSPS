@@ -9,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hcmut.hcmut_spss.DTO.PrinterDTO;
 import hcmut.hcmut_spss.DTO.PrinterPartialRowMapper;
 import hcmut.hcmut_spss.DTO.PrinterRowMapper;
@@ -16,19 +19,28 @@ import hcmut.hcmut_spss.DTO.ResponseObject;
 
 @Service
 public class PrinterService {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final ObjectMapper objectMapper;
+
+    public PrinterService(JdbcTemplate jdbcTemplate, ObjectMapper objectMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     public ResponseEntity<ResponseObject> FNC_getPrinter_information(){
         try {
-            List<PrinterDTO> printerInforList = jdbcTemplate.query(
-            "SELECT * FROM Printer_information()", new PrinterRowMapper());
+            String printerInforList = jdbcTemplate.queryForObject(
+                "SELECT get_printer_information_json()",
+                String.class
+            );
+
+            JsonNode jsonNode = objectMapper.readTree(printerInforList);
 
             return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Query to get Printer_information() successfully", printerInforList));
-        } catch(DataAccessException e) {
+                .body(new ResponseObject("OK", "Query to get Printer_information() successfully", jsonNode));
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR" + ", " + e.getMessage().toString(), "Error getting Printer_information()", null));
+                .body(new ResponseObject("ERROR", "Error getting Printer_information(): " + e.getMessage(), null));
         }
     }
 
@@ -44,4 +56,24 @@ public class PrinterService {
                     .body(new ResponseObject("ERROR" + ", " + e.getMessage().toString(), "Error getting Patial Printer_information()", null));
         }
     }
+
+    // public ResponseEntity<ResponseObject> FNC_getPrinterInformation() {
+    //     try {
+    //         List<PrinterDTO> fetchedData = printerRepository.getPrinterInformation();
+
+    //         ObjectMapper mapper = new ObjectMapper();
+    //         String jsonData = mapper.writeValueAsString(fetchedData);   // have to handle JsonProcessingException
+    //         // JsonNode jsonNode = mapper.valueToTree(fetchedData);     // not handle
+
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //                     .body(new ResponseObject("OK", "Query to get Printer_information() successfully", jsonData));
+    //     } catch(DataAccessException e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(new ResponseObject("ERROR" + ", " + e.getMessage().toString(), "Error getting Printer_information()", null));
+    //     } catch(JsonProcessingException e) { 
+    //         // handle for writeValueAsString method
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(new ResponseObject("ERROR", "Error converting data to JSON: " + e.getMessage(), null));
+    //     }
+    // }
 }
