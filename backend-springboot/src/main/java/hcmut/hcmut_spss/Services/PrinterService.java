@@ -38,7 +38,16 @@ public class PrinterService {
 
             return ResponseEntity.status(HttpStatus.OK)
                 .body(new ResponseObject("OK", "Query to get Printer_information() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
         } catch (Exception e) {
+            // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseObject("ERROR", "Error getting Printer_information(): " + e.getMessage(), null));
         }
