@@ -14,7 +14,7 @@ import AdminPrintLog from './components/root/AdminPrintLog';
 import AccountInformation from "./components/root/AccountInformation";
 import ProtectedRoute from "./components/root/Login/ProtectedRouter";
 import ManageSystem from './components/root/ManageSystem'
-
+import Report from './components/root/Report'
 
 export default function App() {
   return (
@@ -31,53 +31,61 @@ export default function App() {
         <Route path="/newpassword" element={<CreateNewPassword />} />
 
         {/* Protected Route */}
-        <Route 
-          path="/print" 
-          element={
-            <ProtectedRoute>
-              <PrintingSystem />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/buyPaper" 
-          element={
-            <ProtectedRoute>
-              <PrintingPage />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/printlog" 
-          element={
-            <ProtectedRoute>
-              <StudentPrintLog />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/account" 
+        <Route
+          path="/account"
           element={
             <ProtectedRoute>
               <AccountInformation />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/adminprintlog" 
+        <Route
+          path="/print"
+          element={
+            <ProtectedRoute>
+              <PrintingSystem />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/buyPaper"
+          element={
+            <ProtectedRoute>
+              <PrintingPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/printlog"
+          element={
+            <ProtectedRoute>
+              <StudentPrintLog />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/adminprintlog"
           element={
             <ProtectedRoute>
               <AdminPrintLog />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/manage" 
+        <Route
+          path="/manage"
           element={
             <ProtectedRoute>
-              <ManageSystem/>
+              <ManageSystem />
             </ProtectedRoute>
-          } 
+          }
+        />
+        <Route
+          path="/report"
+          element={
+            <ProtectedRoute>
+              <Report />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </div>
