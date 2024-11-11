@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import InputField from '../fragments/InputField/InputField'; // Import InputField
+import { toast } from 'react-toastify'
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -11,43 +12,33 @@ function LoginForm() {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    // Call api set jwt token
     const reqJson = {
-      username: email, // Using the email state as username
-      password: password, // Using the password state
+      username: email,
+      password: password,
     };
-    
-    fetch(
-        `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/authenticate`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reqJson),
-            credentials: 'include' // Đảm bảo rằng cookie được gửi kèm theo yêu cầu
-        }
-    )
-    .then(response => response.json())
-    .then(data => {
-        if(data.status=="OK"){
-            navigate('/print'); 
-        }
-        else if(data.status=="ERROR"){
-            navigate('/login?error=true'); 
-            console.error('Error:', error);
-        }
+
+    fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/authenticate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(reqJson),
+      credentials: 'include'
     })
-    .catch(error => {
-        if (error instanceof AuthenticationException) {
-            navigate('/login?error=true'); 
-            console.error('Error:', error);
-        } 
-        else {
-            navigate('/login?error=true'); 
-            console.error('Error:', error);
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === "OK") {
+          toast.success("Đăng nhập thành công!");
+          navigate('/print');
+        } else if (data.status === "ERROR") {
+          toast.error("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+          navigate('/login?error=true');
         }
-    });
+      })
+      .catch(error => {
+        toast.error("Đã xảy ra lỗi khi đăng nhập.");
+        console.error('Error:', error);
+      });
   };
 
   const togglePasswordVisibility = () => {
@@ -68,11 +59,11 @@ function LoginForm() {
       <InputField
         id="emailInput"
         name="email"
-        type="text" 
+        type="text"
         placeholder="Email/MSSV"
         required
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)} 
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         icon="https://cdn.builder.io/api/v1/image/assets/TEMP/0acec3f0c21c585b693aab238ddf1a6054cfa9ee7646ac7df643f1272897cf03?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
       />
 

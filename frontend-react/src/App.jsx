@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
-
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 // Components
 import HomePage from "../src/components/root/HomePage";
 import PrintingSystem from "../src/components/root/PrintPage";
@@ -88,6 +89,7 @@ export default function App() {
           }
         />
       </Routes>
+      <ToastContainer position="top-right" autoClose={2000} />
     </div>
   );
 }

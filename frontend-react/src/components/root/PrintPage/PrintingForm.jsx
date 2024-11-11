@@ -3,6 +3,7 @@ import { Printer, File, Copy, Layout, AlertCircle, X } from "lucide-react";
 import PrinterSelectionForm from './PrinterSelectionForm'
 import { useSelector } from 'react-redux';
 import { selectFileTypes } from '../../../store/fileTypeSlice';
+import { toast } from "react-toastify";
 
 const TOTAL_PAGES = 100;
 
@@ -14,7 +15,7 @@ const PAPER_SIZES = {
 const PAGES_PER_SIDE_OPTIONS = [1, 2];
 
 // Input component with consistent styling
-const StyledInput = React.memo(({ label, error, ...props }) => (
+const StyledInput = React.memo(({ label, ...props }) => (
   <div className="space-y-2">
     <label className="text-lg font-medium text-gray-700">{label}</label>
     <input
@@ -23,17 +24,13 @@ const StyledInput = React.memo(({ label, error, ...props }) => (
         w-full px-4 py-3 rounded-lg border
         focus:ring-2 focus:ring-blue-500 focus:border-blue-500
         transition duration-200
-        ${error ? 'border-red-500 bg-red-50' : 'border-gray-300'}
       `}
     />
-    {error && (
-      <p className="text-sm text-red-600 mt-1">{error}</p>
-    )}
   </div>
 ));
 
 // PrinterInfo Component with enhanced UI
-const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter }) => (
+const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter, error }) => (
   <div className="space-y-4">
     <div className="flex items-center gap-2">
       <Printer className="w-6 h-6 text-gray-600" />
@@ -42,10 +39,13 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter }) => (
 
     <div className={`
       p-4 rounded-lg border-2 transition-all duration-200
-      ${selectedPrinter
-        ? 'border-green-200 bg-green-50'
-        : 'border-gray-200 bg-gray-50'}
-    `}>
+      ${error
+        ? 'border-red-500 bg-red-50'  // Add red border and background if there's an error
+        : selectedPrinter
+        ? 'border-green-200 bg-green-50' 
+        : 'border-gray-200 bg-gray-50'
+      }`}
+    >
       {selectedPrinter ? (
         <div className="flex items-center justify-between">
           <span className="font-medium text-gray-700">
@@ -59,6 +59,8 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter }) => (
         <span className="text-gray-500">Chưa chọn máy in</span>
       )}
     </div>
+
+    {error && <p className="text-sm text-red-600 mt-1">{error}</p>} {/* Display error message */}
 
     <button
       onClick={onSelectPrinter}
@@ -74,7 +76,7 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter }) => (
 ));
 
 // Enhanced FileUpload component
-const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
+const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   const fileTypes = useSelector(selectFileTypes);
   const acceptedFileTypes = fileTypes.map(type => type.value).join(',');
   const dragRef = React.useRef(null);
@@ -90,16 +92,18 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-    
+
     const files = e.dataTransfer.files;
     if (files.length) {
       onFileUpload({ target: { files: [files[0]] } });
+      toast.success("Tệp đã được thêm thành công!");
     }
   }, [onFileUpload]);
 
   const handleRemoveFile = useCallback((e) => {
     e.stopPropagation();
     onFileUpload({ target: { files: [] } });
+    toast.info("Tệp đã bị gỡ bỏ.");
   }, [onFileUpload]);
 
   return (
@@ -116,15 +120,22 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
         onDragLeave={e => handleDrag(e, false)}
         onDrop={handleDrop}
         className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${
-          isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-        }`}
+          isDragging
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+        } ${error ? 'border-red-500 bg-red-50' : ''}`}  // Add red border if error
       >
         <div className="flex flex-col items-center gap-3">
           <input
             type="file"
             id="fileUpload"
             className="hidden"
-            onChange={onFileUpload}
+            onChange={(e) => {
+              if (e.target.files.length) {
+                onFileUpload(e);
+                toast.success("Tệp đã được thêm thành công!");
+              }
+            }}
             accept={acceptedFileTypes}
           />
           
@@ -156,6 +167,8 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
         </div>
       </div>
 
+      {error && <p className="text-sm text-red-600 mt-2">{error}</p>} {/* Show error message */}
+
       <div className="flex items-center gap-2 text-sm text-gray-500">
         <AlertCircle className="w-4 h-4" />
         <span>Định dạng hỗ trợ: {fileTypes.map(type => type.label).join(', ')}</span>
@@ -164,13 +177,14 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload }) => {
   );
 });
 
+
 // Main PrintingForm component
-function PrintingForm({ printingData }) {
+function PrintingForm() {
   const [formState, setFormState] = useState({
     remainingPages: TOTAL_PAGES,
     missingPages: 0,
     printCopies: 1,
-    pagesToPrint: 0,
+    pagesToPrint: 1,
     selectedPrinter: null,
     showPrinterForm: false,
     pagesPerSide: 1,
@@ -181,40 +195,44 @@ function PrintingForm({ printingData }) {
   const [errors, setErrors] = useState({});
 
   // Validation
-  const validateForm = useCallback(() => {
+  const validateForm = useCallback((state) => {
     const newErrors = {};
 
-    if (!formState.selectedPrinter) {
+    // Kiểm tra lỗi cho từng trường
+    if (!state.selectedPrinter) {
       newErrors.printer = 'Vui lòng chọn máy in';
     }
-    if (!formState.selectedFile) {
+    if (!state.selectedFile) {
       newErrors.file = 'Vui lòng chọn tệp cần in';
     }
-    if (formState.pagesToPrint <= 0) {
-      newErrors.pagesToPrint = 'Số trang phải lớn hơn 0';
-    }
-    if (formState.printCopies <= 0) {
-      newErrors.printCopies = 'Số bản in phải lớn hơn 0';
-    }
-    if (formState.missingPages > 0) {
-      newErrors.pages = `Thiếu ${formState.missingPages} trang để in`;
+
+    if (state.missingPages > 0) {
+      newErrors.pages = `Thiếu ${state.missingPages} trang để in`;
     }
 
+    // Cập nhật lỗi vào state và trả về kết quả
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, [formState]);
+  }, []);
 
   // Handlers
   const handleInputChange = useCallback((field, value) => {
-    setFormState(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  }, []);
+    setFormState(prev => {
+      const updatedState = { ...prev, [field]: value };
+      // Trigger form validation on change
+      validateForm(updatedState);
+      return updatedState;
+    });
+  }, [validateForm]);
 
   const handlePrint = useCallback(() => {
-    if (validateForm()) {
-      console.log('Printing:', formState);
+    // Revalidate the form before submission
+    const isValid = validateForm(formState);
+
+    if (isValid) {
+      toast.success('Xác nhận đơn in thành công');
+    } else {
+      toast.error('Vui lòng kiểm tra lại các lỗi và thử lại');
     }
   }, [formState, validateForm]);
 
@@ -241,15 +259,16 @@ function PrintingForm({ printingData }) {
             alt="Printer illustration"
             className="w-32 mx-auto"
           />
-
           <PrinterInfo
             selectedPrinter={formState.selectedPrinter}
             onSelectPrinter={() => handleInputChange('showPrinterForm', true)}
+            error={errors.printer} 
           />
 
           <FileUpload
             selectedFile={formState.selectedFile}
             onFileUpload={(e) => handleInputChange('selectedFile', e.target.files[0])}
+            error={errors.file}  
           />
         </div>
 
@@ -270,7 +289,6 @@ function PrintingForm({ printingData }) {
               onChange={(e) => handleInputChange('pagesToPrint', parseInt(e.target.value) || 0)}
               min="1"
               placeholder="Nhập số trang"
-              error={errors.pagesToPrint}
             />
 
             <StyledInput
@@ -280,7 +298,6 @@ function PrintingForm({ printingData }) {
               onChange={(e) => handleInputChange('printCopies', parseInt(e.target.value) || 1)}
               min="1"
               placeholder="Nhập số bản in"
-              error={errors.printCopies}
             />
 
             <div className="space-y-2">
