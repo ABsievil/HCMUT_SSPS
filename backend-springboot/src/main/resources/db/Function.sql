@@ -74,7 +74,22 @@ BEGIN
 	Return query
 	Select type_accepted from File_types_accepted where semester = f_semester; 
 END; $$; 
+--JSON -- 
+CREATE OR REPLACE FUNCTION file_of_semester_json(f_semester VARCHAR) 
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(type_accepted)
+	INTO result
+	FROM File_types_accepted
+	WHERE semester = f_semester; 
 
+	RETURN result; 
+END; $$; 
+
+-- select * from file_of_semester_json('232'); 
 -- select * from file_of_semester('232'); 
 ------------------
 
