@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFileType, removeFileType, selectFileTypes } from '../../../store/fileTypeSlice';
 import { File } from "lucide-react";
+import { toast } from 'react-toastify';
 
 const SectionTitle = React.memo(({ children }) => (
     <h3 className="mt-8 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
@@ -66,12 +67,13 @@ const ManageFile = () => {
         const formattedFileType = customFileType.startsWith('.') ? customFileType : `.${customFileType}`;
 
         if (fileTypes.some(type => type.value === formattedFileType)) {
-            alert('Loại tệp này đã tồn tại!');
+            toast.error('Loại tệp này đã tồn tại!');
             return;
         }
 
         dispatch(addFileType({ value: formattedFileType, label: formattedFileType }));
         setCustomFileType('');
+        toast.success('Loại tệp đã được thêm thành công!');
     }, [customFileType, dispatch, fileTypes]);
 
     const handleRemoveFileType = useCallback((typeToRemove) => {
@@ -79,6 +81,7 @@ const ManageFile = () => {
         if (selectedFileType === typeToRemove) {
             setSelectedFileType(fileTypes[0]?.value || '');
         }
+        toast.success('Loại tệp đã được xóa thành công!');
     }, [selectedFileType, dispatch, fileTypes]);
 
     const handleSubmit = useCallback(() => {
@@ -89,6 +92,7 @@ const ManageFile = () => {
             allowedFileTypes: fileTypes.map(type => type.value),
         };
         console.log('Form submitted:', formData);
+        toast.success('Thông tin đã được xác nhận!');
         // Implement your submit logic here
     }, [periodicSupply, supplyDate, selectedFileType, fileTypes]);
 

@@ -22,7 +22,7 @@ function SidebarItem({ icon, text, isHighlighted, link, onClick }) {
             transition: 'filter 0.3s ease'
           }}
         />
-        <div className={`self-stretch my-auto w-[127px] font-bold ${
+        <div className={`self-stretch my-auto w-[140px] font-bold ${
           isHighlighted ? 'text-black' : 'text-white'
         }`}>
           {text}

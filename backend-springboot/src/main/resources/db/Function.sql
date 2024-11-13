@@ -18,7 +18,23 @@ END;
 $$;
 
 -- SELECT printer_id, brand_name, printer_model, description, campus, building, room, state FROM Printer_information(); 
+CREATE OR REPLACE FUNCTION Printer_in4_json()
+RETURNS JSON 
+LANGUAGE PLPGSQL 
+AS $$  
+DECLARE 
+	result JSON;  
+BEGIN 
+	SELECT json_agg(row_to_json(p)) 
+	INTO result
+	FROM printer p; 
+		IF result is NULL THEN 
+			RETURN '[]':: JSON; 
+		END IF; 
+	RETURN result; 
+END; $$;  
 
+--select * from Printer_in4_json(); 
 -------------LOG OF PRINTING-------------
 
 CREATE FUNCTION Log_a_student (v_student_id VARCHAR)  
@@ -41,6 +57,26 @@ END;
 $$;
 
 -- SELECT *  FROM Log_a_student('2213995')
+CREATE FUNCTION Log_a_student_json (v_student_id VARCHAR)  
+RETURNS JSON
+LANGUAGE plpgsql
+AS $$
+DECLARE result json;
+BEGIN
+    SELECT json_agg(row_to_json(p))
+	INTO result 
+	FROM (
+	SELECT Users.student_id, printer_id, file_name, time_start, time_end, page_size, (number_pages_of_file * number_copy / NULLIF(number_side, 0)) AS total_pages
+	FROM Users JOIN Printed_turn ON Users.username = Printed_turn.username
+	WHERE Users.student_id = v_student_id 
+	)p; 
+	IF result is NULL THEN 
+			RETURN '[]':: JSON; 
+		END IF; 
+	RETURN result; 
+END;$$;
+
+-- select * from Log_a_student_json('2213995')
 
 CREATE FUNCTION Log_all_student ()  
 RETURNS TABLE (
@@ -63,6 +99,25 @@ $$;
 
 -- SELECT * FROM Log_all_student()
 
+CREATE FUNCTION Log_all_student_json ()  
+RETURNS JSON
+LANGUAGE plpgsql
+AS $$
+DECLARE result json;
+BEGIN
+    SELECT json_agg(row_to_json(p))
+	INTO result 
+	FROM (
+	SELECT Users.student_id, printer_id, file_name, time_start, time_end, page_size, (number_pages_of_file * number_copy / NULLIF(number_side, 0)) AS total_pages
+	FROM Users JOIN Printed_turn ON Users.username = Printed_turn.username
+	)p; 
+	IF result is NULL THEN 
+			RETURN '[]':: JSON; 
+		END IF; 
+	RETURN result; 
+END;$$;
+
+-- select * from Log_all_student_json()
 ------------------
 -- Function returns accepted file for selected semester-- 
 -- Support for print page
@@ -74,8 +129,23 @@ BEGIN
 	Return query
 	Select type_accepted from File_types_accepted where semester = f_semester; 
 END; $$; 
-
 -- select * from file_of_semester('232'); 
+
+CREATE OR REPLACE FUNCTION file_of_semester_json(f_semester VARCHAR) 
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(type_accepted)
+	INTO result
+	FROM File_types_accepted
+	WHERE semester = f_semester; 
+
+	RETURN result; 
+END; $$; 
+
+-- select * from file_of_semester_json('232'); 
 ------------------
 
 

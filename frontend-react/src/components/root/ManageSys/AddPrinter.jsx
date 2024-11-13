@@ -2,18 +2,18 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAvailablePrinters, updatePrinterStatus } from '../../../store/printersSlice';
 import { Printer, Plus, Settings, CheckCircle, XCircle } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 // Reusable components with enhanced styling
 const RadioButton = React.memo(({ id, label, name, checked, onChange, icon: Icon }) => (
     <label
         htmlFor={id}
-        className={`
-      flex items-center gap-3 p-4 rounded-lg cursor-pointer
-      border-2 transition-all duration-200
-      ${checked
+        className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer
+            border-2 transition-all duration-200
+            ${checked
                 ? 'border-blue-500 bg-blue-50 text-blue-700'
                 : 'border-gray-200 hover:border-blue-200'}
-    `}
+        `}
     >
         <input
             type="radio"
@@ -58,13 +58,7 @@ const Select = React.memo(({ label, options, error, icon: Icon, ...props }) => (
                 </div>
             )}
             <select
-                className={`
-            w-full px-4 py-3 ${Icon ? 'pl-10' : ''}
-            border-2 rounded-lg bg-white
-            focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-            transition duration-200
-            ${error ? 'border-red-500' : 'border-gray-200'}
-          `}
+                className={`w-full px-4 py-3 ${Icon ? 'pl-10' : ''} border-2 rounded-lg bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200 ${error ? 'border-red-500' : 'border-gray-200'}`}
                 {...props}
             >
                 {options.map((option) => (
@@ -79,7 +73,6 @@ const Select = React.memo(({ label, options, error, icon: Icon, ...props }) => (
 ));
 
 // Form for adding new printer
-
 const AddNewPrinterForm = React.memo(({ onClose }) => {
     const [formData, setFormData] = useState({
         id: '',
@@ -105,9 +98,9 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            // Handle submission
-            console.log('Submit new printer:', formData);
-            onClose();
+            // Handle successful form submission (e.g., dispatching an action to add the printer)
+            toast.success('Máy in đã được thêm thành công!');
+            onClose(); // Close the form after submission
         }
     };
 
@@ -135,53 +128,33 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
                     placeholder="ID máy in"
                     value={formData.id}
                     onChange={handleChange('id')}
-                    className={`
-                        w-full px-4 py-3 rounded-lg border-2
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                        ${errors.id ? 'border-red-500' : 'border-gray-200'}
-                    `}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.id ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
                     placeholder="Tên máy in"
                     value={formData.name}
                     onChange={handleChange('name')}
-                    className={`
-                        w-full px-4 py-3 rounded-lg border-2
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                        ${errors.name ? 'border-red-500' : 'border-gray-200'}
-                    `}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.name ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
                     placeholder="Vị trí"
                     value={formData.location}
                     onChange={handleChange('location')}
-                    className={`
-                        w-full px-4 py-3 rounded-lg border-2
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                        ${errors.location ? 'border-red-500' : 'border-gray-200'}
-                    `}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.location ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
                     placeholder="Model máy in"
                     value={formData.type}
                     onChange={handleChange('type')}
-                    className={`
-                        w-full px-4 py-3 rounded-lg border-2
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                        ${errors.type ? 'border-red-500' : 'border-gray-200'}
-                    `}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <select
                     value={formData.status}
                     onChange={handleChange('status')}
-                    className={`
-                        w-full px-4 py-3 rounded-lg border-2
-                        focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-                        ${errors.status ? 'border-red-500' : 'border-gray-200'}
-                    `}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.status ? 'border-red-500' : 'border-gray-200'}`}
                 >
                     <option value="Sẵn sàng">Sử dụng ngay</option>
                     <option value="Đang bảo trì">Chưa sử dụng được</option>
@@ -217,6 +190,7 @@ const AddPrinter = () => {
 
     const handleStatusChange = useCallback((status) => {
         dispatch(updatePrinterStatus({ id: selectedPrinterId, status }));
+        toast.success('Trạng thái máy in đã được cập nhật!');
     }, [dispatch, selectedPrinterId]);
 
     const selectedPrinter = availablePrinters.find(printer => printer.id === selectedPrinterId);
@@ -268,12 +242,6 @@ const AddPrinter = () => {
                                     icon={XCircle}
                                 />
                             </div>
-                        </div>
-
-                        <div className="flex justify-center pt-4">
-                            <Button >
-                                Xác nhận
-                            </Button>
                         </div>
                     </div>
                 </>

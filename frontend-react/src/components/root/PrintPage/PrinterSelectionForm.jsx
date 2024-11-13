@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Search, CircleAlert, X } from 'lucide-react';
 import InputField from "../fragments/InputField/InputField";
 import { selectAvailablePrinters } from '../../../store/printersSlice';
+import { toast } from 'react-toastify';
 
 const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
   const [selectedPrinter, setSelectedPrinter] = useState(null);
@@ -24,6 +25,7 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
 
   const handleConfirm = () => {
     onSelectPrinter(selectedPrinter);
+    toast.success(`Máy in "${selectedPrinter.name}" đã được chọn!`);
     onClose();
   };
 

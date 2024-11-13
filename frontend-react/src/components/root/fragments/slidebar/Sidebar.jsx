@@ -30,10 +30,15 @@ const sidebarItems = [
     link: "/manage"
   },
   {
+    icon: "src/images/icon-file-nav.png", 
+    text: "Báo cáo",
+    link: "/report"
+  },
+  {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9e6254714a807272e104cd11bfb80c4546f8c63032d7d5999b464192ba5220d9?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
     text: "Đăng xuất",
     link: "/logout"
-  },
+  }
 ];
 
 const Sidebar = () => {
@@ -41,7 +46,6 @@ const Sidebar = () => {
   const navigate = useNavigate();
   const [highlightedItem, setHighlightedItem] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
     const currentPath = location.pathname;
@@ -71,12 +75,7 @@ const Sidebar = () => {
   };
 
   return (
-    <aside
-      className={`flex flex-col transition-all duration-300 ${hovered ? 'w-[15%]' : 'w-[10%]'
-        } max-md:ml-0 max-md:w-full`}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-    >
+    <aside className="flex flex-col w-[15%] max-md:w-full">
       <div className="flex flex-col grow items-center px-1 pt-3.5 pb-24 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20">
         <img
           loading="lazy"
@@ -84,7 +83,7 @@ const Sidebar = () => {
           alt="User avatar"
           className="object-contain rounded-full aspect-square w-[70px]"
         />
-        <div className={`mt-1.5 ${hovered ? 'block' : 'hidden'}`}>User name</div>
+        <div className="mt-1.5">User name</div>
         <nav className={`flex flex-col self-stretch mt-8 w-full ${isLoading ? 'pointer-events-none opacity-50' : ''}`}>
           {sidebarItems.map((item, index) => (
             <SidebarItem
@@ -94,7 +93,7 @@ const Sidebar = () => {
               isHighlighted={highlightedItem === index}
               link={item.link}
               onClick={() => handleItemClick(index, item.link)}
-              showText={hovered} // Pass the hovered state
+              showText={true} // Always show text
             />
           ))}
         </nav>
