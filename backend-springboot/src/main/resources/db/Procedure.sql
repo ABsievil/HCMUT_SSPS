@@ -19,11 +19,12 @@ CREATE PROCEDURE Add_printer (v_brand_name VARCHAR, v_printer_model VARCHAR, v_d
 LANGUAGE plpgsql
 AS $$
 BEGIN
-	INSERT INTO Printer (branch_name, printer_model, description, campus, building, room)
+	INSERT INTO Printer (v_brand_name, printer_model, description, campus, building, room)
 	values (v_brand_name, v_printer_model, v_description, v_campus, v_building, v_room);
 	RAISE NOTICE 'Added printer success';
 END;
 $$;
+-- call Add_printer('Lenovo', 'Office T16 Gen2', 'May in phun, may in laser, may in anh', '02', 'H6', '106')
 
 --5.3.Update state với tham số truyền vào là bool state $\-- 
 CREATE PROCEDURE Enable_printer(v_printer_id INT)
