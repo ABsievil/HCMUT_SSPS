@@ -54,17 +54,17 @@ public class PrinterService {
         }
     }
 
-    public ResponseEntity<ResponseObject> FNC_getPatialPrinter_information(){
-        try {
-            List<PrinterDTO> printerInforList = jdbcTemplate.query(
-            "SELECT printer_id, branch_name, printer_model, campus, building, room FROM Printer_information()", new PrinterPartialRowMapper());
+    // public ResponseEntity<ResponseObject> FNC_getPatialPrinter_information(){
+    //     try {
+    //         List<PrinterDTO> printerInforList = jdbcTemplate.query(
+    //         "SELECT printer_id, branch_name, printer_model, campus, building, room FROM Printer_information()", new PrinterPartialRowMapper());
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Query to get Patial Printer_information() successfully", printerInforList));
-        } catch(DataAccessException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ResponseObject("ERROR" + ", " + e.getMessage().toString(), "Error getting Patial Printer_information()", null));
-        }
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //                 .body(new ResponseObject("OK", "Query to get Patial Printer_information() successfully", printerInforList));
+    //     } catch(DataAccessException e) {
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //                 .body(new ResponseObject("ERROR" + ", " + e.getMessage().toString(), "Error getting Patial Printer_information()", null));
+    //     }
     }
 
     // public ResponseEntity<ResponseObject> FNC_getPrinterInformation() {

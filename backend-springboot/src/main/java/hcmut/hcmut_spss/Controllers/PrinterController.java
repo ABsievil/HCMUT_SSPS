@@ -20,8 +20,8 @@ public class PrinterController {
         return printerService.FNC_getPrinter_information();
     }
 
-    @GetMapping("/getPartialPrintersInformation")
-    public ResponseEntity<ResponseObject> getPartialPrinter_information() {
-        return printerService.FNC_getPatialPrinter_information();
-    }
+    // @GetMapping("/getPartialPrintersInformation")
+    // public ResponseEntity<ResponseObject> getPartialPrinter_information() {
+    //     return printerService.FNC_getPatialPrinter_information();
+    // }
 }
