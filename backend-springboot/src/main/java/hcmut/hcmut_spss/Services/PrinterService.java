@@ -101,4 +101,50 @@ public class PrinterService {
                 .body(new ResponseObject("ERROR", "Error updating addPrinter(): " + e.getMessage(), null));
         }
     }
+
+    public ResponseEntity<ResponseObject> PROC_enablePrinter(Integer printerId){
+        try {
+            jdbcTemplate.execute(
+            "CALL Enable_printer(?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setInt(1, printerId);
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_enablePrinter() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_enablePrinter(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> PROC_disablePrinter(Integer printerId){
+        try {
+            jdbcTemplate.execute(
+            "CALL Disable_printer(?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setInt(1, printerId);
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_disablePrinter() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_disablePrinter(): " + e.getMessage(), null));
+        }
+    }
 }
