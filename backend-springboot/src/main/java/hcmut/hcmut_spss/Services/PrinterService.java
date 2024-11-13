@@ -7,12 +7,16 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hcmut.hcmut_spss.DTO.PrinterDTO;
 import hcmut.hcmut_spss.DTO.ResponseObject;
+import hcmut.hcmut_spss.DTO.UtilityDTO;
 
 @Service
 public class PrinterService {
@@ -69,4 +73,32 @@ public class PrinterService {
     //                 .body(new ResponseObject("ERROR", "Error converting data to JSON: " + e.getMessage(), null));
     //     }
     // }
+
+    public ResponseEntity<ResponseObject> PROC_addPrinter(PrinterDTO printerDTO){
+        try {
+            jdbcTemplate.execute(
+            "CALL Add_printer(?, ?, ?, ?, ?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, printerDTO.getBrand_name());
+                ps.setString(2, printerDTO.getPrinter_model());
+                ps.setString(3, printerDTO.getDescription());
+                ps.setString(4, printerDTO.getCampus());
+                ps.setString(5, printerDTO.getBuilding());
+                ps.setString(6, printerDTO.getRoom());
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update addPrinter() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating addPrinter(): " + e.getMessage(), null));
+        }
+    }
 }
