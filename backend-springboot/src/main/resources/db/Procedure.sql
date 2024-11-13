@@ -15,12 +15,12 @@ end; $$;
 -- call add_utility('233',100,'2024-12-15',2500)
 
 --5.2.Thêm máy in by (tất cả thuộc tính cần có của 1 máy in)--
-CREATE PROCEDURE Add_printer (v_branch_name VARCHAR, v_printer_model VARCHAR, v_description VARCHAR, v_campus VARCHAR, v_building VARCHAR, v_room VARCHAR)
+CREATE PROCEDURE Add_printer (v_brand_name VARCHAR, v_printer_model VARCHAR, v_description VARCHAR, v_campus VARCHAR, v_building VARCHAR, v_room VARCHAR)
 LANGUAGE plpgsql
 AS $$
 BEGIN
 	INSERT INTO Printer (branch_name, printer_model, description, campus, building, room)
-	values (v_branch_name, v_printer_model, v_description, v_campus, v_building, v_room);
+	values (v_brand_name, v_printer_model, v_description, v_campus, v_building, v_room);
 	RAISE NOTICE 'Added printer success';
 END;
 $$;
