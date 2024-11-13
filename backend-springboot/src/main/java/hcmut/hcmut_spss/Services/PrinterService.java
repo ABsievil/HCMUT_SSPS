@@ -12,10 +12,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import hcmut.hcmut_spss.DTO.PrinterDTO;
-import hcmut.hcmut_spss.DTO.PrinterPartialRowMapper;
-import hcmut.hcmut_spss.DTO.PrinterRowMapper;
 import hcmut.hcmut_spss.DTO.ResponseObject;
 
 @Service
@@ -65,7 +61,7 @@ public class PrinterService {
     //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
     //                 .body(new ResponseObject("ERROR" + ", " + e.getMessage().toString(), "Error getting Patial Printer_information()", null));
     //     }
-    }
+    // }
 
     // public ResponseEntity<ResponseObject> FNC_getPrinterInformation() {
     //     try {
