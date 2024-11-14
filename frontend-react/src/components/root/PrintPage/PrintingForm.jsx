@@ -49,10 +49,10 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter, error }) => 
       {selectedPrinter ? (
         <div className="flex items-center justify-between">
           <span className="font-medium text-gray-700">
-            {selectedPrinter.name}
+            {selectedPrinter.building} {selectedPrinter.room} - cơ sở {selectedPrinter.campus}
           </span>
           <span className="text-sm text-gray-500">
-            ID: {selectedPrinter.id}
+            ID: {selectedPrinter.printer_id}
           </span>
         </div>
       ) : (

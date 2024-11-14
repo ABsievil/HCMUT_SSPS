@@ -1,22 +1,29 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { Search, CircleAlert, X } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Search, CircleAlert, X } from "lucide-react";
 import InputField from "../fragments/InputField/InputField";
-import { selectAvailablePrinters } from '../../../store/printersSlice';
-import { toast } from 'react-toastify';
+import { fetchPrintersabc } from "../../../store/PrintersabcSlice";
+import { toast } from "react-toastify";
 
 const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
+  const dispatch = useDispatch();
+  const { isLoading, printerList, error } = useSelector(
+    (state) => state.printersabc
+  );
+  useEffect(() => {
+      dispatch(fetchPrintersabc());
+  }, []);
+
   const [selectedPrinter, setSelectedPrinter] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [showPrinterDetails, setShowPrinterDetails] = useState(false);
   const [detailedPrinter, setDetailedPrinter] = useState(null);
 
-  const availablePrinters = useSelector(selectAvailablePrinters);
-
-  const filteredPrinters = availablePrinters.filter(printer =>
-    printer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    printer.id.includes(searchQuery) ||
-    printer.location.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPrinters = printerList.data.filter(
+    (printer) =>
+      printer.brand_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      printer.printer_id.includes(searchQuery) ||
+      printer.building.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const handlePrinterSelect = (printer) => {
@@ -25,7 +32,7 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
 
   const handleConfirm = () => {
     onSelectPrinter(selectedPrinter);
-    toast.success(`Máy in "${selectedPrinter.name}" đã được chọn!`);
+    toast.success(`Máy in ${selectedPrinter.printer_id} đã được chọn!`);
     onClose();
   };
 
@@ -34,6 +41,13 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
     setDetailedPrinter(printer);
     setShowPrinterDetails(true);
   };
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -47,36 +61,49 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+          <Search
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400"
+            size={20}
+          />
         </div>
 
         <div className="space-y-2 mb-6 max-h-60 overflow-y-auto">
           {filteredPrinters.map((printer) => (
             <div
-              key={printer.id}
-              className={`p-3 border rounded-lg cursor-pointer flex justify-between items-center transition-colors ${
-                selectedPrinter && selectedPrinter.id === printer.id ? 'bg-blue-100 border-blue-500' : 'hover:bg-gray-100'
-              }`}
+              key={printer.printer_id}
+              className={`p-3 border rounded-lg cursor-pointer transition-colors ${selectedPrinter && selectedPrinter.printer_id === printer.printer_id
+                ? "bg-blue-100 border-blue-500"
+                : "hover:bg-gray-100"
+                }`}
               onClick={() => handlePrinterSelect(printer)}
             >
-              <div className="flex flex-col">
-                <p className="font-medium">{printer.name}</p>
-                <div className='flex'>
-                  <p className="text-sm text-gray-600">ID: {printer.id}</p>
-                  <p className="text-sm text-gray-600 ml-3">Vị trí: {printer.location}</p>
+              {printer.state && (
+                <div className="flex justify-between items-center ">
+                  <div className="flex flex-col">
+                    <p className="font-medium">{printer.brand_name} - {printer.printer_model}</p>
+                    <div className="flex">
+                      <p className="text-sm text-gray-600">ID: {printer.printer_id}</p>
+                      <p className="text-sm text-gray-600 ml-3">
+                        Vị trí: {printer.building} {printer.room} - cơ sở {printer.campus}
+                      </p>
+                    </div>
+                  </div>
+                  <CircleAlert
+                    className="text-gray-400 hover:text-blue-500"
+                    size={20}
+                    onClick={(e) => handleShowDetails(e, printer)}
+                  />
                 </div>
-              </div>
-              <CircleAlert
-                className="text-gray-400 hover:text-blue-500"
-                size={20}
-                onClick={(e) => handleShowDetails(e, printer)}
-              />
+              )}
             </div>
           ))}
         </div>
 
         <div className="flex justify-between items-center">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 transition-colors"
+          >
             Hủy
           </button>
           <button
@@ -101,11 +128,21 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
               />
             </div>
             <div className="space-y-2">
-              <p><strong>Tên:</strong> {detailedPrinter.name}</p>
-              <p><strong>ID:</strong> {detailedPrinter.id}</p>
-              <p><strong>Vị trí:</strong> {detailedPrinter.location}</p>
-              <p><strong>Trạng thái:</strong> {detailedPrinter.status}</p>
-              <p><strong>Loại:</strong> {detailedPrinter.type}</p>
+              <p>
+                <strong>Tên:</strong> {detailedPrinter.brand_name}
+              </p>
+              <p>
+                <strong>ID:</strong> {detailedPrinter.printer_id}
+              </p>
+              <p>
+                <strong>Vị trí:</strong> {detailedPrinter.building}
+              </p>
+              <p>
+                <strong>Trạng thái:</strong> {detailedPrinter.state ? 'sẵn sàng' : 'không hoat động'}
+              </p>
+              <p>
+                <strong>Loại:</strong> {detailedPrinter.printer_model}
+              </p>
             </div>
             <button
               className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors w-full"

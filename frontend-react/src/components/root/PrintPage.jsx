@@ -16,10 +16,8 @@ function PrintingSystem() {
       <main className="flex gap-5 w-full max-md:flex-col max-md:max-w-full">
         <Sidebar />
         <div className="flex flex-col max-md:w-full w-full px-6">
-          
           <PrintingForm printingData={printingData} />
-          <PrinterList></PrinterList>
-          {/* <PrintingResults setPrintingData={setPrintingData} /> */}
+          <PrintingResults setPrintingData={setPrintingData} />
         </div>
       </main>
       <Footer />
