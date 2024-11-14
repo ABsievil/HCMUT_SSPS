@@ -39,10 +39,10 @@ Thêm/Bật/Tắt và Sửa thông tin của Printer
 
 ----------------------------------------------------------------PRINT------------------------------------------------------------
 
-16. print(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input VARCHAR, number_copy_input VARCHAR)
+16. print(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input INT, number_copy_input INT)
 
 **PRINT FLOW**
-Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input VARCHAR, number_copy_input VARCHAR)
+Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input INT, number_copy_input INT)
       = update page remain
       = update page was printed
 

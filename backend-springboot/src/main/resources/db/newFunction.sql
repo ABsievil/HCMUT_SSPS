@@ -150,3 +150,23 @@ $$;
 
 -- CALL update_student_infor('quachgiaphu', 'Quach', 'Gia', 'Phu', 'quachgiaphu@gmail.com', '2004-9-17', '0976251672', '3', 'Electric')
 
+CREATE OR REPLACE PROCEDURE change_password(username_input VARCHAR, old_password_input VARCHAR, new_password_input VARCHAR)
+LANGUAGE plpgsql AS $$
+DECLARE 
+	stored_password VARCHAR(200);
+BEGIN
+	SELECT password INTO stored_password
+	FROM Users
+	WHERE username = username_input;
+	
+	IF stored_password <> old_password_input THEN
+        RAISE EXCEPTION 'Bạn nhập sai mật khẩu hiện tại!';
+	ELSE 
+		UPDATE Users
+		SET password = new_password_input
+		WHERE username = username_input AND password = old_password_input;
+	END IF;
+END;
+$$;
+
+-- CALL change_password('quachgiaphu', '$2233435r$10$TzDeitFt5kFI6nQgLPqJfelouc08AWJAr4tQZyr96X6nal7pw4oBi', '3546341')
