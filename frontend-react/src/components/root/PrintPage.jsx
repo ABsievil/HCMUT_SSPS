@@ -4,7 +4,6 @@ import Sidebar from "./fragments/slidebar/Sidebar";
 import PrintingForm from "./PrintPage/PrintingForm";
 import PrintingResults from "./PrintPage/PrintingResults";
 import Footer from "./fragments/footer/Footer";
-import PrinterList from "./PrinterList";
 
 function PrintingSystem() {
   // Tạo state dùng chung cho cả hai component

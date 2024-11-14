@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Search, CircleAlert, X } from "lucide-react";
 import InputField from "../fragments/InputField/InputField";
@@ -19,12 +19,6 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
   const [showPrinterDetails, setShowPrinterDetails] = useState(false);
   const [detailedPrinter, setDetailedPrinter] = useState(null);
 
-  const filteredPrinters = printerList.data.filter(
-    (printer) =>
-      printer.brand_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      printer.printer_id.includes(searchQuery) ||
-      printer.building.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   const handlePrinterSelect = (printer) => {
     setSelectedPrinter(printer);
@@ -48,6 +42,16 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
   if (error) {
     return <div>Error: {error}</div>;
   }
+
+  const filteredPrinters = printerList.data.filter(
+    (printer) => {
+      return (
+        printer.brand_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        printer.printer_id.toString().includes(searchQuery) ||
+        printer.building.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    }
+  );
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
