@@ -4,6 +4,7 @@ import Sidebar from "./fragments/slidebar/Sidebar";
 import PrintingForm from "./PrintPage/PrintingForm";
 import PrintingResults from "./PrintPage/PrintingResults";
 import Footer from "./fragments/footer/Footer";
+import PrinterList from "./PrinterList";
 
 function PrintingSystem() {
   // Tạo state dùng chung cho cả hai component
@@ -17,8 +18,8 @@ function PrintingSystem() {
         <div className="flex flex-col max-md:w-full w-full px-6">
           
           <PrintingForm printingData={printingData} />
-         
-          <PrintingResults setPrintingData={setPrintingData} />
+          <PrinterList></PrinterList>
+          {/* <PrintingResults setPrintingData={setPrintingData} /> */}
         </div>
       </main>
       <Footer />
