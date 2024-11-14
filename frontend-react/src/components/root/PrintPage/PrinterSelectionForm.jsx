@@ -11,7 +11,7 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
     (state) => state.printersabc
   );
   useEffect(() => {
-      dispatch(fetchPrintersabc());
+    dispatch(fetchPrintersabc());
   }, []);
 
   const [selectedPrinter, setSelectedPrinter] = useState(null);
@@ -133,19 +133,19 @@ const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
             </div>
             <div className="space-y-2">
               <p>
-                <strong>Tên:</strong> {detailedPrinter.brand_name}
+                <strong>Hãng:</strong> {detailedPrinter.brand_name}
+              </p>
+              <p>
+                <strong>Model:</strong> {detailedPrinter.printer_model}
               </p>
               <p>
                 <strong>ID:</strong> {detailedPrinter.printer_id}
               </p>
               <p>
-                <strong>Vị trí:</strong> {detailedPrinter.building}
+                <strong>Vị trí:</strong> {detailedPrinter.building} {detailedPrinter.room} - cơ sở {detailedPrinter.campus}
               </p>
               <p>
                 <strong>Trạng thái:</strong> {detailedPrinter.state ? 'sẵn sàng' : 'không hoat động'}
-              </p>
-              <p>
-                <strong>Loại:</strong> {detailedPrinter.printer_model}
               </p>
             </div>
             <button
