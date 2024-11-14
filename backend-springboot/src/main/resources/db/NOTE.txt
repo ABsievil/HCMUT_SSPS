@@ -14,7 +14,7 @@
 Thêm/Xóa và Sửa thông tin của Student
 4. add_student(username_input VARCHAR, password_input VARCHAR, last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, student_id_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR, page_remain_input INT)
 5. delete_student(username_input VARCHAR)
-6. update_student_infor(username_input VARCHAR, password_input VARCHAR, last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, student_id_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR, page_remain_input INT)
+6. update_student_infor(username_input VARCHAR,  last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR)
 
 7. change_password(username_input VARCHAR, old_password_input VARCHAR, new_password_input VARCHAR)
 --> đổi mật khẩu của Student, check mật khẩu cũ nếu đúng change thành mật khẩu mới, sai thì báo lỗi.
