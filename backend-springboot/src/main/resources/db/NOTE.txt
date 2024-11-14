@@ -16,44 +16,53 @@ Thêm/Xóa và Sửa thông tin của Student
 5. delete_student(username_input VARCHAR)
 6. update_student_infor(username_input VARCHAR, password_input VARCHAR, last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, student_id_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR, page_remain_input INT)
 
+7. change_password(username_input VARCHAR, old_password_input VARCHAR, new_password_input VARCHAR)
+--> đổi mật khẩu của Student, check mật khẩu cũ nếu đúng change thành mật khẩu mới, sai thì báo lỗi.
+
+Lấy thông tin số trang mặc định còn lại và số trang đã in của Student
+8. get_number_page_default_remain(student_id_input, VARCHAR)
+9.get_number_page_was_printed(student_id_input, VARCHAR)
+
 ---------------------------------------------------------------PRINTER-----------------------------------------------------------
 
 Thêm/Bật/Tắt và Sửa thông tin của Printer
-7. add_printer(brand_name VARCHAR, printer_model VARCHAR, description VARCHAR, campus VARCHAR, building VARCHAR, room VARCHAR)
-8. enable_printer(printer_id_input INT)
-9. disable_printer(printer_id_input INT)
-10. update_printer_infor(printer_id_input INT, brand_name_input VARCHAR, printer_model_input VARCHAR, description_input VARCHAR, campus_input VARCHAR, building_input VARCHAR, room_input VARCHAR)
+10. add_printer(brand_name VARCHAR, printer_model VARCHAR, description VARCHAR, campus VARCHAR, building VARCHAR, room VARCHAR)
+11. enable_printer(printer_id_input INT)
+12. disable_printer(printer_id_input INT)
+13. update_printer_infor(printer_id_input INT, brand_name_input VARCHAR, printer_model_input VARCHAR, description_input VARCHAR, campus_input VARCHAR, building_input VARCHAR, room_input VARCHAR)
 
-11. get_printer_infor_by_id(printer_id_input INT)
+14. get_printer_infor_by_id(printer_id_input INT)
 --> lấy thông tin của 1 Printer bằng id
 
-12. get_infor_all_printer()
+15. get_infor_all_printer()
 --> lấy thông tin toàn bộ Printer
 
 ----------------------------------------------------------------PRINT------------------------------------------------------------
 
-13. add_printed_turn_to_queue()
---> config print và nhấn xác nhận thông tin để thêm đợt in vào hàng đợi
+16. print(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input VARCHAR, number_copy_input VARCHAR)
 
-14. print()
-
+**PRINT FLOW**
+Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input VARCHAR, number_copy_input VARCHAR)
+      = update page remain
+      = update page was printed
 
 ----------------------------------------------------------------BUY PAPER--------------------------------------------------------
 
-15. purchase_paper()
+17. purchase_page(username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
+
 -----------------------------------------------------------------LOG-------------------------------------------------------------
 
-16. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
-17. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
+18. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
+19. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
 
 ----------------------------------------------------------------BUY PAPER--------------------------------------------------------
 
-18. add_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
-19. delete_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
-21. add_ultility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price INT)
-22. update_ultility_of_semester(semester_input VARCHAR, page_price INT)
+20. add_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
+21. delete_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
+22. add_ultility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price INT)
+23. update_ultility_of_semester(semester_input VARCHAR, page_price INT)
 
 -----------------------------------------------------------------REPORT-------------------------------------------------------------
 
-23. get_total_revenue(date_start_input DATE, date_end_input DATE)
-24. get_total_paper_was_printed(date_start_input DATE, date_end_input DATE)
+24. get_total_revenue(date_start_input DATE, date_end_input DATE)
+25. get_total_page_was_printed(date_start_input DATE, date_end_input DATE)
