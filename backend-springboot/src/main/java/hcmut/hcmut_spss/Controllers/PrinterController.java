@@ -19,9 +19,9 @@ public class PrinterController {
     @Autowired
     private PrinterService printerService;
 
-    @GetMapping("/getPrintersInformation")
-    public ResponseEntity<ResponseObject> getPrinter_information() {
-        return printerService.FNC_getPrinter_information();
+    @GetMapping("/getInforAllPrinter")
+    public ResponseEntity<ResponseObject> getInforAllPrinter() {
+        return printerService.FNC_getInforAllPrinter();
     }
 
     @PutMapping("/addPrinter")
