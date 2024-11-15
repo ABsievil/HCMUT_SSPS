@@ -2,17 +2,24 @@
 
 --Thêm/Bật/Tắt và Sửa thông tin của Printer
 --10. add_printer(brand_name VARCHAR, printer_model VARCHAR, description VARCHAR, campus VARCHAR, building VARCHAR, room VARCHAR)
-CREATE OR REPLACE PROCEDURE add_printer(brand_name VARCHAR, printer_model VARCHAR, description VARCHAR, campus VARCHAR, building VARCHAR, room VARCHAR)
+CREATE OR REPLACE PROCEDURE add_printer(
+	brand_name VARCHAR, 
+	printer_model VARCHAR, 
+	description VARCHAR, 
+	campus VARCHAR, 
+	building VARCHAR, 
+	room VARCHAR
+)
 LANGUAGE plpgsql
 AS $$
 BEGIN
 	INSERT INTO Printer (brand_name, printer_model, description, campus, building, room)
 	values (brand_name, printer_model, description, campus, building, room);
-	RAISE NOTICE 'Add printer succeed';
+	RAISE NOTICE 'Add printer success';
 END;
 $$;
-call add_printer('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '106')
- 
+-- CALL add_printer('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '106')
+
 --11. enable_printer(printer_id_input INT)
 CREATE PROCEDURE Enable_printer(printer_id_input INT)
 LANGUAGE plpgsql
@@ -24,7 +31,8 @@ BEGIN
 	RAISE NOTICE 'Printer was enabled';
 END;
 $$;
-call Enable_printer('10'); 
+-- CALL Enable_printer('10')
+
 --12. disable_printer(printer_id_input INT)
 CREATE PROCEDURE Disable_printer(printer_id_input INT)
 LANGUAGE plpgsql
@@ -36,18 +44,26 @@ BEGIN
 	RAISE NOTICE 'Printer was disabled';
 END;
 $$;
--- CALL disable_printer(10);
+-- CALL disable_printer(10)
+
 --13. update_printer_infor(printer_id_input INT, brand_name_input VARCHAR, printer_model_input VARCHAR, description_input VARCHAR, campus_input VARCHAR, building_input VARCHAR, room_input VARCHAR)
 CREATE OR REPLACE PROCEDURE update_printer_infor(printer_id_input INT, brand_name_input VARCHAR, printer_model_input VARCHAR, description_input VARCHAR, campus_input VARCHAR, building_input VARCHAR, room_input VARCHAR)
 LANGUAGE plpgsql
 AS $$
 BEGIN
 	UPDATE Printer 
-	SET printer_id = printer_id_input, brand_name = brand_name_input, printer_model = printer_model_input, description = description_input, campus = campus_input, building = building_input, room =  room_input;
-	RAISE NOTICE 'Printer was disabled';
+	SET 
+		printer_id = printer_id_input,
+		brand_name = brand_name_input, 
+		printer_model = printer_model_input, 
+		description = description_input, 
+		campus = campus_input, 
+		building = building_input, 
+		room =  room_input;
 END;
 $$;
---call update_printer()
+-- CALL update_printer()
+
 --14. get_printer_infor_by_id(printer_id_input INT)
 --> lấy thông tin của 1 Printer bằng id
 CREATE OR REPLACE FUNCTION get_printer_infor_by_id(printer_id_input INT)
@@ -62,7 +78,8 @@ BEGIN
 	WHERE printer_id = printer_id_input; 
 	RETURN result; 
 END; $$; 
--- select * from get_printer_infor_by_id('1')
+-- SELECT * from get_printer_infor_by_id('1')
+
 --15. get_infor_all_printer()
 --> lấy thông tin toàn bộ Printer
 CREATE OR REPLACE FUNCTION get_infor_all_printer()
@@ -76,7 +93,7 @@ BEGIN
 	FROM printer p;
 	RETURN result; 
 END; $$; 
--- select * from get_infor_all_printer()
+-- SELECT * from get_infor_all_printer()
 ----------------------------------------------------------------PRINT------------------------------------------------------------
 
 --16. print(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input VARCHAR, number_copy_input VARCHAR)
