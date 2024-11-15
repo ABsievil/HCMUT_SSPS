@@ -22,17 +22,18 @@ public class StudentService {
         this.objectMapper = objectMapper;
     }
 
-    public ResponseEntity<ResponseObject> FNC_getLogStudent(String studentId){
+    public ResponseEntity<ResponseObject> FNC_getStudentInforById(String studentId){
         try {
-            String logStudentList = jdbcTemplate.queryForObject(
-                "select log_a_student_json(?)",
-                String.class, studentId
+            String studentInfor = jdbcTemplate.queryForObject(
+                "SELECT get_student_infor_by_id(?)",
+                String.class, 
+                studentId
             );
 
-            JsonNode jsonNode = objectMapper.readTree(logStudentList);
+            JsonNode jsonNode = objectMapper.readTree(studentInfor);
 
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to get getLogStudent() successfully", jsonNode));
+                .body(new ResponseObject("OK", "Query to get FNC_getStudentInforById() successfully", jsonNode));
         } catch (DataAccessException e) {
             // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -44,21 +45,21 @@ public class StudentService {
         } catch (Exception e) {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error getting getLogStudent(): " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Error getting FNC_getStudentInforById(): " + e.getMessage(), null));
         }
     }
 
-    public ResponseEntity<ResponseObject> FNC_getLogAllStudent(){
+    public ResponseEntity<ResponseObject> FNC_getAllStudentInfor(){
         try {
-            String logAllStudentList = jdbcTemplate.queryForObject(
-                "select log_all_student_json()",
+            String studentInforList = jdbcTemplate.queryForObject(
+                "SELECT get_all_student_infor()",
                 String.class
             );
 
-            JsonNode jsonNode = objectMapper.readTree(logAllStudentList);
+            JsonNode jsonNode = objectMapper.readTree(studentInforList);
 
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to get getLogAllStudent() successfully", jsonNode));
+                .body(new ResponseObject("OK", "Query to get FNC_getAllStudentInfor() successfully", jsonNode));
         } catch (DataAccessException e) {
             // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -70,7 +71,59 @@ public class StudentService {
         } catch (Exception e) {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error getting getLogAllStudent(): " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Error getting FNC_getAllStudentInfor(): " + e.getMessage(), null));
         }
     }
+
+    // public ResponseEntity<ResponseObject> FNC_getLogStudent(String studentId){
+    //     try {
+    //         String logStudentList = jdbcTemplate.queryForObject(
+    //             "select log_a_student_json(?)",
+    //             String.class, studentId
+    //         );
+
+    //         JsonNode jsonNode = objectMapper.readTree(logStudentList);
+
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //             .body(new ResponseObject("OK", "Query to get getLogStudent() successfully", jsonNode));
+    //     } catch (DataAccessException e) {
+    //         // Xử lý lỗi liên quan đến truy cập dữ liệu
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+    //     } catch (JsonProcessingException e) {
+    //         // Xử lý lỗi khi parse JSON
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+    //     } catch (Exception e) {
+    //         // Xử lý các lỗi khác
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Error getting getLogStudent(): " + e.getMessage(), null));
+    //     }
+    // }
+
+    // public ResponseEntity<ResponseObject> FNC_getLogAllStudent(){
+    //     try {
+    //         String logAllStudentList = jdbcTemplate.queryForObject(
+    //             "select log_all_student_json()",
+    //             String.class
+    //         );
+
+    //         JsonNode jsonNode = objectMapper.readTree(logAllStudentList);
+
+    //         return ResponseEntity.status(HttpStatus.OK)
+    //             .body(new ResponseObject("OK", "Query to get getLogAllStudent() successfully", jsonNode));
+    //     } catch (DataAccessException e) {
+    //         // Xử lý lỗi liên quan đến truy cập dữ liệu
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+    //     } catch (JsonProcessingException e) {
+    //         // Xử lý lỗi khi parse JSON
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+    //     } catch (Exception e) {
+    //         // Xử lý các lỗi khác
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+    //             .body(new ResponseObject("ERROR", "Error getting getLogAllStudent(): " + e.getMessage(), null));
+    //     }
+    // }
 }

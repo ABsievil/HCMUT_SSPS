@@ -16,13 +16,23 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/getLogStudent/{studentId}")
-    public ResponseEntity<ResponseObject> getLogStudent(@PathVariable String studentId) {
-        return studentService.FNC_getLogStudent(studentId);
+    @GetMapping("/getStudentInforById/{studentId}")
+    public ResponseEntity<ResponseObject> getStudentInforById(@PathVariable String studentId) {
+        return studentService.FNC_getStudentInforById(studentId);
     }
 
-    @GetMapping("/getLogAllStudent")
-    public ResponseEntity<ResponseObject> getLogAllStudent() {
-        return studentService.FNC_getLogAllStudent();
+    @GetMapping("/getAllStudentInfor")
+    public ResponseEntity<ResponseObject> getAllStudentInfor() {
+        return studentService.FNC_getAllStudentInfor();
     }
+
+    // @GetMapping("/getLogStudent/{studentId}")
+    // public ResponseEntity<ResponseObject> getLogStudent(@PathVariable String studentId) {
+    //     return studentService.FNC_getLogStudent(studentId);
+    // }
+
+    // @GetMapping("/getLogAllStudent")
+    // public ResponseEntity<ResponseObject> getLogAllStudent() {
+    //     return studentService.FNC_getLogAllStudent();
+    // }
 }
