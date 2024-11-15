@@ -1,47 +1,46 @@
 ---------------------------------------------------------------ADMIN------------------------------------------------------
-3. get_admin_infor()
+1. get_admin_infor()
 --> lấy thông tin cá nhân của admin
 
 ---------------------------------------------------------------STUDENT-----------------------------------------------------------
-1. get_student_infor_by_id(student_id_input VARCHAR)
+2. get_student_infor_by_id(student_id_input VARCHAR)
 --> lấy thông tin cá nhân của 1 student bằng mã số sinh viên
 
-2. get_all_student_infor()
+3. get_all_student_infor()
 --> admin xem thông tin của tất cả student
 
 Thêm/Xóa và Sửa thông tin của Student
-4. add_student(username_input VARCHAR, password_input VARCHAR, last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, student_id_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR, page_remain_input INT)
+4. add_student(username_input VARCHAR, password_input VARCHAR, last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, role_input VARCHAR, student_id_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR, page_remain_input INT)
 5. delete_student(username_input VARCHAR)
 6. update_student_infor(username_input VARCHAR,  last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR)
 
-7. change_password(username_input VARCHAR, old_password_input VARCHAR, new_password_input VARCHAR)
---> đổi mật khẩu của Student, check mật khẩu cũ nếu đúng change thành mật khẩu mới, sai thì báo lỗi.
+7. change_password(username_input VARCHAR, new_password_input VARCHAR)
+--> đổi mật khẩu của Student
 
 Lấy thông tin số trang mặc định còn lại và số trang đã in của Student
 8. get_number_page_default_remain(student_id_input VARCHAR)
 9.get_number_page_was_printed(username_input VARCHAR)
 
 // Log student
-18. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
-19. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
+10. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
+11. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
 
 ---------------------------------------------------------------PRINTER-----------------------------------------------------------
 
 Thêm/Bật/Tắt và Sửa thông tin của Printer
-10. add_printer(brand_name VARCHAR, printer_model VARCHAR, description VARCHAR, campus VARCHAR, building VARCHAR, room VARCHAR)
-11. enable_printer(printer_id_input INT)
-12. disable_printer(printer_id_input INT)
-13. update_printer_infor(printer_id_input INT, brand_name_input VARCHAR, printer_model_input VARCHAR, description_input VARCHAR, campus_input VARCHAR, building_input VARCHAR, room_input VARCHAR)
-
-14. get_printer_infor_by_id(printer_id_input INT)
+12. add_printer(brand_name VARCHAR, printer_model VARCHAR, description VARCHAR, campus VARCHAR, building VARCHAR, room VARCHAR)
+13. enable_printer(printer_id_input INT)
+14. disable_printer(printer_id_input INT)
+15. update_printer_infor(printer_id_input INT, brand_name_input VARCHAR, printer_model_input VARCHAR, description_input VARCHAR, campus_input VARCHAR, building_input VARCHAR, room_input VARCHAR)
+16. get_printer_infor_by_id(printer_id_input INT)
 --> lấy thông tin của 1 Printer bằng id
 
-15. get_infor_all_printer()
+17. get_infor_all_printer()
 --> lấy thông tin toàn bộ Printer
 
 ----------------------------------------------------------------PRINT------------------------------------------------------------
 
-16. print(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input INT, number_copy_input INT)
+18. print(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input INT, number_copy_input INT)
 
 **PRINT FLOW**
 Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input INT, number_copy_input INT)
@@ -49,7 +48,7 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 
 ----------------------------------------------------------------BUY PAPER--------------------------------------------------------
 
-17. purchase_page(username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
+19. purchase_page(username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
 
 ----------------------------------------------------------------UTILITY--------------------------------------------------------
 
@@ -62,3 +61,6 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 
 24. get_total_revenue(date_start_input DATE, date_end_input DATE)
 25. get_total_page_was_printed(date_start_input DATE, date_end_input DATE)
+
++Lưu otp
++Xóa otp
