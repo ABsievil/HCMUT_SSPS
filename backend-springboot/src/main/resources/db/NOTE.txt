@@ -20,8 +20,8 @@ Thêm/Xóa và Sửa thông tin của Student
 --> đổi mật khẩu của Student, check mật khẩu cũ nếu đúng change thành mật khẩu mới, sai thì báo lỗi.
 
 Lấy thông tin số trang mặc định còn lại và số trang đã in của Student
-8. get_number_page_default_remain(student_id_input, VARCHAR)
-9.get_number_page_was_printed(student_id_input, VARCHAR)
+8. get_number_page_default_remain(student_id_input VARCHAR)
+9.get_number_page_was_printed(username_input VARCHAR)
 
 ---------------------------------------------------------------PRINTER-----------------------------------------------------------
 
@@ -54,14 +54,14 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 18. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
 19. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
 
-----------------------------------------------------------------BUY PAPER--------------------------------------------------------
+----------------------------------------------------------------UTILITY--------------------------------------------------------
 
 20. add_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
 21. delete_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
-22. add_ultility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price INT)
-23. update_ultility_of_semester(semester_input VARCHAR, page_price INT)
+22. add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT)
+23. update_utility_of_semester(semester_input VARCHAR, page_price_input INT)
 
------------------------------------------------------------------REPORT-------------------------------------------------------------
+-----------------------------------------------------------------REPORT----------------------------------------------------------
 
 24. get_total_revenue(date_start_input DATE, date_end_input DATE)
 25. get_total_page_was_printed(date_start_input DATE, date_end_input DATE)
