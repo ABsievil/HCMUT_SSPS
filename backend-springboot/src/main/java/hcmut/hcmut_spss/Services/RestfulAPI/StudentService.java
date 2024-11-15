@@ -114,6 +114,83 @@ public class StudentService {
         }
     }
 
+    public ResponseEntity<ResponseObject> PROC_deleteStudent(String studentId){
+        try {
+            jdbcTemplate.execute(
+            "CALL delete_student(?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, studentId);
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_deleteStudent() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_deleteStudent(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getNumberPageDefaultRemain (String studentId){
+        try {
+            String numberPageDefaultRemain = jdbcTemplate.queryForObject(
+                "SELECT get_number_page_default_remain(?)",
+                String.class, 
+                studentId
+            );
+
+            JsonNode jsonNode = objectMapper.readTree(numberPageDefaultRemain);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getNumberPageDefaultRemain() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getNumberPageDefaultRemain(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getNumberPageWasPrinted (String uname){
+        try {
+            String numberPageWasPrinted = jdbcTemplate.queryForObject(
+                "SELECT get_number_page_was_printed(?)",
+                String.class, 
+                uname
+            );
+
+            JsonNode jsonNode = objectMapper.readTree(numberPageWasPrinted);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getNumberPageWasPrinted() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getNumberPageWasPrinted(): " + e.getMessage(), null));
+        }
+    }
+
     // public ResponseEntity<ResponseObject> FNC_getLogStudent(String studentId){
     //     try {
     //         String logStudentList = jdbcTemplate.queryForObject(

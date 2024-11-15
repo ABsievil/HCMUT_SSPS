@@ -34,6 +34,22 @@ public class StudentController {
     public ResponseEntity<ResponseObject> addStudent(@RequestBody StudentDTO studentDTO){
         return studentService.PROC_addStudent(studentDTO);
     }
+
+    @PutMapping("/deleteStudent/{studentId}")
+    public ResponseEntity<ResponseObject> deleteStudent(@PathVariable String studentId){
+        return studentService.PROC_deleteStudent(studentId);
+    }
+    
+    @GetMapping("/getNumberPageDefaultRemain/{studentId}")
+    public ResponseEntity<ResponseObject> getNumberPageDefaultRemain(@PathVariable String studentId) {
+        return studentService.FNC_getNumberPageDefaultRemain(studentId);
+    }
+
+    @GetMapping("/getNumberPageWasPrinted/{uname}")
+    public ResponseEntity<ResponseObject> getNumberPageWasPrinted(@PathVariable String uname) {
+        return studentService.FNC_getNumberPageWasPrinted(uname);
+    }
+
     
     // @GetMapping("/getLogStudent/{studentId}")
     // public ResponseEntity<ResponseObject> getLogStudent(@PathVariable String studentId) {
