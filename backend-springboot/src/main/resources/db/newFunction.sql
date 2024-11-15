@@ -259,13 +259,13 @@ AS $$
 BEGIN
 	UPDATE Printer 
 	SET 
-		printer_id = printer_id_input,
 		brand_name = brand_name_input, 
 		printer_model = printer_model_input, 
 		description = description_input, 
 		campus = campus_input, 
 		building = building_input, 
-		room =  room_input;
+		room =  room_input
+	WHERE printer_id = printer_id_input;
 END;
 $$;
 
@@ -277,7 +277,7 @@ LANGUAGE PLPGSQL
 AS $$ 
 	DECLARE result json; 
 BEGIN 
- 	SELECT 	row_to_json(p)
+ 	SELECT row_to_json(p)
 	INTO result 
 	FROM printer P 
 	WHERE printer_id = printer_id_input; 
@@ -292,7 +292,7 @@ LANGUAGE PLPGSQL
 AS $$ 
 	DECLARE result json; 
 BEGIN 
- 	SELECT 	json_agg(row_to_json(p))
+ 	SELECT json_agg(row_to_json(p))
 	INTO result 
 	FROM printer p;
 	RETURN result; 
