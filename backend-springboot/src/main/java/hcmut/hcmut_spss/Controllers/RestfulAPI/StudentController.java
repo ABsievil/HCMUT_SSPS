@@ -1,4 +1,4 @@
-package hcmut.hcmut_spss.Controllers;
+package hcmut.hcmut_spss.Controllers.RestfulAPI;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.hcmut_spss.DTO.ResponseObject;
-import hcmut.hcmut_spss.Services.StudentService;
+import hcmut.hcmut_spss.Services.RestfulAPI.StudentService;
 
 @RestController
 @RequestMapping("/api/v1/Student")

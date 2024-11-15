@@ -1,4 +1,4 @@
-package hcmut.hcmut_spss.Controllers;
+package hcmut.hcmut_spss.Controllers.RestfulAPI;
 
 import java.sql.Date;
 
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.UtilityDTO;
-import hcmut.hcmut_spss.Services.UltilitiesService;
+import hcmut.hcmut_spss.Services.RestfulAPI.UltilitiesService;
 
 @RestController
 @RequestMapping("/api/v1/Ultilities")

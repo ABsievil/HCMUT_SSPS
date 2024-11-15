@@ -1,4 +1,4 @@
-package hcmut.hcmut_spss.Services;
+package hcmut.hcmut_spss.Services.RestfulAPI;
 
 import java.sql.Date;
 

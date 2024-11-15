@@ -1,4 +1,4 @@
-package hcmut.hcmut_spss.Services;
+package hcmut.hcmut_spss.Services.RestfulAPI;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
