@@ -22,7 +22,7 @@ const ImageCarousel = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[600px] overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
       {images.map((img, index) => (
         <div
           key={index}

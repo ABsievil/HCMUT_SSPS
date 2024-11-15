@@ -362,13 +362,24 @@ function PrintingForm() {
           </div>
 
           {formState.missingPages > 0 && (
-            <Alert variant="destructive">
-              <AlertCircle className="w-4 h-4" />
-              <AlertDescription>
-                Bạn cần thêm {formState.missingPages} trang để hoàn thành việc in
-              </AlertDescription>
-            </Alert>
-          )}
+        <div className="mt-4 p-4 text-sm text-red-500 border border-red-400 bg-red-100 rounded">
+          <div className="flex items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M18 10A8 8 0 11.001 10a8 8 0 0117.998 0zM9 4a1 1 0 112 0v5a1 1 0 11-2 0V4zm1 7a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Bạn cần thêm {formState.missingPages} trang để hoàn thành việc in.
+          </div>
+        </div>
+      )}
         </div>
       </div>
 
