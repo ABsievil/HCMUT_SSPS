@@ -147,4 +147,33 @@ public class PrinterService {
                 .body(new ResponseObject("ERROR", "Error updating PROC_disablePrinter(): " + e.getMessage(), null));
         }
     }
+
+    public ResponseEntity<ResponseObject> PROC_updatePrinterInfor(Integer printerId, PrinterDTO printerDTO){
+        try {
+            jdbcTemplate.execute(
+            "CALL update_printer_infor(?, ?, ?, ?, ?, ?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setInt(1, printerId);
+                ps.setString(2, printerDTO.getBrand_name());
+                ps.setString(3, printerDTO.getPrinter_model());
+                ps.setString(4, printerDTO.getDescription());
+                ps.setString(5, printerDTO.getCampus());
+                ps.setString(6, printerDTO.getBuilding());
+                ps.setString(7, printerDTO.getRoom());
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_updatePrinterInfor() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_updatePrinterInfor(): " + e.getMessage(), null));
+        }
+    }
 }

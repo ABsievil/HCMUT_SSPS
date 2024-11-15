@@ -38,4 +38,11 @@ public class PrinterController {
     public ResponseEntity<ResponseObject> disablePrinter(@PathVariable Integer printerId){
         return printerService.PROC_disablePrinter(printerId);
     }
+
+    @PutMapping("/updatePrinter/{printerId}")
+    public ResponseEntity<ResponseObject> updatePrinter(
+        @PathVariable Integer printerId,    
+        @RequestBody PrinterDTO printerDTO){
+        return printerService.PROC_updatePrinterInfor(printerId, printerDTO);
+    }
 }
