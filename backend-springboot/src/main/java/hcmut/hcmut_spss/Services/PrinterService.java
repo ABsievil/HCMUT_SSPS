@@ -151,6 +151,33 @@ public class PrinterService {
         }
     }
 
+    public ResponseEntity<ResponseObject> FNC_getPrinterInforById(Integer printerId){
+        try {
+            String printerInfor = jdbcTemplate.queryForObject(
+                "SELECT get_printer_infor_by_id(?)",
+                String.class, 
+                printerId
+            );
+
+            JsonNode jsonNode = objectMapper.readTree(printerInfor);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getPrinterInforById() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getPrinterInforById(): " + e.getMessage(), null));
+        }
+    }
+
     public ResponseEntity<ResponseObject> FNC_getInforAllPrinter(){
         try {
             String printerInforList = jdbcTemplate.queryForObject(
