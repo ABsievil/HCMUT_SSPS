@@ -38,7 +38,7 @@ Thêm/Bật/Tắt và Sửa thông tin của Printer
 17. get_infor_all_printer()
 --> lấy thông tin toàn bộ Printer
 
-----------------------------------------------------------------PRINT------------------------------------------------------------
+----------------------------------------------------------------PRINT(save in STUDENT class)------------------------------------------------------------
 
 18. print(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input INT, number_copy_input INT)
 
@@ -46,7 +46,7 @@ Thêm/Bật/Tắt và Sửa thông tin của Printer
 Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_date_input DATE, time_start_input TIME, time_end_input TIME, file_name_input VARCHAR, file_type_input VARCHAR, number_page_of_file_input INT, page_size_input VARCHAR, number_size_input INT, number_copy_input INT)
       = update page remain
 
-----------------------------------------------------------------BUY PAPER--------------------------------------------------------
+----------------------------------------------------------------BUY PAGE(save in STUDENT class)--------------------------------------------------------
 
 19. purchase_page(username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
 
