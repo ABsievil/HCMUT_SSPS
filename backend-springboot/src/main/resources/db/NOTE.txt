@@ -1,15 +1,13 @@
---------------------------------------------------------STUDENT-ADMIN INFOR------------------------------------------------------
+---------------------------------------------------------------ADMIN------------------------------------------------------
+3. get_admin_infor()
+--> lấy thông tin cá nhân của admin
 
+---------------------------------------------------------------STUDENT-----------------------------------------------------------
 1. get_student_infor_by_id(student_id_input VARCHAR)
 --> lấy thông tin cá nhân của 1 student bằng mã số sinh viên
 
 2. get_all_student_infor()
 --> admin xem thông tin của tất cả student
-
-3. get_admin_infor()
---> lấy thông tin cá nhân của admin
-
----------------------------------------------------------------STUDENT-----------------------------------------------------------
 
 Thêm/Xóa và Sửa thông tin của Student
 4. add_student(username_input VARCHAR, password_input VARCHAR, last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, student_id_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR, page_remain_input INT)
@@ -22,6 +20,10 @@ Thêm/Xóa và Sửa thông tin của Student
 Lấy thông tin số trang mặc định còn lại và số trang đã in của Student
 8. get_number_page_default_remain(student_id_input VARCHAR)
 9.get_number_page_was_printed(username_input VARCHAR)
+
+// Log student
+18. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
+19. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
 
 ---------------------------------------------------------------PRINTER-----------------------------------------------------------
 
@@ -48,11 +50,6 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 ----------------------------------------------------------------BUY PAPER--------------------------------------------------------
 
 17. purchase_page(username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
-
------------------------------------------------------------------LOG-------------------------------------------------------------
-
-18. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
-19. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
 
 ----------------------------------------------------------------UTILITY--------------------------------------------------------
 
