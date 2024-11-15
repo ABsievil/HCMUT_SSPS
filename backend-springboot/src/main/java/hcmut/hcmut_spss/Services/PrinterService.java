@@ -64,7 +64,7 @@ public class PrinterService {
             }
         );
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to update addPrinter() successfully", null));
+                .body(new ResponseObject("OK", "Query to update PROC_addPrinter() successfully", null));
         } catch (DataAccessException e) {
             // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -72,7 +72,7 @@ public class PrinterService {
         } catch (Exception e) {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error updating addPrinter(): " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Error updating PROC_addPrinter(): " + e.getMessage(), null));
         }
     }
 
@@ -188,7 +188,7 @@ public class PrinterService {
             JsonNode jsonNode = objectMapper.readTree(printerInforList);
 
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to get Printer_information() successfully", jsonNode));
+                .body(new ResponseObject("OK", "Query to get FNC_getInforAllPrinter() successfully", jsonNode));
         } catch (DataAccessException e) {
             // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -200,7 +200,7 @@ public class PrinterService {
         } catch (Exception e) {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error getting Printer_information(): " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Error getting FNC_getInforAllPrinter(): " + e.getMessage(), null));
         }
     }
 }
