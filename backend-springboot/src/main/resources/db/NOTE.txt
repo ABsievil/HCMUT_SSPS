@@ -48,16 +48,23 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 
 ----------------------------------------------------------------BUY PAGE(save in STUDENT class)--------------------------------------------------------
 
-19. purchase_page(username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
+19. purchase_page(student_id VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
 
+20. get_log_buy_page_a_student(student_id_input VARCHAR, )
+
+21. get_log_buy_page_all_student(date_start_input DATE, date_end_input DATE)
 ----------------------------------------------------------------UTILITY--------------------------------------------------------
 
-20. add_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
-21. delete_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
-22. add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT, date_start_input DATE, date_end_input DATE)
-23. update_utility_of_semester(semester_input VARCHAR, page_price_input INT)
+22. add_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
+23. delete_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
+24. add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT, date_start_input DATE, date_end_input DATE)
+25. update_utility_of_semester(semester_input VARCHAR, page_price_input INT)
 
 ----------------------------------------------------------------OTP--------------------------------------------------------
 
-24. add_otp(username_input VARCHAR, otp_code_input VARCHAR)
-25. delete_otp(username_input VARCHAR)
+26. add_otp(username_input VARCHAR, otp_code_input VARCHAR)
+27. delete_otp(username_input VARCHAR)
+28. get_otp(username_input VARCHAR)
+
+
+Chưa làm: 19, 20, 21
