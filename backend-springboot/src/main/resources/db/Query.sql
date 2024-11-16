@@ -216,7 +216,7 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_number_page_was_printed('nguyenmanhhung')
 
 --10--
-CREATE OR REPLACE FUNCTION get_log_a_student(username_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
+CREATE OR REPLACE FUNCTION get_log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
@@ -235,7 +235,7 @@ BEGIN
 	)
 	INTO result
 	FROM Users u, Printed_turn pt
-	WHERE 	u.username = username_input AND u.username = pt.username AND 
+	WHERE 	u.student_id = student_id_input AND u.username = pt.username AND 
 			(printer_id_input IS NULL OR pt.printer_id = printer_id_input) AND
 			(date_start_input IS NULL OR pt.printing_date > date_start_input) AND
 			(date_end_input IS NULL OR pt.printing_date < date_end_input);
@@ -244,7 +244,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
--- SELECT get_log_a_student('matruongvu', 1, null, null)
+-- SELECT get_log_a_student('2213995', 1, null, null)
 
 --11--
 CREATE OR REPLACE FUNCTION get_log_all_student(printer_id_input INT, date_start_input DATE, date_end_input DATE)
