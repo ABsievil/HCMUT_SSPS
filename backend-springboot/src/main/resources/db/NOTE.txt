@@ -22,8 +22,8 @@ Lấy thông tin số trang mặc định còn lại và số trang đã in củ
 9.get_number_page_was_printed(username_input VARCHAR)
 
 // Log student
-10. log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
-11. log_all_student(date_start_input DATE, printer_id_input INT, date_end_input DATE)
+10. get_log_a_student(usernane_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
+11. get_log_all_student(printer_id_input INT, date_start_input DATE, date_end_input DATE)
 
 ---------------------------------------------------------------PRINTER-----------------------------------------------------------
 

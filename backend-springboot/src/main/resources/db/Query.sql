@@ -216,8 +216,66 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_number_page_was_printed('nguyenmanhhung')
 
 --10--
+CREATE OR REPLACE FUNCTION get_log_a_student(username_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT json_agg(
+		json_build_object(
+			'student_id', u.student_id,
+			'printer_id', pt.printer_id,
+			'file_name', pt.file_name,
+			'printing_date', pt.printing_date,
+			'time_start', pt.time_start,
+			'time_end', pt.time_end,
+			'total_page', pt.number_pages_of_file * pt.number_copy,	
+			'page_size', pt.page_size
+       		)
+	)
+	INTO result
+	FROM Users u, Printed_turn pt
+	WHERE 	u.username = username_input AND u.username = pt.username AND 
+			(printer_id_input IS NULL OR pt.printer_id = printer_id_input) AND
+			(date_start_input IS NULL OR pt.printing_date > date_start_input) AND
+			(date_end_input IS NULL OR pt.printing_date < date_end_input);
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT get_log_a_student('matruongvu', 1, null, null)
 
 --11--
+CREATE OR REPLACE FUNCTION get_log_all_student(printer_id_input INT, date_start_input DATE, date_end_input DATE)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT json_agg(
+		json_build_object(
+			'student_id', u.student_id,
+			'printer_id', pt.printer_id,
+			'file_name', pt.file_name,
+			'printing_date', pt.printing_date,
+			'time_start', pt.time_start,
+			'time_end', pt.time_end,
+			'total_page', pt.number_pages_of_file * pt.number_copy,	
+			'page_size', pt.page_size
+       		)
+	)
+	INTO result
+	FROM Users u, Printed_turn pt
+	WHERE 	 u.username = pt.username AND 
+			(printer_id_input IS NULL OR pt.printer_id = printer_id_input) AND
+			(date_start_input IS NULL OR pt.printing_date > date_start_input) AND
+			(date_end_input IS NULL OR pt.printing_date < date_end_input);
+
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+SELECT get_log_all_student(1, null, null)
 
 ---------------------------------------------------------------PRINTER-----------------------------------------------------------
 
@@ -403,8 +461,8 @@ LANGUAGE plpgsql AS $$
 BEGIN
     UPDATE Utility
 	SET 
-		default_pages = default_pages_input
-		date_reset_default_page = date_reset_default_page_input
+		default_pages = default_pages_input,
+		date_reset_default_page = date_reset_default_page_input,
 	    page_price = page_price_input
 	WHERE semester = semester_input;
 END;
