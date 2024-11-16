@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import hcmut.hcmut_spss.DTO.ChangePasswordDTO;
+import hcmut.hcmut_spss.DTO.LogStudentDTO;
 import hcmut.hcmut_spss.DTO.PrinterDTO;
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.StudentDTO;
+import hcmut.hcmut_spss.DTO.UpdateStudentDTO;
 import hcmut.hcmut_spss.Services.RestfulAPI.StudentService;
 
 @RestController
@@ -39,6 +42,16 @@ public class StudentController {
     public ResponseEntity<ResponseObject> deleteStudent(@PathVariable String studentId){
         return studentService.PROC_deleteStudent(studentId);
     }
+
+    @PutMapping("/updateStudent")
+    public ResponseEntity<ResponseObject> updateStudent(@RequestBody UpdateStudentDTO updateStudentDTO){
+        return studentService.PROC_updateStudent(updateStudentDTO);
+    }
+
+    @PutMapping("/changeStudentPassword")
+    public ResponseEntity<ResponseObject> changeStudentPassword(@RequestBody ChangePasswordDTO changePasswordDTO){
+        return studentService.PROC_changeStudentPassword(changePasswordDTO);
+    }
     
     @GetMapping("/getNumberPageDefaultRemain/{studentId}")
     public ResponseEntity<ResponseObject> getNumberPageDefaultRemain(@PathVariable String studentId) {
@@ -51,13 +64,16 @@ public class StudentController {
     }
 
     
-    // @GetMapping("/getLogStudent/{studentId}")
-    // public ResponseEntity<ResponseObject> getLogStudent(@PathVariable String studentId) {
-    //     return studentService.FNC_getLogStudent(studentId);
-    // }
+    @GetMapping("/getLogStudent/{studentId}")
+    public ResponseEntity<ResponseObject> getLogStudent(
+        @PathVariable String studentId, 
+        @RequestBody LogStudentDTO logStudentDTO) {
 
-    // @GetMapping("/getLogAllStudent")
-    // public ResponseEntity<ResponseObject> getLogAllStudent() {
-    //     return studentService.FNC_getLogAllStudent();
-    // }
+        return studentService.FNC_getLogStudent(studentId, logStudentDTO);
+    }
+
+    @GetMapping("/getLogAllStudent")
+    public ResponseEntity<ResponseObject> getLogAllStudent(@RequestBody LogStudentDTO logStudentDTO) {
+        return studentService.FNC_getLogAllStudent(logStudentDTO);
+    }
 }
