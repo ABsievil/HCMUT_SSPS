@@ -275,7 +275,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-SELECT get_log_all_student(1, null, null)
+-- SELECT get_log_all_student(1, null, null)
 
 ---------------------------------------------------------------PRINTER-----------------------------------------------------------
 
@@ -470,6 +470,24 @@ $$;
 
 -- CALL update_utility_of_semester('252', 100, '2024-12-12', 2000)
 
---24--
+--24--Lưu otp
+CREATE OR REPLACE PROCEDURE add_otp(username_input VARCHAR, otp_code_input VARCHAR)
+LANGUAGE plpgsql AS $$
+BEGIN
+    INSERT INTO OTP (username, otp_code)
+    VALUES (username_input, otp_code_input);
+END;
+$$;
 
---25--
+-- CALL add_otp('matruongvu', '1272647')
+
+--25--Xóa otp
+CREATE OR REPLACE PROCEDURE delete_otp(username_input VARCHAR)
+LANGUAGE plpgsql AS $$
+BEGIN
+    DELETE FROM OTP
+	WHERE username = username_input;
+END;
+$$;
+
+-- CALL delete_otp('matruongvu')

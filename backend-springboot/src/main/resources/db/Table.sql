@@ -80,3 +80,10 @@ CREATE TABLE File_types_accepted (
 	PRIMARY KEY (semester, type_accepted),
 	FOREIGN KEY (semester) REFERENCES Utility(semester) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE OTP (
+	username VARCHAR(50),
+	otp_code VARCHAR(10)
+	PRIMARY KEY (username, otp_code)
+	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE
+)
