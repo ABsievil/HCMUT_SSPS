@@ -6,7 +6,7 @@ import ScrollToTopButton from "./fragments/scrollTop/ScrollToTopButton";
 
 const ImageCarousel = () => {
   const [currentImage, setCurrentImage] = useState(0);
-  
+
   const images = [
     "src/images/slbktv-1.png",
     "src/images/backgr-homepage-2.avif",
@@ -16,7 +16,7 @@ const ImageCarousel = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentImage((prev) => (prev + 1) % images.length);
-    }, 5000); 
+    }, 5000);
 
     return () => clearInterval(timer);
   }, []);
@@ -26,22 +26,21 @@ const ImageCarousel = () => {
       {images.map((img, index) => (
         <div
           key={index}
-          className={`absolute w-full h-full transition-transform duration-500 ease-in-out ${
-            index === currentImage 
-              ? 'translate-x-0' 
-              : index < currentImage 
-                ? '-translate-x-full' 
-                : 'translate-x-full'
-          }`}
+          className={`absolute w-full h-full transition-transform duration-500 ease-in-out ${index === currentImage
+            ? 'translate-x-0'
+            : index < currentImage
+              ? '-translate-x-full'
+              : 'translate-x-full'
+            }`}
         >
           <img
             src={img}
             alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover"
+            className="w-full object-cover"
           />
         </div>
       ))}
-      
+
       {/* Overlay with text */}
       <div className="absolute inset-0 flex justify-center items-center bg-black/15">
         <h2 className="text-2xl text-cyan-100 font-['Inter'] md:text-5xl font-black text-center text-stroke-black">
@@ -55,9 +54,8 @@ const ImageCarousel = () => {
           <button
             key={index}
             onClick={() => setCurrentImage(index)}
-            className={`w-3 h-3 rounded-full transition-colors duration-300 ${
-              currentImage === index ? 'bg-white' : 'bg-white/50'
-            }`}
+            className={`w-3 h-3 rounded-full transition-colors duration-300 ${currentImage === index ? 'bg-white' : 'bg-white/50'
+              }`}
             aria-label={`Go to slide ${index + 1}`}
           />
         ))}
@@ -68,9 +66,12 @@ const ImageCarousel = () => {
 
 export default function HomePage() {
   return (
-    <div className="relative bg-white">
+    <>
+
       {/* Header Section */}
-      <Header />
+      <header className="fixed w-full z-50">
+        <Header />
+      </header>
 
       {/* Main Image Carousel Section */}
       <ImageCarousel />
@@ -83,6 +84,6 @@ export default function HomePage() {
 
       {/* Scroll To Top Button */}
       <ScrollToTopButton />
-    </div>
+    </>
   );
 }
