@@ -1,4 +1,4 @@
-package hcmut.hcmut_spss.DTO;
+package hcmut.hcmut_spss.DTO.RestfulAPI;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;
@@ -10,14 +10,18 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateStudentDTO {
-    private String student_id;
+public class StudentDTO {
+    private String username;
+    private String password;
     private String last_name;
     private String middle_name;
     private String first_name;
     private String email;
     private Date date_of_birth;
     private String phone_number;
+    private String role;
+    private String student_id;
     private String school_year;
     private String faculty;
+    private Integer page_remain;
 }

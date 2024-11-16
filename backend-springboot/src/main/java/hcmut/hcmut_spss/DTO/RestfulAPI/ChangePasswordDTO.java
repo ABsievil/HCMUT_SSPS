@@ -1,6 +1,4 @@
-package hcmut.hcmut_spss.DTO;
-import java.sql.Date;
-
+package hcmut.hcmut_spss.DTO.RestfulAPI;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LogStudentDTO {
-    private Integer printerId;
-    private Date dateStart;
-    private Date dateEnd;
+public class ChangePasswordDTO {
+    private String username;
+    private String newPassword;
 }

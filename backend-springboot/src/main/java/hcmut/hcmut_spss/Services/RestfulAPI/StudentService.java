@@ -13,13 +13,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hcmut.hcmut_spss.DTO.ChangePasswordDTO;
-import hcmut.hcmut_spss.DTO.LogStudentDTO;
-import hcmut.hcmut_spss.DTO.PrinterDTO;
 import hcmut.hcmut_spss.DTO.ResponseObject;
-import hcmut.hcmut_spss.DTO.StudentDTO;
-import hcmut.hcmut_spss.DTO.UpdateStudentDTO;
-
+import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.StudentDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.UpdateStudentDTO;
 @Service
 public class StudentService {
     private final JdbcTemplate jdbcTemplate;

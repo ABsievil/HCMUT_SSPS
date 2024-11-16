@@ -1,4 +1,4 @@
-package hcmut.hcmut_spss.DTO;
+package hcmut.hcmut_spss.DTO.RestfulAPI;
 import java.sql.Date;
 
 import lombok.AllArgsConstructor;

@@ -14,9 +14,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import hcmut.hcmut_spss.DTO.PrinterDTO;
 import hcmut.hcmut_spss.DTO.ResponseObject;
-import hcmut.hcmut_spss.DTO.UtilityDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.PrinterDTO;
 
 @Service
 public class PrinterService {

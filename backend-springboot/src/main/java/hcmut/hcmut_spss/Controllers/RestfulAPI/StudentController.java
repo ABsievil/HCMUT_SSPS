@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import hcmut.hcmut_spss.DTO.ChangePasswordDTO;
-import hcmut.hcmut_spss.DTO.LogStudentDTO;
-import hcmut.hcmut_spss.DTO.PrinterDTO;
 import hcmut.hcmut_spss.DTO.ResponseObject;
-import hcmut.hcmut_spss.DTO.StudentDTO;
-import hcmut.hcmut_spss.DTO.UpdateStudentDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.StudentDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.UpdateStudentDTO;
 import hcmut.hcmut_spss.Services.RestfulAPI.StudentService;
 
 @RestController

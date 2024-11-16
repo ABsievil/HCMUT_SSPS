@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import hcmut.hcmut_spss.DTO.PrinterDTO;
 import hcmut.hcmut_spss.DTO.ResponseObject;
+import hcmut.hcmut_spss.DTO.RestfulAPI.PrinterDTO;
 import hcmut.hcmut_spss.Services.RestfulAPI.PrinterService;
 
 @RestController
