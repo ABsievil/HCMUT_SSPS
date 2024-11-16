@@ -93,7 +93,7 @@ public class StudentService {
             "CALL add_student(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (PreparedStatementCallback<Void>) ps -> {
                 ps.setString(1, studentDTO.getUsername());
-                ps.setString(2, studentDTO.getPassword());
+                ps.setString(2, passwordEncoder.encode(studentDTO.getPassword()));
                 ps.setString(3, studentDTO.getLast_name());
                 ps.setString(4, studentDTO.getMiddle_name());
                 ps.setString(5, studentDTO.getFirst_name());
