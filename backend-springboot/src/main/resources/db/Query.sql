@@ -126,7 +126,7 @@ $$;
 -- CALL add_student('quachgiaphu', '$2a$10$TzDeitFt5kFI6nQgLPqJfelouc08AWJAr4tQZyr96X6nal7pw4oBi', 'Quach', 'Gia', 'Phu', 'quachgiaphu@gmail.com',
 --  				'2004-9-17', '0976251672', 'USER', '2213662', '2', 'Computer Science', 100)
 
---5--Xóa sinh viên ra khỏi hệ thống
+--5--Xóa sinh viên ra khỏi hệ thống bằng mã số sinh viên
 CREATE OR REPLACE PROCEDURE delete_student(student_id_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -138,7 +138,7 @@ $$;
 -- CALL delete_student('2213662')
 
 --6--Cập nhật thông tin sinh viên
---Check các thuộc tính nếu null thì không đổi thông tin
+--Check các thuộc tính nếu null thì không đổi thông tin, xác định sinh viên bằng mã số sinh viên
 CREATE OR REPLACE PROCEDURE update_student_infor(
 	student_id_input VARCHAR, 
 	last_name_input VARCHAR, 
@@ -168,7 +168,7 @@ $$;
 
 -- CALL update_student_infor('quachgiaphu', 'Quach', 'Gia', 'Phu', 'quachgiaphu@gmail.com', '2004-9-17', '0976251672', '3', 'Electric')
 
---7--Đổi mật khẩu của sinh viên
+--7--Đổi mật khẩu của sinh viên, lưu mật khẩu mới
 CREATE OR REPLACE PROCEDURE change_password(username_input VARCHAR, new_password_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -180,7 +180,7 @@ $$;
 
 -- CALL change_password('quachgiaphu', '4321')
 
---8--Lấy số trang còn lại của học sinh
+--8--Lấy số trang còn lại của học sinh bằng mã số sinh viên
 CREATE OR REPLACE FUNCTION get_number_page_default_remain(student_id_input VARCHAR)
 RETURNS JSON AS $$
 DECLARE
@@ -215,7 +215,9 @@ $$ LANGUAGE plpgsql;
 
 -- SELECT get_number_page_was_printed('nguyenmanhhung')
 
---10--
+--10--Lấy thông tin in ấn của một sinh viên bằng mã số sinh viên
+--có thể lọc bằng printer_id, date_start, date_end
+--nếu các giá trị trên là null nghĩa là chọn tất cả lịch sử
 CREATE OR REPLACE FUNCTION get_log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
 RETURNS JSON AS $$
 DECLARE
@@ -246,7 +248,9 @@ $$ LANGUAGE plpgsql;
 
 -- SELECT get_log_a_student('2213995', 1, null, null)
 
---11--
+--11--Lấy lịch sử in ấn của toàn bộ sinh viên
+--có thể lọc bằng printer_id, date_start, date_end
+--nếu các giá trị trên là null nghĩa là chọn tất cả lịch sử
 CREATE OR REPLACE FUNCTION get_log_all_student(printer_id_input INT, date_start_input DATE, date_end_input DATE)
 RETURNS JSON AS $$
 DECLARE
@@ -299,7 +303,7 @@ $$;
 
 -- CALL add_printer('HP', 'OfficeJet Pro 9025e', 'May in phun, may in laser, may in da chuc nang (in, scan, copy, fax)', '02', 'H1', '106')
 
---13--Bật máy in
+--13--Bật máy in bằng id
 CREATE PROCEDURE Enable_printer(printer_id_input INT)
 LANGUAGE plpgsql
 AS $$
@@ -313,7 +317,7 @@ $$;
 
 -- CALL Enable_printer('10')
 
---14--Tắt máy in
+--14--Tắt máy in bằng id
 CREATE PROCEDURE Disable_printer(printer_id_input INT)
 LANGUAGE plpgsql
 AS $$
@@ -327,7 +331,7 @@ $$;
 
 -- CALL disable_printer(10)
 
---15--Cập nhật thông tin máy in
+--15--Cập nhật thông tin máy in bằng id
 --Check null các thuộc tính nếu null thì không cần đổi thông tin
 CREATE OR REPLACE PROCEDURE update_printer_infor(
     printer_id_input INT, 
@@ -388,7 +392,7 @@ END; $$;
 
 ----------------------------------------------------------------PRINT------------------------------------------------------------
 
---18--Nhấn nút in
+--18--Student nhấn nút in sẽ INSERT 1 printed_turn và cập nhật số lượng trang giấy còn lại
 CREATE OR REPLACE PROCEDURE print(
 	username_input VARCHAR, 
 	printer_id_input INT, 
@@ -417,11 +421,16 @@ END; $$;
 
 ----------------------------------------------------------------BUY PAPER--------------------------------------------------------
 
---19--
+--19--Student mua giấy --> INSERT 1 purchase transaction
 
+--20--Lấy thông tin mua giấy của một sinh viên bằng mã số sinh viên
+--bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
+
+--21--Lấy thông tin mua giấy của toàn bộ sinh viên
+--bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
 ----------------------------------------------------------------ULTILITY--------------------------------------------------------
 
---20--Thêm loại file in được
+--22--Thêm loại file in được
 CREATE OR REPLACE PROCEDURE add_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -432,7 +441,7 @@ $$;
 
 -- CALL add_file_accepted('251', '.bin')
 
---21--Xóa loại file in được
+--23--Xóa loại file in được
 CREATE OR REPLACE PROCEDURE delete_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -443,7 +452,7 @@ $$;
 
 -- CALL delete_file_accepted('251', '.bin')
 
---22--Thêm các thông số của học kì
+--24--Thêm các thông số của học kì
 CREATE OR REPLACE PROCEDURE add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT, date_start_input DATE, date_end_input DATE)
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -454,7 +463,7 @@ $$;
 
 -- CALL add_utility_of_semester('261', 100, '2024-12-12', 2000)
 
---23--Cập nhật các thông số của học kì
+--25--Cập nhật các thông số của học kì
 --check thay đổi của thông tin bằng null
 CREATE OR REPLACE PROCEDURE update_utility_of_semester(semester_input VARCHAR, default_pages_input INT,  date_reset_default_page_input DATE, page_price_input INT)
 LANGUAGE plpgsql AS $$
@@ -470,7 +479,7 @@ $$;
 
 -- CALL update_utility_of_semester('252', 100, '2024-12-12', 2000)
 
---24--Lưu otp
+--26--Lưu otp
 CREATE OR REPLACE PROCEDURE add_otp(username_input VARCHAR, otp_code_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -481,8 +490,8 @@ $$;
 
 -- CALL add_otp('matruongvu', '1272647')
 
---25--Xóa otp
-CREATE OR REPLACE PROCEDURE delete_otp(username_input VARCHAR)
+--27--Xóa otp
+CREATE OR REPLACE PROCEDURE delete_otp(student_id_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
     DELETE FROM OTP
@@ -491,3 +500,22 @@ END;
 $$;
 
 -- CALL delete_otp('matruongvu')
+
+--28--Lấy thông tin otp
+CREATE OR REPLACE FUNCTION get_otp(username_input VARCHAR)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT json_build_object(
+			'otp_code', otp_code
+       		)
+    INTO result
+    FROM OTP
+	WHERE username = username_input;
+    
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT get_otp('matruongvu')
