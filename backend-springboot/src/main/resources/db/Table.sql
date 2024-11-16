@@ -69,7 +69,9 @@ CREATE TABLE Utility (
 	semester VARCHAR(3) PRIMARY KEY,
 	default_pages INT,
 	date_reset_default_page DATE,
-	page_price INT
+	page_price INT,
+	date_start DATE,
+	date_end DATE
 );
 
 CREATE TABLE File_types_accepted (
