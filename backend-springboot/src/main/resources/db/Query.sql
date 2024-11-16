@@ -154,14 +154,14 @@ LANGUAGE plpgsql AS $$
 BEGIN
     UPDATE Users
 	SET 
-	    last_name = last_name_input,
-		middle_name = middle_name_input,
-		first_name = first_name_input,
-		email = email_input,
-		date_of_birth = date_of_birth_input,
-		phone_number = phone_number_input,
-		school_year = school_year_input,
-		faculty = faculty_input
+	    last_name = COALESCE(last_name_input, last_name),
+        middle_name = COALESCE(middle_name_input, middle_name),
+        first_name = COALESCE(first_name_input, first_name),
+        email = COALESCE(email_input, email),
+        date_of_birth = COALESCE(date_of_birth_input, date_of_birth),
+        phone_number = COALESCE(phone_number_input, phone_number),
+        school_year = COALESCE(school_year_input, school_year),
+        faculty = COALESCE(faculty_input, faculty)
 	WHERE student_id = student_id_input;
 END;
 $$;
@@ -271,19 +271,27 @@ $$;
 
 --15--Cập nhật thông tin máy in
 --Check null các thuộc tính nếu null thì không cần đổi thông tin
-CREATE OR REPLACE PROCEDURE update_printer_infor(printer_id_input INT, brand_name_input VARCHAR, printer_model_input VARCHAR, description_input VARCHAR, campus_input VARCHAR, building_input VARCHAR, room_input VARCHAR)
+CREATE OR REPLACE PROCEDURE update_printer_infor(
+    printer_id_input INT, 
+    brand_name_input VARCHAR, 
+    printer_model_input VARCHAR, 
+    description_input VARCHAR, 
+    campus_input VARCHAR, 
+    building_input VARCHAR, 
+    room_input VARCHAR
+)
 LANGUAGE plpgsql
 AS $$
 BEGIN
-	UPDATE Printer 
-	SET 
-		brand_name = brand_name_input, 
-		printer_model = printer_model_input, 
-		description = description_input, 
-		campus = campus_input, 
-		building = building_input, 
-		room =  room_input
-	WHERE printer_id = printer_id_input;
+    UPDATE Printer
+    SET 
+        brand_name = COALESCE(brand_name_input, brand_name),
+        printer_model = COALESCE(printer_model_input, printer_model),
+        description = COALESCE(description_input, description),
+        campus = COALESCE(campus_input, campus),
+        building = COALESCE(building_input, building),
+        room = COALESCE(room_input, room)
+    WHERE printer_id = printer_id_input;
 END;
 $$;
 
@@ -378,28 +386,31 @@ $$;
 -- CALL delete_file_accepted('251', '.bin')
 
 --22--Thêm các thông số của học kì
-CREATE OR REPLACE PROCEDURE add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT)
+CREATE OR REPLACE PROCEDURE add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT, date_start_input DATE, date_end_input DATE)
 LANGUAGE plpgsql AS $$
 BEGIN
-    INSERT INTO Utility (semester, default_pages, date_reset_default_page, page_price)
-    VALUES (semester_input, default_pages_input, date_reset_default_page_input, page_price_input);
+    INSERT INTO Utility (semester, default_pages, date_reset_default_page, page_price, date_start, date_end)
+    VALUES (semester_input, default_pages_input, date_reset_default_page_input, page_price_input, date_start_input, date_end_input);
 END;
 $$;
 
 -- CALL add_utility_of_semester('261', 100, '2024-12-12', 2000)
 
 --23--Cập nhật các thông số của học kì
-CREATE OR REPLACE PROCEDURE update_utility_of_semester(semester_input VARCHAR, page_price_input INT)
+--check thay đổi của thông tin bằng null
+CREATE OR REPLACE PROCEDURE update_utility_of_semester(semester_input VARCHAR, default_pages_input INT,  date_reset_default_page_input DATE, page_price_input INT)
 LANGUAGE plpgsql AS $$
 BEGIN
     UPDATE Utility
 	SET 
+		default_pages = default_pages_input
+		date_reset_default_page = date_reset_default_page_input
 	    page_price = page_price_input
 	WHERE semester = semester_input;
 END;
 $$;
 
--- CALL update_utility_of_semester('252', 2000)
+-- CALL update_utility_of_semester('252', 100, '2024-12-12', 2000)
 
 --24--
 

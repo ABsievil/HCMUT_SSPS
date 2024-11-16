@@ -54,7 +54,7 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 
 20. add_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
 21. delete_file_accepted(semester_input VARCHAR, type_accepted_input VARCHAR)
-22. add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT)
+22. add_utility_of_semester(semester_input VARCHAR, default_pages_input INT, date_reset_default_page_input DATE, page_price_input INT, date_start_input DATE, date_end_input DATE)
 23. update_utility_of_semester(semester_input VARCHAR, page_price_input INT)
 
 -----------------------------------------------------------------REPORT----------------------------------------------------------
