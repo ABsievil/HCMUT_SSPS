@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hcmut.hcmut_spss.DTO.ResponseObject;
-import hcmut.hcmut_spss.DTO.UtilityDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.UtilityDTO;
 
 @Service
 public class UltilitiesService {

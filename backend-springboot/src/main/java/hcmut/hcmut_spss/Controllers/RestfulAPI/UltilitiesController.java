@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.hcmut_spss.DTO.ResponseObject;
-import hcmut.hcmut_spss.DTO.UtilityDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.UtilityDTO;
 import hcmut.hcmut_spss.Services.RestfulAPI.UltilitiesService;
 
 @RestController
