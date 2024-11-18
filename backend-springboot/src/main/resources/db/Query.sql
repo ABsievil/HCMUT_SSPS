@@ -589,5 +589,21 @@ BEGIN
     RETURN result;
 END;
 $$ LANGUAGE plpgsql;
-
 -- SELECT get_otp('matruongvu')
+--29-- Lâý thông tin file_accepted theo kì 
+CREATE OR REPLACE FUNCTION file_of_semester(f_semester VARCHAR) 
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(json_build_object(
+		'Accepted file type', type_accepted
+	))
+	INTO result
+	FROM File_types_accepted
+	WHERE semester = f_semester; 
+
+	RETURN result; 
+END; $$; 
+select * from file_of_semester('232')
