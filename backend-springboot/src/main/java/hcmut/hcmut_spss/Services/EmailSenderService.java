@@ -128,7 +128,7 @@ public class EmailSenderService {
         // Lưu OTP với thời gian hết hạn (ví dụ: 5 phút)
         try {
             jdbcTemplate.execute(
-            "CALL add_otp(?, ?)",
+            "CALL add_otp_by_email(?, ?)",
                 (PreparedStatementCallback<Void>) ps -> {
                     ps.setString(1, toEmail);
                     ps.setString(2, otp);
