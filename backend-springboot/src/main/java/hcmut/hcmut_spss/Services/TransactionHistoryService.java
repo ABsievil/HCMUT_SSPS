@@ -42,6 +42,7 @@ public class TransactionHistoryService {
                     url += "&" + "transaction_date_max=" + Date_max;
                 }
             }
+            
             if(Limit != null) url += (isFirstParam ? "?" : "&")  +"limit="+ Limit;
             HttpEntity<String> entity = new HttpEntity<>(headers);
             ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);

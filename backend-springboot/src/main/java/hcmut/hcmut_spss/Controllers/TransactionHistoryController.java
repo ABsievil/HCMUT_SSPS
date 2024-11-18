@@ -10,12 +10,12 @@ import hcmut.hcmut_spss.Services.TransactionHistoryService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/v1/Transaction")
+@RequestMapping("/api/v1/transactions")
 @RequiredArgsConstructor
 public class TransactionHistoryController {
     private final TransactionHistoryService TransactionHistoryService;
 
-    @GetMapping("/log")
+    @GetMapping("/list")
     public ResponseEntity<ResponseObject> listTransactions(
         @RequestParam(value = "Date_min", required = false) String Date_min,
         @RequestParam(value = "Date_max", required = false) String Date_max,

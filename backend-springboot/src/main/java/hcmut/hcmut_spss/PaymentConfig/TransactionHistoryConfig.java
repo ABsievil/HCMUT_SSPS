@@ -9,9 +9,11 @@ public class TransactionHistoryConfig {
     @Getter
     @Value("${sepay.api.url}")
     private String sepayApiUrl;
+
     @Getter
     @Value("${sepay.api.token}")
     private String apiToken;
+    
     @Bean
     public RestTemplate restTemplate() {
         return new RestTemplate();
