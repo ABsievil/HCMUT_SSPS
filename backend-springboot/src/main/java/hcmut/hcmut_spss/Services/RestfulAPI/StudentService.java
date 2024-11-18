@@ -232,12 +232,12 @@ public class StudentService {
         }
     }
 
-    public ResponseEntity<ResponseObject> FNC_getNumberPageWasPrinted (String uname){
+    public ResponseEntity<ResponseObject> FNC_getNumberPageWasPrinted (String studentId, String dateStart, String dateEnd){
         try {
             String numberPageWasPrinted = jdbcTemplate.queryForObject(
-                "SELECT get_number_page_was_printed(?)",
+                "SELECT get_number_page_was_printed(?, ?, ?)",
                 String.class, 
-                uname
+                studentId, dateStart, dateEnd
             );
 
             JsonNode jsonNode = objectMapper.readTree(numberPageWasPrinted);

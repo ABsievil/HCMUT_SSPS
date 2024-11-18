@@ -63,9 +63,15 @@ public class StudentController {
         return studentService.FNC_getNumberPageDefaultRemain(studentId);
     }
 
-    @GetMapping("/getNumberPageWasPrinted/{uname}")
-    public ResponseEntity<ResponseObject> getNumberPageWasPrinted(@PathVariable String uname) {
-        return studentService.FNC_getNumberPageWasPrinted(uname);
+    @GetMapping("/getNumberPageWasPrinted/{studentId}")
+    public ResponseEntity<ResponseObject> getNumberPageWasPrinted(
+        @PathVariable String studentId,
+        @RequestParam(value = "dateStart", required = false) String dateStart,
+        @RequestParam(value = "dateEnd", required = false) String dateEnd) {
+
+        dateStart = (dateStart != null && !dateStart.isEmpty()) ? dateStart: null;
+        dateEnd = (dateEnd != null && !dateEnd.isEmpty()) ? dateEnd: null;
+        return studentService.FNC_getNumberPageWasPrinted(studentId, dateStart, dateEnd);
     }
 
     @GetMapping("/getLogStudent/{studentId}")
