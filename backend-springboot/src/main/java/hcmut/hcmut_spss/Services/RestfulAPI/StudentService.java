@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.PrintDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.StudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.UpdateStudentDTO;
 @Service
@@ -311,6 +312,39 @@ public class StudentService {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseObject("ERROR", "Error getting getLogAllStudent(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> PROC_print(PrintDTO printDTO){
+        try {
+            jdbcTemplate.execute(
+            "CALL print(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, printDTO.getUsername());
+                ps.setInt(2, printDTO.getPrinterId());
+                ps.setDate(3, printDTO.getPrintingDate());
+                ps.setTime(4, printDTO.getTimeStart());
+                ps.setTime(5, printDTO.getTimeEnd());
+                ps.setString(6, printDTO.getFileName());
+                ps.setString(7, printDTO.getFileType());
+                ps.setInt(8, printDTO.getNumberPageOfFile());
+                ps.setString(9, printDTO.getPageSize());
+                ps.setInt(10, printDTO.getNumberSize());
+                ps.setInt(11, printDTO.getNumberCopy());
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_print() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_print(): " + e.getMessage(), null));
         }
     }
 }

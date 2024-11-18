@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.PrintDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.StudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.UpdateStudentDTO;
 import hcmut.hcmut_spss.Services.RestfulAPI.StudentService;
@@ -74,5 +75,10 @@ public class StudentController {
     @GetMapping("/getLogAllStudent")
     public ResponseEntity<ResponseObject> getLogAllStudent(@RequestBody LogStudentDTO logStudentDTO) {
         return studentService.FNC_getLogAllStudent(logStudentDTO);
+    }
+
+    @PutMapping("/print")
+    public ResponseEntity<ResponseObject> print(@RequestBody PrintDTO printDTO){
+        return studentService.PROC_print(printDTO);
     }
 }
