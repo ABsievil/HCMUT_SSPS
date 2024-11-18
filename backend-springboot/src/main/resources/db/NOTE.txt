@@ -19,7 +19,7 @@ Thêm/Xóa và Sửa thông tin của Student
 
 Lấy thông tin số trang mặc định còn lại và số trang đã in của Student
 8. get_number_page_default_remain(student_id_input VARCHAR)
-9.get_number_page_was_printed(username_input VARCHAR)
+9. get_number_page_was_printed(student_id_input VARCHAR, date_start_input DATE, date_end_input DATE)
 
 // Log student
 10. get_log_a_student(student_id_input VARCHAR, printer_id_input INT, date_start_input DATE, date_end_input DATE)
@@ -65,5 +65,4 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 27. delete_otp(username_input VARCHAR)
 28. get_otp(username_input VARCHAR)
 
-
-Chưa làm: 19, 20, 21
+29. get_utility_of_semester(f_semester VARCHAR)

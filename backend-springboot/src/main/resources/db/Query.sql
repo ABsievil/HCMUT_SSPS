@@ -31,6 +31,12 @@ RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE student_id = student_id_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'Student_id % does not exist', student_id_input;
+	END IF;
     SELECT json_build_object(
 			'last_name', u.last_name,
 			'middle_name', u.middle_name,
@@ -130,6 +136,12 @@ $$;
 CREATE OR REPLACE PROCEDURE delete_student(student_id_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE student_id = student_id_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'Student_id % does not exist', student_id_input;
+	END IF;
     DELETE FROM Users
 	WHERE student_id = student_id_input;
 END;
@@ -152,6 +164,12 @@ CREATE OR REPLACE PROCEDURE update_student_infor(
 )
 LANGUAGE plpgsql AS $$
 BEGIN
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE student_id = student_id_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'Student_id % does not exist', student_id_input;
+	END IF;
     UPDATE Users
 	SET 
 	    last_name = COALESCE(last_name_input, last_name),
@@ -172,6 +190,12 @@ $$;
 CREATE OR REPLACE PROCEDURE change_password(username_input VARCHAR, new_password_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE username = username_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'Username % does not exist', username_input;
+	END IF;
 	UPDATE Users
 	SET password = new_password_input
 	WHERE username = username_input;
@@ -186,6 +210,12 @@ RETURNS JSON AS $$
 DECLARE
     result JSON;
 BEGIN
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE student_id = student_id_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'Student_id % does not exist', student_id_input;
+	END IF;
     SELECT json_build_object(
 			'page_remain', u.page_remain
        		)
@@ -200,20 +230,23 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_number_page_default_remain('2213995')
 
 --9--Lấy tổng số trang đã in của sinh viên
-CREATE OR REPLACE FUNCTION get_number_page_was_printed(username_input VARCHAR)
+--Nếu date_start và date_end null thì lấy tất cả trang đã in
+CREATE OR REPLACE FUNCTION get_number_page_was_printed(student_id_input VARCHAR, date_start_input DATE, date_end_input DATE)
 RETURNS JSON AS $$
 DECLARE
 	number_page_was_printed INT;
 BEGIN
 	SELECT SUM(number_pages_of_file * number_copy) INTO number_page_was_printed
-	FROM Printed_turn
-	WHERE username = username_input;
+	FROM Printed_turn pt, Users u
+	WHERE pt.username = u.username AND u.student_id = student_id_input AND
+		  (date_start_input IS NULL OR date_start_input <= printing_date) AND
+		  (date_end_input IS NULL OR date_end_input >= printing_date) ;
 	
 	RETURN json_build_object('number_page_was_printed', number_page_was_printed);
 END;
 $$ LANGUAGE plpgsql;
 
--- SELECT get_number_page_was_printed('nguyenmanhhung')
+-- select get_number_page_was_printed('2213995', '2024-8-1', '2024-8-30')
 
 --10--Lấy thông tin in ấn của một sinh viên bằng mã số sinh viên
 --có thể lọc bằng printer_id, date_start, date_end
@@ -239,8 +272,8 @@ BEGIN
 	FROM Users u, Printed_turn pt
 	WHERE 	u.student_id = student_id_input AND u.username = pt.username AND 
 			(printer_id_input IS NULL OR pt.printer_id = printer_id_input) AND
-			(date_start_input IS NULL OR pt.printing_date > date_start_input) AND
-			(date_end_input IS NULL OR pt.printing_date < date_end_input);
+			(date_start_input IS NULL OR pt.printing_date >= date_start_input) AND
+			(date_end_input IS NULL OR pt.printing_date <= date_end_input);
 
     RETURN result;
 END;
@@ -272,8 +305,8 @@ BEGIN
 	FROM Users u, Printed_turn pt
 	WHERE 	 u.username = pt.username AND 
 			(printer_id_input IS NULL OR pt.printer_id = printer_id_input) AND
-			(date_start_input IS NULL OR pt.printing_date > date_start_input) AND
-			(date_end_input IS NULL OR pt.printing_date < date_end_input);
+			(date_start_input IS NULL OR pt.printing_date >= date_start_input) AND
+			(date_end_input IS NULL OR pt.printing_date <= date_end_input);
 
     RETURN result;
 END;
@@ -535,21 +568,23 @@ $$;
 
 -- CALL add_utility_of_semester('261', 100, '2024-12-12', 2000)
 
---25--Cập nhật các thông số của học kì
---check thay đổi của thông tin bằng null
-CREATE OR REPLACE PROCEDURE update_utility_of_semester(semester_input VARCHAR, default_pages_input INT,  date_reset_default_page_input DATE, page_price_input INT)
-LANGUAGE plpgsql AS $$
-BEGIN
-    UPDATE Utility
-	SET 
-		default_pages = default_pages_input,
-		date_reset_default_page = date_reset_default_page_input,
-	    page_price = page_price_input
-	WHERE semester = semester_input;
-END;
-$$;
+--25--Lâý thông tin file_accepted theo kì 
+CREATE OR REPLACE FUNCTION get_file_of_semester(f_semester VARCHAR) 
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(json_build_object(
+		'Accepted file type', type_accepted
+	))
+	INTO result
+	FROM File_types_accepted
+	WHERE semester = f_semester; 
 
--- CALL update_utility_of_semester('252', 100, '2024-12-12', 2000)
+	RETURN result; 
+END; $$; 
+--select * from get_file_of_semester('232')
 
 --26--Lưu otp
 CREATE OR REPLACE PROCEDURE add_otp(username_input VARCHAR, otp_code_input VARCHAR)
@@ -590,20 +625,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 -- SELECT get_otp('matruongvu')
---29-- Lâý thông tin file_accepted theo kì 
-CREATE OR REPLACE FUNCTION get_file_of_semester(f_semester VARCHAR) 
+
+--29--Lấy các thông số của học kì
+CREATE OR REPLACE FUNCTION get_utility_of_semester(f_semester VARCHAR) 
 RETURNS JSON 
 LANGUAGE plpgsql
 AS $$ 
 	declare result JSON;
 BEGIN 
 	SELECT json_agg(json_build_object(
-		'Accepted file type', type_accepted
+		'semester', semester,
+		'default_pages', default_pages,
+		'date_reset_default_page', date_reset_default_page,
+		'page_price', page_price,
+		'date_start', date_start,
+		'date_end', date_end
 	))
 	INTO result
-	FROM File_types_accepted
+	FROM Utility
 	WHERE semester = f_semester; 
 
 	RETURN result; 
-END; $$; 
---select * from get_file_of_semester('232')
+END; 
+$$; 
+--select * from get_utility_of_semester('232')
