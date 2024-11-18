@@ -273,7 +273,7 @@ public class StudentService {
             JsonNode jsonNode = objectMapper.readTree(logStudentList);
 
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to get getLogStudent() successfully", jsonNode));
+                .body(new ResponseObject("OK", "Query to get FNC_getLogStudent() successfully", jsonNode));
         } catch (DataAccessException e) {
             // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -285,7 +285,7 @@ public class StudentService {
         } catch (Exception e) {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error getting getLogStudent(): " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Error getting FNC_getLogStudent(): " + e.getMessage(), null));
         }
     }
 
@@ -302,7 +302,7 @@ public class StudentService {
             JsonNode jsonNode = objectMapper.readTree(logAllStudentList);
 
             return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to get getLogAllStudent() successfully", jsonNode));
+                .body(new ResponseObject("OK", "Query to get FNC_getLogAllStudent() successfully", jsonNode));
         } catch (DataAccessException e) {
             // Xử lý lỗi liên quan đến truy cập dữ liệu
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -314,7 +314,7 @@ public class StudentService {
         } catch (Exception e) {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error getting getLogAllStudent(): " + e.getMessage(), null));
+                .body(new ResponseObject("ERROR", "Error getting FNC_getLogAllStudent(): " + e.getMessage(), null));
         }
     }
 
