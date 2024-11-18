@@ -23,52 +23,28 @@ public class UltilitiesController {
     private UltilitiesService ultilitiesService;
 
     @GetMapping("/getFileOfSemester/{semesterId}")
-    public ResponseEntity<ResponseObject> getLogStudent(@PathVariable String semesterId) {
+    public ResponseEntity<ResponseObject> getFileOfSemester(@PathVariable String semesterId) {
         return ultilitiesService.FNC_getFileOfSemester(semesterId);
     }
 
-    @PutMapping("/addUltility")
-    public ResponseEntity<ResponseObject> addUtility(@RequestBody UtilityDTO utilityDTO){
-        return ultilitiesService.PROC_addUtility(utilityDTO);
-    }
-
-    @PutMapping("/insertFileType")
-    public ResponseEntity<ResponseObject> insertFileType(
+    @PutMapping("/addFileAccepted")
+    public ResponseEntity<ResponseObject> addFileAccepted(
                         @RequestParam("semester") String semester, 
                         @RequestParam("typeAccepted") String typeAccepted){
 
-        return ultilitiesService.PROC_insertFileType(semester, typeAccepted);
+        return ultilitiesService.PROC_addFileAccepted(semester, typeAccepted);
     }
 
-    @PutMapping("/deleteFileType")
-    public ResponseEntity<ResponseObject> deleteFileType(
+    @PutMapping("/deleteFileAccepted")
+    public ResponseEntity<ResponseObject> deleteFileAccepted(
                         @RequestParam("semester") String semester, 
                         @RequestParam("typeAccepted") String typeAccepted){
 
-        return ultilitiesService.PROC_deleteFileType(semester, typeAccepted);
+        return ultilitiesService.PROC_deleteFileAccepted(semester, typeAccepted);
     }
 
-    @PutMapping("/updateDateReset")
-    public ResponseEntity<ResponseObject> updateDateReset(
-                        @RequestParam("semester") String semester, 
-                        @RequestParam("resetDate") Date resetDate){
-
-        return ultilitiesService.PROC_updateDateReset(semester, resetDate);
-    }
-
-    @PutMapping("/updatePagePrice")
-    public ResponseEntity<ResponseObject> updatePagePrice(
-                        @RequestParam("semester") String semester, 
-                        @RequestParam("pagePrice") Integer pagePrice){
-
-        return ultilitiesService.PROC_updatePagePrice(semester, pagePrice);
-    }
-
-    @PutMapping("/updateDefaultPage")
-    public ResponseEntity<ResponseObject> updateDefaultPage(
-                        @RequestParam("semester") String semester, 
-                        @RequestParam("defaultPage") Integer defaultPage){
-
-        return ultilitiesService.PROC_updateDefaultPage(semester, defaultPage);
+    @PutMapping("/addUltilityOfSemester")
+    public ResponseEntity<ResponseObject> addUltilityOfSemester(@RequestBody UtilityDTO utilityDTO){
+        return ultilitiesService.PROC_addUltilityOfSemester(utilityDTO);
     }
 }

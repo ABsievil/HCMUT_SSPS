@@ -15,4 +15,6 @@ public class UtilityDTO {
     private Integer defaultpage;
     private Date dateReset;
     private Integer pagePrice;
+    private Date dateStart;
+    private Date dateEnd;
 }
