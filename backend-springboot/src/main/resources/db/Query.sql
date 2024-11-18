@@ -423,11 +423,83 @@ END; $$;
 
 --19--Student mua giấy --> INSERT 1 purchase transaction
 
+CREATE OR REPLACE PROCEDURE purchase_page (username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
+LANGUAGE PLPGSQL 
+AS $$ 
+BEGIN 
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE username = username_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'User % does not exist', username_input;
+	END IF;
+	INSERT INTO Purchase_transaction (username, purchase_pages, purchase_date, purchase_time) VALUES (username_input, purchase_pages_input, purchase_date_input,purchase_time_input);
+	RAISE NOTICE 'Purchase recorded successfully for user %', username_input;
+END; $$;
+-- call purchase_page('matruongvu',0,'2025-05-21','09:30:01')
 --20--Lấy thông tin mua giấy của một sinh viên bằng mã số sinh viên
 --bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
 
+CREATE OR REPLACE FUNCTION get_log_buy_page_a_student(student_id_input VARCHAR, date_start_input DATE, date_end_input DATE )
+RETURNS JSON 
+LANGUAGE PLPGSQL 
+AS $$  
+	DECLARE 
+		result json;
+		name VARCHAR; 
+BEGIN 
+	SELECT u.username
+	INTO name
+	FROM users u 
+	WHERE u.student_id = student_id_input;  
+	
+	IF name is NULL 
+		THEN RAISE EXCEPTION 'Student_id % does not exists',student_id_input; 
+	END IF; 
+	SELECT json_agg(json_build_object(
+		'student_id', student_id_input, 
+		'username', name,
+		'transaction_id',p.transaction_id, 
+		'purchase_page',p.purchase_pages, 
+		'purchase_date',p.purchase_date, 
+		'purchase_time',p.purchase_time
+	))
+	INTO result 
+	FROM purchase_transaction p
+	WHERE p.username = name AND 
+	(date_start_input IS NULL OR p.purchase_date >= date_start_input) AND 
+	(date_end_input IS NULL OR p.purchase_date <= date_end_input );
+	RETURN result; 
+END;$$;
+
+select * from get_log_buy_page_a_student('2213969','2024-08-21',null)
+
 --21--Lấy thông tin mua giấy của toàn bộ sinh viên
 --bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
+
+CREATE OR REPLACE FUNCTION get_log_buy_page_all_student(date_start_input DATE, date_end_input DATE) 
+RETURNS JSON
+LANGUAGE PLPGSQL 
+AS $$  
+	DECLARE 
+		result json;
+BEGIN 
+	SELECT json_agg(json_build_object(
+		'username', p.username,
+		'transaction_id',p.transaction_id, 
+		'purchase_page',p.purchase_pages, 
+		'purchase_date',p.purchase_date, 
+		'purchase_time',p.purchase_time
+	))
+	INTO result 
+	FROM purchase_transaction p
+	WHERE
+	(date_start_input IS NULL OR p.purchase_date >= date_start_input) AND 
+	(date_end_input IS NULL OR p.purchase_date <= date_end_input );
+	RETURN result; 
+END;$$;
+
+select * from get_log_buy_page_aLL_student(null,null)
 ----------------------------------------------------------------ULTILITY--------------------------------------------------------
 
 --22--Thêm loại file in được
@@ -517,5 +589,21 @@ BEGIN
     RETURN result;
 END;
 $$ LANGUAGE plpgsql;
-
 -- SELECT get_otp('matruongvu')
+--29-- Lâý thông tin file_accepted theo kì 
+CREATE OR REPLACE FUNCTION get_file_of_semester(f_semester VARCHAR) 
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(json_build_object(
+		'Accepted file type', type_accepted
+	))
+	INTO result
+	FROM File_types_accepted
+	WHERE semester = f_semester; 
+
+	RETURN result; 
+END; $$; 
+--select * from get_file_of_semester('232')
