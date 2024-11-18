@@ -598,18 +598,17 @@ $$;
 -- CALL add_otp('matruongvu', '1272647')
 
 --27--Xóa otp
-CREATE OR REPLACE PROCEDURE delete_otp(student_id_input VARCHAR)
+CREATE OR REPLACE PROCEDURE delete_otp_by_email(email_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
     DELETE FROM OTP
-	WHERE username = username_input;
+	WHERE username = (select username from users where email = email_input);
 END;
 $$;
-
--- CALL delete_otp('matruongvu')
+-- CALL delete_otp_by_email('vumakhmtk22@hcmut.edu.vn')
 
 --28--Lấy thông tin otp
-CREATE OR REPLACE FUNCTION get_otp(username_input VARCHAR)
+CREATE OR REPLACE FUNCTION get_otp_by_email(email_input VARCHAR)
 RETURNS JSON AS $$
 DECLARE
     result JSON;
@@ -619,12 +618,13 @@ BEGIN
        		)
     INTO result
     FROM OTP
-	WHERE username = username_input;
+	WHERE username = (select username from users where email = email_input);
     
     RETURN result;
 END;
 $$ LANGUAGE plpgsql;
--- SELECT get_otp('matruongvu')
+
+--select * from get_otp_by_email('vumakhmtk22@hcmut.edu.vn')
 
 --29--Lấy các thông số của học kì
 CREATE OR REPLACE FUNCTION get_utility_of_semester(f_semester VARCHAR) 
