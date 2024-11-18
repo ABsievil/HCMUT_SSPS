@@ -591,7 +591,7 @@ END;
 $$ LANGUAGE plpgsql;
 -- SELECT get_otp('matruongvu')
 --29-- Lâý thông tin file_accepted theo kì 
-CREATE OR REPLACE FUNCTION file_of_semester(f_semester VARCHAR) 
+CREATE OR REPLACE FUNCTION get_file_of_semester(f_semester VARCHAR) 
 RETURNS JSON 
 LANGUAGE plpgsql
 AS $$ 
@@ -606,4 +606,4 @@ BEGIN
 
 	RETURN result; 
 END; $$; 
-select * from file_of_semester('232')
+--select * from get_file_of_semester('232')
