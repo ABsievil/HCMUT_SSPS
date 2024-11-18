@@ -1,14 +1,25 @@
 package hcmut.hcmut_spss.Services;
 
 import java.text.MessageFormat;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.Services.Utils.OTPGenerator;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -17,6 +28,16 @@ import jakarta.mail.internet.MimeMessage;
 public class EmailSenderService {
     @Autowired
     private JavaMailSender mailSender;
+
+    private final JdbcTemplate jdbcTemplate;
+    private final ObjectMapper objectMapper;
+
+    private static final Logger logger = LoggerFactory.getLogger(EmailSenderService.class);
+    
+    public EmailSenderService(JdbcTemplate jdbcTemplate, ObjectMapper objectMapper) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.objectMapper = objectMapper;
+    }
 
     @Value("${spring.mail.username}")
     private String fromEmailId;
@@ -105,5 +126,75 @@ public class EmailSenderService {
     // Implement phương thức này để lưu OTP
     private void saveOTPToDatabase(String toEmail, String otp) {
         // Lưu OTP với thời gian hết hạn (ví dụ: 5 phút)
+        try {
+            jdbcTemplate.execute(
+            "CALL add_otp(?, ?)",
+                (PreparedStatementCallback<Void>) ps -> {
+                    ps.setString(1, toEmail);
+                    ps.setString(2, otp);
+
+                    ps.execute();
+                    return null;
+                }
+            );
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            logger.error("Database access error when saving OTP for email: {}", toEmail, e);
+            // throw new DatabaseException("Cannot save OTP", e);
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            logger.error("Unexpected error when saving OTP for email: {}", toEmail, e);
+            throw new RuntimeException("Unknown error while saving OTP", e);
+        }
+    }
+
+    public ResponseEntity<ResponseObject> PROC_deleteOTPByEmail(String email){
+        try {
+            jdbcTemplate.execute(
+            "CALL delete_otp_by_email(?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, email);
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_deleteOTPByEmail() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_deleteOTPByEmail(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getOTPByEmail(String email){
+        try {
+            String otp = jdbcTemplate.queryForObject(
+                "SELECT get_otp_by_email(?)",
+                String.class, 
+                email
+            );
+
+            JsonNode jsonNode = objectMapper.readTree(otp);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getOTPByEmail() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getOTPByEmail(): " + e.getMessage(), null));
+        }
     }
 }

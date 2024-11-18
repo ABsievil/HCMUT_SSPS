@@ -62,7 +62,7 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 ----------------------------------------------------------------OTP--------------------------------------------------------
 
 26. add_otp(username_input VARCHAR, otp_code_input VARCHAR)
-27. delete_otp(username_input VARCHAR)
-28. get_otp(username_input VARCHAR)
+27. delete_otp_by_email(email_input VARCHAR)
+28. get_otp_by_email(email_input VARCHAR)
 
 29. get_utility_of_semester(f_semester VARCHAR)
