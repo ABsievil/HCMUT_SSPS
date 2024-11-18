@@ -32,14 +32,14 @@ export default function App() {
           <Route path="/newpassword" element={<CreateNewPassword />} />
         </Route>
 
-          <Route element={<ProtectedRoute />}>
+          <Route>
           <Route path="/account" element={<AccountInformation />} />
           <Route path="/print" element={<PrintingSystem />} />
           <Route path="/buyPaper" element={<PrintingPage />} />
           <Route path="/printlog" element={<StudentPrintLog />} />
         </Route>
 
-        <Route element={<ProtectedRoute />}>
+        <Route>
           <Route path="/account" element={<AccountInformation />} />
           <Route path="/adminprintlog" element={<AdminPrintLog />} />
           <Route path="/manage" element={<ManageSystem />} />
