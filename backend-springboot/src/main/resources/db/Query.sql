@@ -587,15 +587,16 @@ END; $$;
 --select * from get_file_of_semester('232')
 
 --26--Lưu otp
-CREATE OR REPLACE PROCEDURE add_otp(username_input VARCHAR, otp_code_input VARCHAR)
-LANGUAGE plpgsql AS $$
+CREATE OR REPLACE PROCEDURE add_otp_by_email(email_input VARCHAR, otp_code_input VARCHAR)
+LANGUAGE plpgsql AS $$ 
+DECLARE name VARCHAR; 
 BEGIN
+	SELECT username INTO name FROM users WHERE email = email_input;
     INSERT INTO OTP (username, otp_code)
-    VALUES (username_input, otp_code_input);
+    VALUES (name, otp_code_input);
 END;
 $$;
-
--- CALL add_otp('matruongvu', '1272647')
+--call add_otp_by_email('tinhquach@hcmut.edu.vn','1234m5')
 
 --27--Xóa otp
 CREATE OR REPLACE PROCEDURE delete_otp_by_email(email_input VARCHAR)
