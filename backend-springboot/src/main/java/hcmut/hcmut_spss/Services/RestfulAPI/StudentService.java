@@ -1,5 +1,7 @@
 package hcmut.hcmut_spss.Services.RestfulAPI;
 
+import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.PrintDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.PurchasePageDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.StudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.UpdateStudentDTO;
 @Service
@@ -345,6 +348,87 @@ public class StudentService {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseObject("ERROR", "Error updating PROC_print(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> PROC_purchasePage(PurchasePageDTO purchasePageDTO){
+        try {
+            jdbcTemplate.execute(
+            "CALL purchase_page(?, ?, ?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, purchasePageDTO.getUsername());
+                ps.setInt(2, purchasePageDTO.getPurchasePages());
+                ps.setDate(3, purchasePageDTO.getPurchaseDate());
+                ps.setTime(4, purchasePageDTO.getPurchaseTime());
+
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_purchasePage() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_purchasePage(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getLogBuyPageStudent(String studentId, String dateStart, String dateEnd){
+        try {
+            String logBuyPageStudent = jdbcTemplate.queryForObject(
+                "select get_log_buy_page_a_student(?, ?, ?)",
+                String.class, 
+                studentId, dateStart, dateEnd
+            );
+
+            JsonNode jsonNode = objectMapper.readTree(logBuyPageStudent);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getLogBuyPageStudent() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getLogBuyPageStudent(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getLogBuyPageAllStudent(String dateStart, String dateEnd){
+        try {
+            String logBuyPageAllStudentList = jdbcTemplate.queryForObject(
+                "select get_log_buy_page_all_student(?, ?)",
+                String.class, 
+                dateStart, dateEnd
+            );
+
+            JsonNode jsonNode = objectMapper.readTree(logBuyPageAllStudentList);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getLogBuyPageAllStudent() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getLogBuyPageAllStudent(): " + e.getMessage(), null));
         }
     }
 }

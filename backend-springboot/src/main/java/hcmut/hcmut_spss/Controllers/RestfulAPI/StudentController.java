@@ -1,18 +1,23 @@
 package hcmut.hcmut_spss.Controllers.RestfulAPI;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.PrintDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.PurchasePageDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.StudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.UpdateStudentDTO;
 import hcmut.hcmut_spss.Services.RestfulAPI.StudentService;
@@ -63,7 +68,6 @@ public class StudentController {
         return studentService.FNC_getNumberPageWasPrinted(uname);
     }
 
-    
     @GetMapping("/getLogStudent/{studentId}")
     public ResponseEntity<ResponseObject> getLogStudent(
         @PathVariable String studentId, 
@@ -80,5 +84,31 @@ public class StudentController {
     @PutMapping("/print")
     public ResponseEntity<ResponseObject> print(@RequestBody PrintDTO printDTO){
         return studentService.PROC_print(printDTO);
+    }
+
+    @PutMapping("/purchasePage")
+    public ResponseEntity<ResponseObject> purchasePage(@RequestBody PurchasePageDTO purchasePageDTO){
+        return studentService.PROC_purchasePage(purchasePageDTO);
+    }
+
+    @GetMapping("/getLogBuyPageStudent/{studentId}")
+    public ResponseEntity<ResponseObject> getLogBuyPageStudent(
+        @PathVariable String studentId, 
+        @RequestParam(value = "dateStart", required = false) String dateStart,
+        @RequestParam(value = "dateEnd", required = false) String dateEnd) {
+
+        dateStart = (dateStart != null && !dateStart.isEmpty()) ? dateStart: null;
+        dateEnd = (dateEnd != null && !dateEnd.isEmpty()) ? dateEnd: null;
+        return studentService.FNC_getLogBuyPageStudent(studentId, dateStart, dateEnd);
+    }
+
+    @GetMapping("/getLogBuyPageAllStudent")
+    public ResponseEntity<ResponseObject> getLogBuyPageAllStudent(
+        @RequestParam(value = "dateStart", required = false) String dateStart,
+        @RequestParam(value = "dateEnd", required = false) String dateEnd) {
+
+        dateStart = (dateStart != null && !dateStart.isEmpty()) ? dateStart: null;
+        dateEnd = (dateEnd != null && !dateEnd.isEmpty()) ? dateEnd: null;
+        return studentService.FNC_getLogBuyPageAllStudent(dateStart, dateEnd);
     }
 }
