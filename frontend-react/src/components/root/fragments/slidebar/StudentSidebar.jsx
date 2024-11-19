@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
 import SidebarItem from "./SidebarItem";
+import Cookies from 'js-cookie';
 
 const sidebarItems = [
   {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/cc51959b7aa574dbb1fb56269de103e2d9b884f56bffb75d18b1579b4ef3ff89?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
     text: "Thông tin tài khoản",
     link: "/account"
-  },
-  {
-    icon: "src/images/icon-lock-nav.png",
-    text: "Thay đổi mật khẩu",
-    link: "/change-password"
   },
   {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/3979f5fa700a249165cd855fae46b710c5072631be07574fb4438f32ddb0c312?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
@@ -30,14 +25,9 @@ const sidebarItems = [
     link: "/printlog"
   },
   {
-    icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/73dd0575c4ff34141b69921c28e0c0be6cbe1dbfebcfbe5828db94ee29ff575b?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
-    text: "Cài đặt hệ thống",
-    link: "/manage"
-  },
-  {
-    icon: "src/images/icon-file-nav.png", 
-    text: "Báo cáo",
-    link: "/report"
+    icon: "src/images/icon-lock-nav.png",
+    text: "Thay đổi mật khẩu",
+    link: "/change-password"
   },
   {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9e6254714a807272e104cd11bfb80c4546f8c63032d7d5999b464192ba5220d9?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
@@ -46,7 +36,7 @@ const sidebarItems = [
   }
 ];
 
-const Sidebar = () => {
+const StudentSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [highlightedItem, setHighlightedItem] = useState(0);
@@ -107,4 +97,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default StudentSidebar;
