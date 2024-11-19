@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectAvailablePrinters, updatePrinterStatus } from '../../../store/printersSlice';
 import { Printer, Plus, Settings, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { addPrinter } from '../../../store/singlePrinterSlice';
 
 // Reusable components with enhanced styling
 const RadioButton = React.memo(({ id, label, name, checked, onChange, icon: Icon }) => (
@@ -75,18 +76,19 @@ const Select = React.memo(({ label, options, error, icon: Icon, ...props }) => (
 // Form for adding new printer
 const AddNewPrinterForm = React.memo(({ onClose }) => {
     const [formData, setFormData] = useState({
-        campus: '',
-        building: '',
-        room: '',
+        // it has to be this exact oder, do not swap lines
         brand_name: '',
         printer_model: '',
         description: '',
+        campus: '',
+        building: '',
+        room: ''
     });
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.campus) newErrors.id = 'cơ sở đặt máy in là bắt buộc';
+        if (!formData.campus) newErrors.campus = 'cơ sở đặt máy in là bắt buộc';
         if (!formData.building) newErrors.building = 'Tòa nhà là bắt buộc';
         if (!formData.room) newErrors.room = 'Số phòng là bắt buộc';
         if (!formData.brand_name) newErrors.brand_name = 'Tên hãng máy in là bắt buộc';
@@ -96,11 +98,14 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
+    const dispatch = useDispatch();
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
+            console.log(formData);
             // Handle successful form submission (e.g., dispatching an action to add the printer)
+            dispatch(addPrinter(formData));
             toast.success('Máy in đã được thêm thành công!');
             onClose(); // Close the form after submission
         }
@@ -125,47 +130,48 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input
-                    type="text"
-                    placeholder="Cơ sở"
+                <select
                     value={formData.campus}
                     onChange={handleChange('campus')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.id ? 'border-red-500' : 'border-gray-200'}`}
-                />
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.campus ? 'border-red-500' : 'border-gray-200'}`}
+                >
+                    <option value="01"> Cơ sở 1</option>
+                    <option value="02"> Cơ sở 2</option>
+                </select>
                 <input
                     type="text"
                     placeholder="Tòa nhà"
                     value={formData.building}
                     onChange={handleChange('building')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.location ? 'border-red-500' : 'border-gray-200'}`}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.building ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
                     placeholder="Phòng"
                     value={formData.room}
                     onChange={handleChange('room')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-200'}`}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.room ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
                     placeholder="Tên hãng"
                     value={formData.brand_name}
-                    onChange={handleChange('name')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.name ? 'border-red-500' : 'border-gray-200'}`}
+                    onChange={handleChange('brand_name')}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.brand_name ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
                     placeholder="Model máy in"
                     value={formData.printer_model}
                     onChange={handleChange('printer_model')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-200'}`}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.printer_model ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
                     placeholder="Mô tả"
                     value={formData.description}
-                    onChange={handleChange('printer_model')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-200'}`}
+                    onChange={handleChange('description')}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.description ? 'border-red-500' : 'border-gray-200'}`}
                 />
             </div>
             <div className="flex justify-end gap-4">
