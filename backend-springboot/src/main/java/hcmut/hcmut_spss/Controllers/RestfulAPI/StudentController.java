@@ -1,6 +1,7 @@
 package hcmut.hcmut_spss.Controllers.RestfulAPI;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -27,6 +28,12 @@ import hcmut.hcmut_spss.Services.RestfulAPI.StudentService;
 public class StudentController {
     @Autowired
     private StudentService studentService;
+
+    @GetMapping("/getStudentIdByUsername")
+    public ResponseEntity<ResponseObject> FNC_getStudentIdByUsername(@RequestBody Map<String, String> requestBody) {
+        String username = requestBody.get("username");
+        return studentService.FNC_getStudentIdByUsername(username);
+    }
 
     @GetMapping("/getStudentInforById/{studentId}")
     public ResponseEntity<ResponseObject> getStudentInforById(@PathVariable String studentId) {

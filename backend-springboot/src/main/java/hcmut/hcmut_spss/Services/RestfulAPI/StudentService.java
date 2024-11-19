@@ -36,6 +36,27 @@ public class StudentService {
         this.objectMapper = objectMapper;
     }
 
+    public ResponseEntity<ResponseObject> FNC_getStudentIdByUsername(String username){
+        try {
+            String studentId = jdbcTemplate.queryForObject(
+                "SELECT get_student_id_by_username(?)",
+                String.class, 
+                username
+            );
+            
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getStudentIdByUsername() successfully", studentId));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getStudentIdByUsername(): " + e.getMessage(), null));
+        }
+    }
+
     public ResponseEntity<ResponseObject> FNC_getStudentInforById(String studentId){
         try {
             String studentInfor = jdbcTemplate.queryForObject(
