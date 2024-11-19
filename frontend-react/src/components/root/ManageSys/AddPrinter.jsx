@@ -75,21 +75,23 @@ const Select = React.memo(({ label, options, error, icon: Icon, ...props }) => (
 // Form for adding new printer
 const AddNewPrinterForm = React.memo(({ onClose }) => {
     const [formData, setFormData] = useState({
-        id: '',
-        name: '',
-        location: '',
-        status: '',
-        type: '',
+        campus: '',
+        building: '',
+        room: '',
+        brand_name: '',
+        printer_model: '',
+        description: '',
     });
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.id) newErrors.id = 'ID máy in là bắt buộc';
-        if (!formData.name) newErrors.name = 'Tên máy in là bắt buộc';
-        if (!formData.location) newErrors.location = 'Vị trí là bắt buộc';
-        if (!formData.status) newErrors.status = 'Trạng thái là bắt buộc';
-        if (!formData.type) newErrors.type = 'Model máy in là bắt buộc';
+        if (!formData.campus) newErrors.id = 'cơ sở đặt máy in là bắt buộc';
+        if (!formData.building) newErrors.building = 'Tòa nhà là bắt buộc';
+        if (!formData.room) newErrors.room = 'Số phòng là bắt buộc';
+        if (!formData.brand_name) newErrors.brand_name = 'Tên hãng máy in là bắt buộc';
+        if (!formData.printer_model) newErrors.printer_model = 'Model máy in là bắt buộc';
+        if (!formData.description) newErrors.description = 'Mô tả là bắt buộc';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -125,40 +127,46 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <input
                     type="text"
-                    placeholder="ID máy in"
-                    value={formData.id}
-                    onChange={handleChange('id')}
+                    placeholder="Cơ sở"
+                    value={formData.campus}
+                    onChange={handleChange('campus')}
                     className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.id ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
-                    placeholder="Tên máy in"
-                    value={formData.name}
+                    placeholder="Tòa nhà"
+                    value={formData.building}
+                    onChange={handleChange('building')}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.location ? 'border-red-500' : 'border-gray-200'}`}
+                />
+                <input
+                    type="text"
+                    placeholder="Phòng"
+                    value={formData.room}
+                    onChange={handleChange('room')}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-200'}`}
+                />
+                <input
+                    type="text"
+                    placeholder="Tên hãng"
+                    value={formData.brand_name}
                     onChange={handleChange('name')}
                     className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.name ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
-                    placeholder="Vị trí"
-                    value={formData.location}
-                    onChange={handleChange('location')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.location ? 'border-red-500' : 'border-gray-200'}`}
+                    placeholder="Model máy in"
+                    value={formData.printer_model}
+                    onChange={handleChange('printer_model')}
+                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-200'}`}
                 />
                 <input
                     type="text"
-                    placeholder="Model máy in"
-                    value={formData.type}
-                    onChange={handleChange('type')}
+                    placeholder="Mô tả"
+                    value={formData.description}
+                    onChange={handleChange('printer_model')}
                     className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.type ? 'border-red-500' : 'border-gray-200'}`}
                 />
-                <select
-                    value={formData.status}
-                    onChange={handleChange('status')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.status ? 'border-red-500' : 'border-gray-200'}`}
-                >
-                    <option value="Sẵn sàng">Sử dụng ngay</option>
-                    <option value="Đang bảo trì">Chưa sử dụng được</option>
-                </select>
             </div>
             <div className="flex justify-end gap-4">
                 <Button variant="secondary" onClick={onClose}>
