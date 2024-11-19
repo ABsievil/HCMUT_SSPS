@@ -4,7 +4,7 @@ export const fetchPrintersabc = createAsyncThunk(
   "fetchPrintersabc",
   async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Printer/getPrintersInformation`, {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Printer/getInforAllPrinter`, {
         method: 'GET',
         credentials: 'include'
       })
