@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @GetMapping("/getStudentIdByUsername")
+    @PostMapping("/getStudentIdByUsername")
     public ResponseEntity<ResponseObject> FNC_getStudentIdByUsername(@RequestBody Map<String, String> requestBody) {
         String username = requestBody.get("username");
         return studentService.FNC_getStudentIdByUsername(username);
