@@ -199,6 +199,17 @@ const ManageFile = () => {
     const [showAddForm, setShowAddForm] = useState(false);
     const [selectedFileType, setSelectedFileType] = useState(fileTypes[0]?.value || '');
 
+    // New State for Selected Semester
+    const [semesters, setSemesters] = useState([
+        { value: '241', label: '20241 - Học kỳ 1 2024-2025' },
+        { value: '242', label: '20242 - Học kỳ 2 2024-2025' },
+    ]);
+    const [selectedSemester, setSelectedSemester] = useState(semesters[0]?.value || '');
+
+    const handleSemesterChange = useCallback((e) => {
+        setSelectedSemester(e.target.value);
+    }, []);
+
     const handleCustomFileTypeChange = useCallback((e) => {
         setCustomFileType(e.target.value.toLowerCase());
     }, []);
@@ -208,7 +219,7 @@ const ManageFile = () => {
 
         const formattedFileType = customFileType.startsWith('.') ? customFileType : `.${customFileType}`;
 
-        if (fileTypes.some(type => type.value === formattedFileType)) {
+        if (fileTypes.some((type) => type.value === formattedFileType)) {
             toast.error('Loại tệp này đã tồn tại!');
             return;
         }
@@ -218,13 +229,16 @@ const ManageFile = () => {
         toast.success('Loại tệp đã được thêm thành công!');
     }, [customFileType, dispatch, fileTypes]);
 
-    const handleRemoveFileType = useCallback((typeToRemove) => {
-        dispatch(removeFileType(typeToRemove));
-        if (selectedFileType === typeToRemove) {
-            setSelectedFileType(fileTypes[0]?.value || '');
-        }
-        toast.success('Loại tệp đã được xóa thành công!');
-    }, [selectedFileType, dispatch, fileTypes]);
+    const handleRemoveFileType = useCallback(
+        (typeToRemove) => {
+            dispatch(removeFileType(typeToRemove));
+            if (selectedFileType === typeToRemove) {
+                setSelectedFileType(fileTypes[0]?.value || '');
+            }
+            toast.success('Loại tệp đã được xóa thành công!');
+        },
+        [selectedFileType, dispatch, fileTypes]
+    );
 
     return (
         <div className="w-4/5 md:w-1/2 mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8">
@@ -239,6 +253,16 @@ const ManageFile = () => {
                             Thêm học kì mới
                         </Button>
                     </div>
+
+                    {/* Select Semester Section */}
+                    <SectionTitle>CHỌN HỌC KỲ</SectionTitle>
+                    <Select
+                        id="selectSemester"
+                        options={semesters}
+                        className="w-1/2"
+                        value={selectedSemester}
+                        onChange={handleSemesterChange}
+                    />
 
                     <SectionTitle>NGÀY CUNG CẤP ĐỊNH KỲ</SectionTitle>
                     <input
@@ -304,7 +328,7 @@ const ManageFile = () => {
             )}
         </div>
     );
-
 };
 
 export default ManageFile;
+
