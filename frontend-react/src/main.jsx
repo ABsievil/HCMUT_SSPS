@@ -7,6 +7,7 @@ import App from './App.jsx';
 import "./CSS/style.module.css";
 import "./CSS/login.module.css";
 import "./index.css";
+import { UserProvider } from './store/userContext.jsx';
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
@@ -14,7 +15,9 @@ const root = createRoot(rootElement);
 root.render(
   <StrictMode>
     <Provider store={store}>
+      <UserProvider>
         <App />
+      </UserProvider>
     </Provider>
   </StrictMode>
 );

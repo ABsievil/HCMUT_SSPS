@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Pencil } from 'lucide-react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { useUser } from '../../../store/userContext';
 
 const PersonalInfoForm = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +16,7 @@ const PersonalInfoForm = () => {
     faculty: 'Khoa Công nghệ thông tin',
     remainingPages: '100',
   });
+  const { username, role, userId, isLoggedIn } = useUser();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;

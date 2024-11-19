@@ -15,6 +15,7 @@
     "frontend-react": "file:",
     "js-cookie": "^3.0.5",
     "jspdf": "^2.5.2",
+    "jwt-decode": "^4.0.0",
     "lucide-react": "^0.453.0",
     "pdfmake": "^0.2.15",
     "react": "^18.3.1",
