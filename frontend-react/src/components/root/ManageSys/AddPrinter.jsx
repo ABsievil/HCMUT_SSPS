@@ -130,50 +130,93 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <select
-                    value={formData.campus}
-                    onChange={handleChange('campus')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.campus ? 'border-red-500' : 'border-gray-200'}`}
-                >
-                    <option value="01"> Cơ sở 1</option>
-                    <option value="02"> Cơ sở 2</option>
-                </select>
-                <input
-                    type="text"
-                    placeholder="Tòa nhà"
-                    value={formData.building}
-                    onChange={handleChange('building')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.building ? 'border-red-500' : 'border-gray-200'}`}
-                />
-                <input
-                    type="text"
-                    placeholder="Phòng"
-                    value={formData.room}
-                    onChange={handleChange('room')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.room ? 'border-red-500' : 'border-gray-200'}`}
-                />
-                <input
-                    type="text"
-                    placeholder="Tên hãng"
-                    value={formData.brand_name}
-                    onChange={handleChange('brand_name')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.brand_name ? 'border-red-500' : 'border-gray-200'}`}
-                />
-                <input
-                    type="text"
-                    placeholder="Model máy in"
-                    value={formData.printer_model}
-                    onChange={handleChange('printer_model')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.printer_model ? 'border-red-500' : 'border-gray-200'}`}
-                />
-                <input
-                    type="text"
-                    placeholder="Mô tả"
-                    value={formData.description}
-                    onChange={handleChange('description')}
-                    className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.description ? 'border-red-500' : 'border-gray-200'}`}
-                />
+                {/* Campus */}
+                <div>
+                    <select
+                        value={formData.campus}
+                        onChange={handleChange('campus')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.campus ? 'border-red-500' : 'border-gray-200'}`}
+                    >
+                        <option value="">Chọn cơ sở</option>
+                        <option value="01">Cơ sở 1</option>
+                        <option value="02">Cơ sở 2</option>
+                    </select>
+                    {errors.campus && (
+                        <div className="text-red-500 text-sm mt-1">{errors.campus}</div>
+                    )}
+                </div>
+
+                {/* Building */}
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Tòa nhà"
+                        value={formData.building}
+                        onChange={handleChange('building')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.building ? 'border-red-500' : 'border-gray-200'}`}
+                    />
+                    {errors.building && (
+                        <div className="text-red-500 text-sm mt-1">{errors.building}</div>
+                    )}
+                </div>
+
+                {/* Room */}
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Phòng"
+                        value={formData.room}
+                        onChange={handleChange('room')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.room ? 'border-red-500' : 'border-gray-200'}`}
+                    />
+                    {errors.room && (
+                        <div className="text-red-500 text-sm mt-1">{errors.room}</div>
+                    )}
+                </div>
+
+                {/* Brand Name */}
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Tên hãng"
+                        value={formData.brand_name}
+                        onChange={handleChange('brand_name')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.brand_name ? 'border-red-500' : 'border-gray-200'}`}
+                    />
+                    {errors.brand_name && (
+                        <div className="text-red-500 text-sm mt-1">{errors.brand_name}</div>
+                    )}
+                </div>
+
+                {/* Printer Model */}
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Model máy in"
+                        value={formData.printer_model}
+                        onChange={handleChange('printer_model')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.printer_model ? 'border-red-500' : 'border-gray-200'}`}
+                    />
+                    {errors.printer_model && (
+                        <div className="text-red-500 text-sm mt-1">{errors.printer_model}</div>
+                    )}
+                </div>
+
+                {/* Description */}
+                <div>
+                    <input
+                        type="text"
+                        placeholder="Mô tả"
+                        value={formData.description}
+                        onChange={handleChange('description')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.description ? 'border-red-500' : 'border-gray-200'}`}
+                    />
+                    {errors.description && (
+                        <div className="text-red-500 text-sm mt-1">{errors.description}</div>
+                    )}
+                </div>
             </div>
+
             <div className="flex justify-end gap-4">
                 <Button variant="secondary" onClick={onClose}>
                     Hủy
@@ -183,6 +226,7 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
                 </Button>
             </div>
         </form>
+
     );
 });
 

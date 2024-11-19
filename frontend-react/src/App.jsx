@@ -16,6 +16,7 @@ import AccountInformation from "./components/root/AccountInformation";
 import ProtectedRoute from "./components/root/Login/ProtectedRouter";
 import ManageSystem from "./components/root/ManageSystem";
 import Report from "./components/root/Report";
+import ChangePassword from "./components/root/ChangePassword";
 
 export default function App() {
   return (
@@ -32,8 +33,9 @@ export default function App() {
           <Route path="/newpassword" element={<CreateNewPassword />} />
         </Route>
 
-          <Route>
+        <Route>
           <Route path="/account" element={<AccountInformation />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/print" element={<PrintingSystem />} />
           <Route path="/buyPaper" element={<PrintingPage />} />
           <Route path="/printlog" element={<StudentPrintLog />} />

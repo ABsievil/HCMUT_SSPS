@@ -8,15 +8,15 @@ const PrintHistoryDetail = ({ isOpen, onClose, data }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative bg-white rounded-lg w-full max-w-2xl p-6 mx-4">
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
         >
           <X size={24} />
         </button>
-        
+
         <h2 className="text-2xl font-bold mb-6">Chi tiết lịch sử in</h2>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-4">
             <div>
@@ -45,7 +45,7 @@ const PrintHistoryDetail = ({ isOpen, onClose, data }) => {
               <h3 className="font-semibold text-gray-800">Thông số in</h3>
               <div className="mt-2 space-y-2">
                 <p><span className="font-medium">Số trang:</span> {data.pageCount || '10'}</p>
-                <p><span className="font-medium">Số bản in:</span> {data.numberCopies|| '10'}</p>
+                <p><span className="font-medium">Số bản in:</span> {data.numberCopies || '10'}</p>
                 <p><span className="font-medium">Khổ giấy:</span> {data.paperSize || 'A4'}</p>
                 <p><span className="font-medium">Trang/mặt:</span> {data.pagesPerSide || '1'}</p>
               </div>
@@ -74,12 +74,12 @@ const Table = ({ type }) => {
   const [showDetail, setShowDetail] = useState(false);
 
   const rows = [
-    { 
-      mssv: 2021001, 
-      printerId: 101, 
-      name: 'congthuc.doc', 
-      startTime: '12:20', 
-      endTime: '12:59', 
+    {
+      mssv: 2021001,
+      printerId: 101,
+      name: 'congthuc.doc',
+      startTime: '12:20',
+      endTime: '12:59',
       date: '26/09/2024',
       pageCount: 12,
       numberCopies: 2,
@@ -87,12 +87,12 @@ const Table = ({ type }) => {
       pagesPerSide: 1,
       status: 'Hoàn thành'
     },
-    { 
-      mssv: 2021002, 
-      printerId: 102, 
-      name: 'baitap.doc', 
-      startTime: '13:00', 
-      endTime: '13:30', 
+    {
+      mssv: 2021002,
+      printerId: 102,
+      name: 'baitap.doc',
+      startTime: '13:00',
+      endTime: '13:30',
       date: '26/09/2024',
       pageCount: 8,
       numberCopies: 1,
@@ -100,12 +100,12 @@ const Table = ({ type }) => {
       pagesPerSide: 2,
       status: 'Hoàn thành'
     },
-    { 
-      mssv: 2021003, 
-      printerId: 103, 
-      name: 'lythuyet.pdf', 
-      startTime: '13:30', 
-      endTime: '14:00', 
+    {
+      mssv: 2021003,
+      printerId: 103,
+      name: 'lythuyet.pdf',
+      startTime: '13:30',
+      endTime: '14:00',
       date: '26/09/2024',
       pageCount: 15,
       numberCopies: 1,
@@ -113,12 +113,12 @@ const Table = ({ type }) => {
       pagesPerSide: 1,
       status: 'Hoàn thành'
     },
-    { 
-      mssv: 2021004, 
-      printerId: 104, 
-      name: 'tailieu.pdf', 
-      startTime: '14:00', 
-      endTime: '14:30', 
+    {
+      mssv: 2021004,
+      printerId: 104,
+      name: 'tailieu.pdf',
+      startTime: '14:00',
+      endTime: '14:30',
       date: '26/09/2024',
       pageCount: 20,
       numberCopies: 1,
@@ -126,12 +126,12 @@ const Table = ({ type }) => {
       pagesPerSide: 2,
       status: 'Hoàn thành'
     },
-    { 
-      mssv: 2021005, 
-      printerId: 105, 
-      name: 'doan.ppt', 
-      startTime: '14:30', 
-      endTime: '15:00', 
+    {
+      mssv: 2021005,
+      printerId: 105,
+      name: 'doan.ppt',
+      startTime: '14:30',
+      endTime: '15:00',
       date: '26/09/2024',
       pageCount: 30,
       numberCopies: 1,
@@ -140,6 +140,13 @@ const Table = ({ type }) => {
       status: 'Hoàn thành'
     },
   ];
+
+  // Tính tổng số trang đã in
+  const calculateTotalPages = () => {
+    return rows.reduce((total, row) => {
+      return total + (row.pageCount * row.numberCopies);
+    }, 0);
+  };
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
@@ -153,6 +160,13 @@ const Table = ({ type }) => {
       </h1>
 
       <PrintLogFilter type={type} />
+      { type === "student" &&
+        <div className="w-full md:w-4/5 m-auto mt-4 mb-4">
+          <p className="font-medium text-gray-800">
+            Tổng số trang in đã dùng: <span className="font-bold text-blue-600">{calculateTotalPages()} trang</span>
+          </p>
+        </div>
+      }
 
       <table className="w-full md:w-4/5 bg-white mt-3 m-auto">
         <thead>
@@ -167,8 +181,8 @@ const Table = ({ type }) => {
         </thead>
         <tbody>
           {rows.map((row, index) => (
-            <tr 
-              key={index} 
+            <tr
+              key={index}
               className={`
                 ${index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-purple-100 hover:bg-purple-200'}
                  cursor-pointer transition-colors duration-150
