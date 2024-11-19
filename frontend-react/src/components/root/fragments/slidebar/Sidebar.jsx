@@ -10,6 +10,11 @@ const sidebarItems = [
     link: "/account"
   },
   {
+    icon: "src/images/icon-lock-nav.png",
+    text: "Thay đổi mật khẩu",
+    link: "/change-password"
+  },
+  {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/3979f5fa700a249165cd855fae46b710c5072631be07574fb4438f32ddb0c312?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
     text: "Trang in ấn",
     link: "/print"
@@ -76,7 +81,7 @@ const Sidebar = () => {
 
   return (
     <aside className="flex flex-col w-[15%] max-md:w-full">
-      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-24 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20">
+      <div className="flex flex-col grow items-center px-1 pt-3.5 pb-16 w-full text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20">
         <img
           loading="lazy"
           src="src/images/ellipse-1.png"
@@ -84,7 +89,7 @@ const Sidebar = () => {
           className="object-contain rounded-full aspect-square w-[70px]"
         />
         <div className="mt-1.5">User name</div>
-        <nav className={`flex flex-col self-stretch mt-8 w-full ${isLoading ? 'pointer-events-none opacity-50' : ''}`}>
+        <nav className={`flex flex-col self-stretch mt-2 w-full ${isLoading ? 'pointer-events-none opacity-50' : ''}`}>
           {sidebarItems.map((item, index) => (
             <SidebarItem
               key={index}

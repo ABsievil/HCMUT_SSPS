@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import InputField from '../fragments/InputField/InputField';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import Toastify styles
+import 'react-toastify/dist/ReactToastify.css';
 
 function ChangePassword() {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -34,7 +34,7 @@ function ChangePassword() {
   };
 
   return (
-    <div className="w-10/12 mx-auto bg-white shadow-md rounded-lg p-6">
+    <div className="w-3/5 mx-auto bg-white shadow-md rounded-lg p-10">
       <h2 className="text-2xl font-bold mb-4 justify-center flex">THAY ĐỔI MẬT KHẨU</h2>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div className="mb-4">
