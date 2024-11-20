@@ -27,7 +27,7 @@ const AdminInforForm = () => {
     if (adminInfor.data) {
       setFormData({
         email: adminInfor.data.email,
-        fullName: adminInfor.data.last_name +' '+ adminInfor.data.middle_name +' '+ adminInfor.data.first_name,
+        fullName: adminInfor.data.last_name + ' ' + adminInfor.data.middle_name + ' ' + adminInfor.data.first_name,
         phoneNumber: adminInfor.data.phone_number,
         dateOfBirth: adminInfor.data.date_of_birth,
       });
@@ -54,9 +54,9 @@ const AdminInforForm = () => {
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-2">{label}</label>
         {isEditing &&
-        !["remainingPages", "usedPages", "studentId", "email"].includes(
-          name
-        ) ? (
+          !["remainingPages", "usedPages", "studentId", "email"].includes(
+            name
+          ) ? (
           <input
             type={type}
             name={name}
@@ -87,9 +87,18 @@ const AdminInforForm = () => {
           onClick={() => setIsEditing(!isEditing)}
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         >
-          <div className='flex gap-3'>
-            CHỈNH SỬA
-            <Pencil className="w-5 h-5 text-gray-600" />
+          <div className="flex gap-3">
+            {isEditing ? (
+              <>
+                HỦY THAO TÁC
+                <X className="w-5 h-5 text-gray-600" />
+              </>
+            ) : (
+              <>
+                CHỈNH SỬA
+                <Pencil className="w-5 h-5 text-gray-600" />
+              </>
+            )}
           </div>
         </button>
       </div>

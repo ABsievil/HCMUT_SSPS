@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux"; // for dispatch, and for store selection
-import { Pencil } from 'lucide-react';
+import { Pencil, X } from 'lucide-react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useUser } from '../../../store/userContext'; // get user id
@@ -11,7 +11,7 @@ const PersonalInfoForm = () => {
   const { username, role, userId, isLoggedIn } = useUser();
   //TODO: we may want to distinguish dispatch logic between admin and student using 'role'
   //here just work for students, cuz admin doesnt have an ID
-  
+
   const dispatch = useDispatch();
   const { isLoading, personalInfor, error } = useSelector(
     (state) => state.personalInfor
@@ -20,7 +20,7 @@ const PersonalInfoForm = () => {
   useEffect(() => {
     dispatch(fetchPersonalInfor(userId));
   }, [userId, dispatch]);
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({ // sample data
     studentId: '2211445',
@@ -99,9 +99,18 @@ const PersonalInfoForm = () => {
           onClick={() => setIsEditing(!isEditing)}
           className="p-2 hover:bg-gray-100 rounded-full transition-colors"
         >
-          <div className='flex gap-3'>
-            CHỈNH SỬA
-            <Pencil className="w-5 h-5 text-gray-600" />
+          <div className="flex gap-3">
+            {isEditing ? (
+              <>
+                HỦY THAO TÁC
+                <X className="w-5 h-5 text-gray-600" />
+              </>
+            ) : (
+              <>
+                CHỈNH SỬA
+                <Pencil className="w-5 h-5 text-gray-600" />
+              </>
+            )}
           </div>
         </button>
       </div>

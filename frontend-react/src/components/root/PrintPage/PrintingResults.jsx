@@ -78,7 +78,7 @@ function PrintingResults({ setPrintingData }) {
               <td className="px-5 py-3 text-center"></td>
               <td className="px-5 py-3 text-center">
                 <button
-                  className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
+                  className="px-2 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg"
                   onClick={handleUpdate}
                 >
                   In ngay

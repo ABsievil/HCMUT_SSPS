@@ -42,8 +42,8 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter, error }) => 
       ${error
         ? 'border-red-500 bg-red-50'  // Add red border and background if there's an error
         : selectedPrinter
-        ? 'border-green-200 bg-green-50' 
-        : 'border-gray-200 bg-gray-50'
+          ? 'border-green-200 bg-green-50'
+          : 'border-gray-200 bg-gray-50'
       }`}
     >
       {selectedPrinter ? (
@@ -119,11 +119,10 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
         onDragOver={e => handleDrag(e, true)}
         onDragLeave={e => handleDrag(e, false)}
         onDrop={handleDrop}
-        className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${
-          isDragging
-            ? 'border-blue-500 bg-blue-50'
-            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-        } ${error ? 'border-red-500 bg-red-50' : ''}`}  // Add red border if error
+        className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${isDragging
+          ? 'border-blue-500 bg-blue-50'
+          : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+          } ${error ? 'border-red-500 bg-red-50' : ''}`}  // Add red border if error
       >
         <div className="flex flex-col items-center gap-3">
           <input
@@ -138,7 +137,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
             }}
             accept={acceptedFileTypes}
           />
-          
+
           {selectedFile ? (
             <div className="flex items-center gap-3 w-full">
               <div className="flex-1 flex items-center gap-2">
@@ -262,26 +261,24 @@ function PrintingForm() {
           <PrinterInfo
             selectedPrinter={formState.selectedPrinter}
             onSelectPrinter={() => handleInputChange('showPrinterForm', true)}
-            error={errors.printer} 
+            error={errors.printer}
           />
 
           <FileUpload
             selectedFile={formState.selectedFile}
             onFileUpload={(e) => handleInputChange('selectedFile', e.target.files[0])}
-            error={errors.file}  
+            error={errors.file}
           />
         </div>
 
         {/* Right Column */}
-        <div className="space-y-8">
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-gray-900">Thông tin in ấn</h2>
-            <div className="px-4 py-2 bg-blue-100 text-blue-800 rounded-lg font-medium">
-              Số trang có sẵn: {TOTAL_PAGES}
-            </div>
-          </div>
+        <div className="space-y-6">
+          <h2 className="text-2xl font-bold text-gray-900">Thông tin in ấn</h2>
 
           <div className="space-y-6">
+            <div className="px-4 py-2 bg-blue-100 text-lg w-3/5 text-blue-800 rounded-lg font-medium">
+              Số trang có sẵn: {TOTAL_PAGES}
+            </div>
             <StyledInput
               label="Số trang cần in"
               type="number"
@@ -362,24 +359,24 @@ function PrintingForm() {
           </div>
 
           {formState.missingPages > 0 && (
-        <div className="mt-4 p-4 text-sm text-red-500 border border-red-400 bg-red-100 rounded">
-          <div className="flex items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-2"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M18 10A8 8 0 11.001 10a8 8 0 0117.998 0zM9 4a1 1 0 112 0v5a1 1 0 11-2 0V4zm1 7a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Bạn cần thêm {formState.missingPages} trang để hoàn thành việc in.
-          </div>
-        </div>
-      )}
+            <div className="mt-4 p-4 text-sm text-red-500 border border-red-400 bg-red-100 rounded">
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 mr-2"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M18 10A8 8 0 11.001 10a8 8 0 0117.998 0zM9 4a1 1 0 112 0v5a1 1 0 11-2 0V4zm1 7a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Bạn cần thêm {formState.missingPages} trang để hoàn thành việc in.
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

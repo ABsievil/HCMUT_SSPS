@@ -30,7 +30,7 @@ const RadioButton = React.memo(({ id, label, name, checked, onChange, icon: Icon
 ));
 
 const Button = React.memo(({ children, variant = 'primary', className = '', icon: Icon, ...props }) => {
-    const baseStyle = "px-8 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-1";
+    const baseStyle = "px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-1";
     const variants = {
         primary: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800",
         secondary: "bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300",
@@ -123,13 +123,12 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
             <h3 className="text-xl font-bold text-gray-900 flex items-center">
-                <Plus className="w-6 h-6" />
                 Thêm máy in mới
             </h3>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-y-6 gap-x-11">
                 {/* Campus */}
                 <div>
                     <select
@@ -217,7 +216,7 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
                 </div>
             </div>
 
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-end gap-4 pt-2">
                 <Button variant="secondary" onClick={onClose}>
                     Hủy
                 </Button>
@@ -254,7 +253,7 @@ const AddPrinter = () => {
     const selectedPrinter = availablePrinters.find(printer => printer.id === selectedPrinterId);
 
     return (
-        <div className="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8 h-full">
+        <div className="mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8 h-full">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-4">

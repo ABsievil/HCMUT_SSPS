@@ -5,13 +5,13 @@ import { File, Plus } from "lucide-react";
 import { toast } from 'react-toastify';
 
 const SectionTitle = React.memo(({ children }) => (
-    <h3 className="mt-8 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
+    <h3 className="mt-4 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
         {children}
     </h3>
 ));
 
 const Button = React.memo(({ children, variant = 'primary', className = '', icon: Icon, ...props }) => {
-    const baseStyle = "px-8 py-3 rounded-lg font-medium transition-all duration-200 flex items-center gap-1";
+    const baseStyle = "px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-1";
     const variants = {
         primary: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800",
         secondary: "bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300",
@@ -103,7 +103,6 @@ const AddNewSemesterForm = React.memo(({ onClose }) => {
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                <Plus className="w-6 h-6" />
                 Thêm học kỳ mới
             </h3>
 
@@ -241,7 +240,7 @@ const ManageFile = () => {
     );
 
     return (
-        <div className="w-4/5 md:w-1/2 mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8">
+        <div className="w-full md:w-1/2 mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-4">
@@ -255,33 +254,39 @@ const ManageFile = () => {
                     </div>
 
                     {/* Select Semester Section */}
-                    <SectionTitle>CHỌN HỌC KỲ</SectionTitle>
-                    <Select
-                        id="selectSemester"
-                        options={semesters}
-                        className="w-1/2"
-                        value={selectedSemester}
-                        onChange={handleSemesterChange}
-                    />
+                    <div className="flex items-center gap-4">
+                        <SectionTitle>CHỌN HỌC KỲ</SectionTitle>
+                        <Select
+                            id="selectSemester"
+                            options={semesters}
+                            className="flex-1"
+                            value={selectedSemester}
+                            onChange={handleSemesterChange}
+                        />
+                    </div>
 
-                    <SectionTitle>NGÀY CUNG CẤP ĐỊNH KỲ</SectionTitle>
-                    <input
-                        id="supplyDate"
-                        type="date"
-                        value={supplyDate}
-                        className="border border-gray-300 rounded-md p-2 w-1/2"
-                        disabled
-                    />
+                    <div className="flex items-center gap-4">
+                        <SectionTitle>NGÀY CUNG CẤP ĐỊNH KỲ</SectionTitle>
+                        <input
+                            id="supplyDate"
+                            type="date"
+                            value={supplyDate}
+                            className="border border-gray-300 rounded-md p-2 flex-1 text-center"
+                            disabled
+                        />
+                    </div>
 
-                    <SectionTitle>SỐ TRANG CUNG CẤP ĐỊNH KỲ</SectionTitle>
-                    <input
-                        id="periodicSupply"
-                        type="number"
-                        min={0}
-                        value={periodicSupply}
-                        className="border border-gray-300 rounded-md p-2 w-1/2"
-                        disabled
-                    />
+                    <div className="flex items-center gap-4">
+                        <SectionTitle>SỐ TRANG CUNG CẤP ĐỊNH KỲ</SectionTitle>
+                        <input
+                            id="periodicSupply"
+                            type="number"
+                            min={0}
+                            value={periodicSupply}
+                            className="border border-gray-300 rounded-md p-2 flex-1 text-center"
+                            disabled
+                        />
+                    </div>
 
                     <SectionTitle>LOẠI TỆP ĐƯỢC TẢI LÊN</SectionTitle>
                     <div className="flex flex-col gap-4 mt-4">
