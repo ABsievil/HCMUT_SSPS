@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
 import SidebarItem from "./SidebarItem";
+import Cookies from 'js-cookie';
 
 const sidebarItems = [
   {
@@ -10,25 +10,11 @@ const sidebarItems = [
     link: "/account"
   },
   {
-    icon: "src/images/icon-lock-nav.png",
-    text: "Thay đổi mật khẩu",
-    link: "/change-password"
-  },
-  {
-    icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/3979f5fa700a249165cd855fae46b710c5072631be07574fb4438f32ddb0c312?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
-    text: "Trang in ấn",
-    link: "/print"
-  },
-  {
-    icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/2366765ec2dd4a998fa08e8feb917c77aa9abdd1ca371b3c6c3589a10419bef0?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
-    text: "Mua giấy in",
-    link: "/buypaper"
-  },
-  {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/1c4134eae08bde30084c70bf9ce3fba0cffea383b3ec61d772b2a1e70116cb49?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
     text: "Lịch sử in",
     link: "/printlog"
   },
+
   {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/73dd0575c4ff34141b69921c28e0c0be6cbe1dbfebcfbe5828db94ee29ff575b?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
     text: "Cài đặt hệ thống",
@@ -40,13 +26,18 @@ const sidebarItems = [
     link: "/report"
   },
   {
+    icon: "src/images/icon-lock-nav.png",
+    text: "Thay đổi mật khẩu",
+    link: "/change-password"
+  },
+  {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/9e6254714a807272e104cd11bfb80c4546f8c63032d7d5999b464192ba5220d9?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
     text: "Đăng xuất",
     link: "/logout"
   }
 ];
 
-const Sidebar = () => {
+const AdminSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [highlightedItem, setHighlightedItem] = useState(0);
@@ -107,4 +98,4 @@ const Sidebar = () => {
   );
 };
 
-export default Sidebar;
+export default AdminSidebar;

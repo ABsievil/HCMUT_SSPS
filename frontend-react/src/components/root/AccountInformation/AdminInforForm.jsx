@@ -1,59 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux"; // for dispatch, and for store selection
-import { Pencil } from 'lucide-react';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { useUser } from '../../../store/userContext'; // get user id
-import { fetchPersonalInfor } from '../../../store/personalInforSlice'; // fetch infor by id
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Pencil } from "lucide-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { fetchAdminInfor } from "../../../store/adminInforSlice";
 
-
-const PersonalInfoForm = () => {
-  const { username, role, userId, isLoggedIn } = useUser();
-  //TODO: we may want to distinguish dispatch logic between admin and student using 'role'
-  //here just work for students, cuz admin doesnt have an ID
-  
+const AdminInforForm = () => {
   const dispatch = useDispatch();
-  const { isLoading, personalInfor, error } = useSelector(
-    (state) => state.personalInfor
+  const { isLoading, adminInfor, error } = useSelector(
+    (state) => state.adminInfor
   );
 
   useEffect(() => {
-    dispatch(fetchPersonalInfor(userId));
-  }, [userId, dispatch]);
-  
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({ // sample data
-    studentId: '2211445',
-    email: 'name.lastname@hcmut.edu.vn',
-    fullName: 'Nguyen Van A',
-    phoneNumber: '0123456789',
-    dateOfBirth: '1990-01-01',
-    schoolYear: '3',
-    faculty: 'Khoa Khoa học và Kỹ thuat Máy Tính',
-    remainingPages: '100',
-  });
+    dispatch(fetchAdminInfor());
+  }, [dispatch]);
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    adminId: "1111111",
+    email: "admin@hcmut.edu.vn",
+    fullName: "Admin Name",
+    phoneNumber: "0999999999",
+    dateOfBirth: "2024-01-01",
+  });
   useEffect(() => {
-    // Update formData only when personalInfor.data is available
-    if (personalInfor.data) {
+    if (adminInfor.data) {
       setFormData({
-        studentId: personalInfor.data.student_id,
-        email: personalInfor.data.email,
-        fullName: personalInfor.data.last_name + ' ' + personalInfor.data.middle_name + ' ' + personalInfor.data.first_name,
-        phoneNumber: personalInfor.data.phone_number,
-        dateOfBirth: personalInfor.data.date_of_birth,
-        schoolYear: personalInfor.data.school_year,
-        faculty: personalInfor.data.faculty,
-        remainingPages: personalInfor.data.page_remain,
+        email: adminInfor.data.email,
+        fullName: adminInfor.data.last_name +' '+ adminInfor.data.middle_name +' '+ adminInfor.data.first_name,
+        phoneNumber: adminInfor.data.phone_number,
+        dateOfBirth: adminInfor.data.date_of_birth,
       });
     }
-  }, [personalInfor.data]);
+  }, [adminInfor.data]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -68,7 +53,10 @@ const PersonalInfoForm = () => {
     return (
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-2">{label}</label>
-        {isEditing && !['remainingPages', 'usedPages', 'studentId', 'email'].includes(name) ? (
+        {isEditing &&
+        !["remainingPages", "usedPages", "studentId", "email"].includes(
+          name
+        ) ? (
           <input
             type={type}
             name={name}
@@ -107,14 +95,10 @@ const PersonalInfoForm = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-x-6 gap-y-4">
-        {renderField("MÃ SỐ SINH VIÊN", "studentId", formData.studentId)}
         {renderField("EMAIL", "email", formData.email)}
         {renderField("HỌ VÀ TÊN", "fullName", formData.fullName)}
         {renderField("SỐ ĐIỆN THOẠI", "phoneNumber", formData.phoneNumber)}
         {renderField("NGÀY SINH", "dateOfBirth", formData.dateOfBirth, "date")}
-        {renderField("SINH VIÊN NĂM", "schoolYear", formData.schoolYear)}
-        {renderField("KHOA", "faculty", formData.faculty)}
-        {renderField("SỐ TRANG IN CÒN LẠI", "remainingPages", formData.remainingPages)}
       </div>
 
       {isEditing && (
@@ -130,5 +114,4 @@ const PersonalInfoForm = () => {
     </div>
   );
 };
-
-export default PersonalInfoForm;
+export default AdminInforForm;

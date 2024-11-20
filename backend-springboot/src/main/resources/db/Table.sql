@@ -46,7 +46,6 @@ CREATE TABLE Printed_turn (
 	page_size VARCHAR(2),
 	number_side INT,
 	number_copy INT,
-	state BOOL DEFAULT FALSE,
 	PRIMARY KEY (username, printer_id, printing_date, time_start, time_end, file_name, file_type, number_pages_of_file, page_size, number_side, number_copy),
 	FOREIGN KEY (username, printer_id) REFERENCES Printing(username, printer_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT check_number_side CHECK (number_side > 0),
@@ -83,7 +82,7 @@ CREATE TABLE File_types_accepted (
 
 CREATE TABLE OTP (
 	username VARCHAR(50),
-	otp_code VARCHAR(10)
+	otp_code VARCHAR(6)
 	PRIMARY KEY (username, otp_code)
 	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE
 )

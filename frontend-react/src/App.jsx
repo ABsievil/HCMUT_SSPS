@@ -10,13 +10,12 @@ import RegisterPage from "../src/components/root/RegisterPage";
 import Verification from "./components/root/Verify/Verification";
 import InputMail from "./components/root/Verify/InputMail";
 import CreateNewPassword from "./components/root/CreateNewPassword";
-import StudentPrintLog from "./components/root/StudentPrintLog";
-import AdminPrintLog from "./components/root/AdminPrintLog";
 import AccountInformation from "./components/root/AccountInformation";
 import ProtectedRoute from "./components/root/Login/ProtectedRouter";
 import ManageSystem from "./components/root/ManageSystem";
 import Report from "./components/root/Report";
 import ChangePassword from "./components/root/ChangePassword";
+import PrintLog from "./components/root/PrintLog";
 
 export default function App() {
   return (
@@ -38,12 +37,12 @@ export default function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/print" element={<PrintingSystem />} />
           <Route path="/buyPaper" element={<PrintingPage />} />
-          <Route path="/printlog" element={<StudentPrintLog />} />
+          <Route path="/printlog" element={<PrintLog />} />
         </Route>
 
         <Route>
           <Route path="/account" element={<AccountInformation />} />
-          <Route path="/adminprintlog" element={<AdminPrintLog />} />
+          <Route path="/printlog" element={<PrintLog />} />
           <Route path="/manage" element={<ManageSystem />} />
           <Route path="/report" element={<Report />} />
         </Route>
