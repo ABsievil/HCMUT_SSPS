@@ -3,7 +3,9 @@
 --> lấy thông tin cá nhân của admin
 
 ---------------------------------------------------------------STUDENT-----------------------------------------------------------
-2. get_student_infor_by_id(student_id_input VARCHAR)
+2.1 get_student_id_by_username(username_input VARCHAR)
+
+2.2 get_student_infor_by_id(student_id_input VARCHAR)
 --> lấy thông tin cá nhân của 1 student bằng mã số sinh viên
 
 3. get_all_student_infor()
@@ -14,8 +16,10 @@ Thêm/Xóa và Sửa thông tin của Student
 5. delete_student(username_input VARCHAR)
 6. update_student_infor(username_input VARCHAR,  last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR)
 
-7. change_password(username_input VARCHAR, new_password_input VARCHAR)
+7.1 change_password(username_input VARCHAR, new_password_input VARCHAR)
 --> đổi mật khẩu của Student
+
+7.2 get_password_by_username(username_input VARCHAR)
 
 Lấy thông tin số trang mặc định còn lại và số trang đã in của Student
 8. get_number_page_default_remain(student_id_input VARCHAR)

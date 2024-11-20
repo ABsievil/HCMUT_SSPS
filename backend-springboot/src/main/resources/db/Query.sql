@@ -25,7 +25,31 @@ $$ LANGUAGE plpgsql;
 -- SELECT get_admin_infor()
 
 ---------------------------------------------------------------STUDENT-----------------------------------------------------------
---2--Lấy thông tin của student bằng mã số sinh viên
+--2.1--
+CREATE OR REPLACE FUNCTION get_student_id_by_username(username_input VARCHAR)
+RETURNS VARCHAR AS $$
+DECLARE
+    result VARCHAR;
+BEGIN
+    IF NOT EXISTS (
+        SELECT * FROM Users WHERE username = username_input
+    )
+    THEN 
+        RAISE EXCEPTION 'Username % does not exist', username_input;
+    END IF;
+
+    SELECT student_id 
+    INTO result
+    FROM Users 
+    WHERE username = username_input;
+    
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT get_student_id_by_username('cuong.nguyen317qb')
+
+--2.2--Lấy thông tin của student bằng mã số sinh viên
 CREATE OR REPLACE FUNCTION get_student_infor_by_id(student_id_input VARCHAR)
 RETURNS JSON AS $$
 DECLARE
@@ -186,7 +210,7 @@ $$;
 
 -- CALL update_student_infor('quachgiaphu', 'Quach', 'Gia', 'Phu', 'quachgiaphu@gmail.com', '2004-9-17', '0976251672', '3', 'Electric')
 
---7--Đổi mật khẩu của sinh viên, lưu mật khẩu mới
+--7.1--Đổi mật khẩu của sinh viên, lưu mật khẩu mới
 CREATE OR REPLACE PROCEDURE change_password(username_input VARCHAR, new_password_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
@@ -201,6 +225,28 @@ BEGIN
 	WHERE username = username_input;
 END;
 $$;
+
+-- 7.2 get_password_by_username(username_input VARCHAR)
+CREATE OR REPLACE FUNCTION get_password_by_username(username_input VARCHAR)
+RETURNS VARCHAR AS $$
+DECLARE
+    result VARCHAR;
+BEGIN
+    IF NOT EXISTS (
+        SELECT * FROM Users WHERE username = username_input
+    )
+    THEN 
+        RAISE EXCEPTION 'Username % does not exist', username_input;
+    END IF;
+
+    SELECT password 
+    INTO result
+    FROM Users 
+    WHERE username = username_input;
+    
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
 
 -- CALL change_password('quachgiaphu', '4321')
 
