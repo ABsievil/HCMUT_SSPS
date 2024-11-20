@@ -12,7 +12,7 @@ const sidebarItems = [
   {
     icon: "https://cdn.builder.io/api/v1/image/assets/TEMP/1c4134eae08bde30084c70bf9ce3fba0cffea383b3ec61d772b2a1e70116cb49?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96",
     text: "Lịch sử in",
-    link: "/adminPrintlog"
+    link: "/printlog"
   },
 
   {
