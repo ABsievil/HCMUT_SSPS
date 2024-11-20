@@ -204,6 +204,17 @@ public class StudentService {
     // cần thêm hàm check otp, hoặc check old pwd trước khi dùng hàm này để lưu new password
     public ResponseEntity<ResponseObject> PROC_changeStudentPassword(ChangePasswordDTO changePasswordDTO){
         try {
+            String fetchedPassword = jdbcTemplate.queryForObject(
+                "SELECT get_password_by_username(?)",
+                String.class, changePasswordDTO.getUsername()
+            );
+
+            boolean isSamePassword = passwordEncoder.matches(changePasswordDTO.getOldPassword(), fetchedPassword);
+            if(!isSamePassword) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ResponseObject("ERROR", "Incorrect password", null));
+            }
+
             jdbcTemplate.execute(
             "CALL change_password(?, ?)",
             (PreparedStatementCallback<Void>) ps -> {
