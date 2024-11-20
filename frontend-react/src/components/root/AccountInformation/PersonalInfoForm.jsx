@@ -1,22 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux"; // for dispatch, and for store selection
 import { Pencil } from 'lucide-react';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useUser } from '../../../store/userContext';
+import { useUser } from '../../../store/userContext'; // get user id
+import { fetchPersonalInfor } from '../../../store/personalInforSlice'; // fetch infor by id
+
 
 const PersonalInfoForm = () => {
+  const { username, role, userId, isLoggedIn } = useUser();
+  //TODO: we may want to distinguish dispatch logic between admin and student using 'role'
+  //here just work for students, cuz admin doesnt have an ID
+  
+  const dispatch = useDispatch();
+  const { isLoading, personalInfor, error } = useSelector(
+    (state) => state.personalInfor
+  );
+
+  useEffect(() => {
+    dispatch(fetchPersonalInfor(userId));
+  }, [userId, dispatch]);
+  
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    studentId: 'thepetergriffin',
-    email: 'hello@designpros.io',
-    fullName: 'Peter Griffin',
+  const [formData, setFormData] = useState({ // sample data
+    studentId: '2211445',
+    email: 'name.lastname@hcmut.edu.vn',
+    fullName: 'Nguyen Van A',
     phoneNumber: '0123456789',
     dateOfBirth: '1990-01-01',
-    school_year: 'K22',
-    faculty: 'Khoa Công nghệ thông tin',
+    schoolYear: '3',
+    faculty: 'Khoa Khoa học và Kỹ thuat Máy Tính',
     remainingPages: '100',
   });
-  const { username, role, userId, isLoggedIn } = useUser();
+
+  useEffect(() => {
+    // Update formData only when personalInfor.data is available
+    if (personalInfor.data) {
+      setFormData({
+        studentId: personalInfor.data.student_id,
+        email: personalInfor.data.email,
+        fullName: personalInfor.data.last_name + ' ' + personalInfor.data.middle_name + ' ' + personalInfor.data.first_name,
+        phoneNumber: personalInfor.data.phone_number,
+        dateOfBirth: personalInfor.data.date_of_birth,
+        schoolYear: personalInfor.data.school_year,
+        faculty: personalInfor.data.faculty,
+        remainingPages: personalInfor.data.page_remain,
+      });
+    }
+  }, [personalInfor.data]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +83,14 @@ const PersonalInfoForm = () => {
     );
   };
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
   return (
     <div className="w-10/12 mx-auto bg-white shadow-md rounded-lg p-6">
       <div className="flex justify-between items-center mb-4">
@@ -73,7 +112,7 @@ const PersonalInfoForm = () => {
         {renderField("HỌ VÀ TÊN", "fullName", formData.fullName)}
         {renderField("SỐ ĐIỆN THOẠI", "phoneNumber", formData.phoneNumber)}
         {renderField("NGÀY SINH", "dateOfBirth", formData.dateOfBirth, "date")}
-        {renderField("NIÊN KHÓA", "school_year", formData.school_year)}
+        {renderField("SINH VIÊN NĂM", "schoolYear", formData.schoolYear)}
         {renderField("KHOA", "faculty", formData.faculty)}
         {renderField("SỐ TRANG IN CÒN LẠI", "remainingPages", formData.remainingPages)}
       </div>

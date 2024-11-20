@@ -5,6 +5,7 @@ import printJobReducer from './printJobSlice';
 import fileTypeReducer from './fileTypeSlice';
 import printersabcSlice from './PrintersabcSlice';
 import singlePrinterReducer from './singlePrinterSlice'
+import personalInforReducer from './personalInforSlice'
 
 const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ const store = configureStore({
     printJobs: printJobReducer,
     fileTypes: fileTypeReducer,
     printersabc: printersabcSlice, // todo: rename to printerListReducer
-    singlePrinter: singlePrinterReducer
+    singlePrinter: singlePrinterReducer,
+    personalInfor: personalInforReducer
   },
 });
 
