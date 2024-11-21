@@ -30,7 +30,6 @@ export default function App() {
     <Router>
       <Routes>
 
-        
         <Route>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
