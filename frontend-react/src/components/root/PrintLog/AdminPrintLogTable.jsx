@@ -69,8 +69,7 @@ const PrintHistoryDetail = ({ isOpen, onClose, data }) => {
   );
 };
 
-//deprecated, gonna erease it soon
-const Table = ({ type }) => {
+const AdminPrintLogTable = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
 
@@ -105,22 +104,15 @@ const Table = ({ type }) => {
   return (
     <div className="overflow-x-auto drop-shadow-lg mx-10 py-4">
       <h1 className="text-center text-xl font-bold mt-10 mb-5">
-        LỊCH SỬ IN CỦA {type === "student" ? "SINH VIÊN" : type === "admin" ? "HỆ THỐNG" : "BẠN"}
+        LỊCH SỬ IN CỦA HỆ THỐNG
       </h1>
 
-      <PrintLogFilter type={type} />
-      { type === "student" &&
-        <div className="w-full md:w-4/5 m-auto mt-4 mb-4">
-          <p className="font-medium text-gray-800">
-            Tổng số trang in đã dùng: <span className="font-bold text-blue-600">{calculateTotalPages()} trang</span>
-          </p>
-        </div>
-      }
+      <PrintLogFilter type="admin" />
 
       <table className="w-full md:w-4/5 bg-white mt-3 m-auto">
         <thead>
           <tr className="bg-themecolor1">
-            {type === 'admin' && <th className="py-3 text-center">MSSV</th>}
+            <th className="py-3 text-center">MSSV</th>
             <th className=" py-3 text-center">ID máy in</th>
             <th className=" py-3 text-center">Tên tệp</th>
             <th className=" py-3 text-center">Giờ bắt đầu</th>
@@ -138,7 +130,7 @@ const Table = ({ type }) => {
               `}
               onClick={() => handleRowClick(row)}
             >
-              {type === 'admin' && <td className="py-4 text-center">{row.mssv}</td>}
+              <td className="py-4 text-center">{row.mssv}</td>
               <td className=" py-4 text-center">{row.printerId}</td>
               <td className=" py-4 text-center">{row.name}</td>
               <td className=" py-4 text-center">{row.startTime}</td>
@@ -158,4 +150,4 @@ const Table = ({ type }) => {
   );
 };
 
-export default Table;
+export default AdminPrintLogTable;
