@@ -38,4 +38,5 @@ const printersabcSlice = createSlice({
   },
 });
 
+export const selectPrinterList = (state) => state.printersabc;
 export default printersabcSlice.reducer;

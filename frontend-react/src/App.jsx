@@ -16,8 +16,16 @@ import ManageSystem from "./components/root/ManageSystem";
 import Report from "./components/root/Report";
 import ChangePassword from "./components/root/ChangePassword";
 import PrintLog from "./components/root/PrintLog";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPrintersabc } from "./store/PrintersabcSlice";
+import React, { useState, useEffect, useMemo } from "react";
 
 export default function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchPrintersabc()); // printerList is used alot throughout the app, fetching it here maybe effective
+  }, []);
+
   return (
     <Router>
       <Routes>

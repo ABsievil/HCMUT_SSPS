@@ -1,18 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import { Search, CircleAlert, X } from "lucide-react";
 import InputField from "../fragments/InputField/InputField";
-import { fetchPrintersabc } from "../../../store/PrintersabcSlice";
+import { selectPrinterList } from "../../../store/PrintersabcSlice";
 import { toast } from "react-toastify";
 
 const PrinterSelectionForm = ({ onSelectPrinter, onClose }) => {
-  const dispatch = useDispatch();
-  const { isLoading, printerList, error } = useSelector(
-    (state) => state.printersabc
-  );
-  useEffect(() => {
-    dispatch(fetchPrintersabc());
-  }, []);
+  const { isLoading, printerList, error } = useSelector(selectPrinterList);
 
   const [selectedPrinter, setSelectedPrinter] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
