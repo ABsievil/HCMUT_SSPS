@@ -636,7 +636,7 @@ BEGIN
 
 	RETURN result; 
 END; $$; 
---select * from get_file_of_semester('232')
+--SELECT * from get_file_of_semester('232')
 
 --26--Lưu otp
 CREATE OR REPLACE PROCEDURE add_otp_by_email(email_input VARCHAR, otp_code_input VARCHAR)
@@ -648,7 +648,7 @@ BEGIN
     VALUES (name, otp_code_input);
 END;
 $$;
---call add_otp_by_email('tinhquach@hcmut.edu.vn','1234m5')
+--CALL add_otp_by_email('tinhquach@hcmut.edu.vn','1234m5')
 
 --27--Xóa otp
 CREATE OR REPLACE PROCEDURE delete_otp_by_email(email_input VARCHAR)
@@ -677,7 +677,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---select * from get_otp_by_email('vumakhmtk22@hcmut.edu.vn')
+--SELECT * from get_otp_by_email('vumakhmtk22@hcmut.edu.vn')
 
 --29--Lấy các thông số của học kì
 CREATE OR REPLACE FUNCTION get_utility_of_semester(f_semester VARCHAR) 
@@ -701,4 +701,44 @@ BEGIN
 	RETURN result; 
 END; 
 $$; 
---select * from get_utility_of_semester('232')
+--SELECT * from get_utility_of_semester('232')
+
+------------------------------------------------------------REPORT--------------------------------------------------------
+
+--30--Lấy số lượng người dùng trong khoảng thời gian chọn
+--nếu không chọn thời gian thì truyền vào null
+
+CREATE OR REPLACE FUNCTION get_number_user_using_system(date_start_input DATE, date_end_input DATE)
+RETURNS JSON AS $$
+DECLARE
+	number_users INT;
+BEGIN
+	SELECT COUNT(DISTINCT username) 
+	INTO number_users
+	FROM Printed_turn pt
+	WHERE(date_start_input IS NULL OR pt.printing_date >= date_start_input) 
+		 AND (date_end_input IS NULL OR pt.printing_date <= date_end_input);
+		 
+    RETURN json_build_object('number_users', number_users);
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT get_number_user_using_system(null, null)
+
+--31-- Lấy số lượng trang đã in toàn hệ thống trong khoảng thời gian chọn
+--nếu không chọn thời gian thì truyền vào null
+CREATE OR REPLACE FUNCTION get_number_page_was_printed_of_system(date_start_input DATE, date_end_input DATE)
+RETURNS JSON AS $$
+DECLARE
+	number_page_was_printed INT;
+BEGIN
+	SELECT SUM(number_pages_of_file * number_copy) INTO number_page_was_printed
+	FROM Printed_turn pt
+	WHERE (date_start_input IS NULL OR date_start_input <= printing_date) 
+		  AND (date_end_input IS NULL OR date_end_input >= printing_date) ;
+	
+	RETURN json_build_object('number_page_was_printed', number_page_was_printed);
+END;
+$$ LANGUAGE plpgsql;
+
+-- SELECT get_number_page_was_printed_of_system(null, null)
