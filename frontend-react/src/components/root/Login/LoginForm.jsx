@@ -29,10 +29,12 @@ function LoginForm() {
       .then(data => {
         if (data.status === "OK") {
           toast.success("Đăng nhập thành công!");
-          navigate('/print');
+          // Sử dụng window.location để điều hướng
+          window.location.href = '/account';
         } else if (data.status === "ERROR") {
           toast.error("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
-          navigate('/login?error=true');
+          // Điều hướng bằng cách cập nhật URL
+          window.location.href = '/login?error=true';
         }
       })
       .catch(error => {
