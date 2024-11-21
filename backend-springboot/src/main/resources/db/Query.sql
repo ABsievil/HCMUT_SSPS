@@ -310,8 +310,11 @@ BEGIN
 			'printing_date', pt.printing_date,
 			'time_start', pt.time_start,
 			'time_end', pt.time_end,
-			'total_page', pt.number_pages_of_file * pt.number_copy,	
-			'page_size', pt.page_size
+			'time_type', pt.file_type,
+			'number_pages_of_file', pt.number_pages_of_file,
+			'page_size', pt.page_size,
+			'number_side', pt.number_side,
+			'number_copy', pt.number_copy
        		)
 	)
 	INTO result
