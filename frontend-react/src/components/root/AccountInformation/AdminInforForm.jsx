@@ -85,17 +85,17 @@ const AdminInforForm = () => {
         <h2 className="text-2xl font-bold">THÔNG TIN CÁ NHÂN</h2>
         <button
           onClick={() => setIsEditing(!isEditing)}
-          className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-2 hover:bg-gray-200 bg-gray-100 rounded-md  transition-colors"
         >
           <div className="flex gap-3">
             {isEditing ? (
               <>
-                HỦY THAO TÁC
-                <X className="w-5 h-5 text-gray-600" />
+                HỦY
+                <X className="w-5 h-5 text-red-600" />
               </>
             ) : (
               <>
-                CHỈNH SỬA
+                HỦY CHỈNH SỬA
                 <Pencil className="w-5 h-5 text-gray-600" />
               </>
             )}
