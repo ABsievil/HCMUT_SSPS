@@ -15,7 +15,7 @@ function ChangePassword() {
 
   const HandlePassword = (username, currentPassword, newPassword1, newPassword2) => {
     if (newPassword1 !== newPassword2) {
-      toast.error("Mật khẩu mới và xác nhận mật khẩu không khớp.");
+      toast.error("Mật khẩu mới và nhập lại mật khẩu mới không khớp!");
       return;
     }
     const reqJson = {
