@@ -1,9 +1,10 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectAvailablePrinters, updatePrinterStatus } from '../../../store/printersSlice';
+import { updatePrinterStatus } from '../../../store/printersSlice';
 import { Printer, Plus, Settings, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { addPrinter } from '../../../store/singlePrinterSlice';
+import { selectPrinterList } from '../../../store/PrintersabcSlice';
 
 // Reusable components with enhanced styling
 const RadioButton = React.memo(({ id, label, name, checked, onChange, icon: Icon }) => (
@@ -232,25 +233,37 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
 // Main component
 const AddPrinter = () => {
     const dispatch = useDispatch();
-    const availablePrinters = useSelector(selectAvailablePrinters);
-    const [selectedPrinterId, setSelectedPrinterId] = useState(availablePrinters[0]?.id || '');
+    const { isLoading, printerList, error } = useSelector(selectPrinterList);
+    const [selectedPrinterId, setSelectedPrinterId] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
+    console.log(printerList.data);
 
-    const printerOptions = availablePrinters.map((printer) => ({
-        value: printer.id,
-        label: `${printer.name} - ${printer.location} (${printer.status})`
-    }));
+    useEffect(() => {
+        {
+            if (printerList && printerList.data) {
+                setSelectedPrinterId(printerList?.data[0]?.printer_id || '');
+            }
+        }
+    }, [printerList.data]);
 
     const handlePrinterChange = (event) => {
         setSelectedPrinterId(event.target.value);
     };
 
-    const handleStatusChange = useCallback((status) => {
-        dispatch(updatePrinterStatus({ id: selectedPrinterId, status }));
+    const handleStatusChange = useCallback((state) => {
+        dispatch(updatePrinterStatus({ id: selectedPrinterId, state }));
         toast.success('Trạng thái máy in đã được cập nhật!');
     }, [dispatch, selectedPrinterId]);
 
-    const selectedPrinter = availablePrinters.find(printer => printer.id === selectedPrinterId);
+
+    if (isLoading || error)
+        return <div>Loading...</div>
+
+    const selectedPrinter = printerList.data?.find(printer => printer.id === selectedPrinterId);
+    const printerOptions = printerList.data.map((printer) => ({
+        value: printer.printer_id,
+        label: `${printer.brand_name} - ${printer.building} ${printer.room} (${printer.state ? 'Sẵn sàng' : 'Dừng hoạt động'})`
+    }));
 
     return (
         <div className="mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8 h-full">
@@ -261,7 +274,7 @@ const AddPrinter = () => {
                             <Printer />
                             Quản lý máy in
                         </h2>
-                        <Button onClick={() => setShowAddForm(true)} icon={Plus}>
+                        <Button onClick={() => sethowAddForm(true)} icon={Plus}>
                             Thêm máy in mới
                         </Button>
                     </div>
@@ -281,7 +294,7 @@ const AddPrinter = () => {
                                 Trạng thái hoạt động
                             </h3>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid Sgrid-cols-1 md:grid-cols-2 gap-4">
                                 <RadioButton
                                     id="active"
                                     label="Kích hoạt"
@@ -294,8 +307,8 @@ const AddPrinter = () => {
                                     id="inactive"
                                     label="Dừng hoạt động"
                                     name="printerStatus"
-                                    checked={selectedPrinter?.status === 'Đang bảo trì'}
-                                    onChange={() => handleStatusChange('Đang bảo trì')}
+                                    checked={selectedPrinter?.status === 'Dừng hoạt động'}
+                                    onChange={() => handleStatusChange('Dừng hoạt động')}
                                     icon={XCircle}
                                 />
                             </div>
