@@ -29,5 +29,4 @@ const printerSlice = createSlice({
 });
 
 export const { updatePrinterStatus, addPrinter } = printerSlice.actions;
-export const selectAvailablePrinters = (state) => state.printers.availablePrinters;
 export default printerSlice.reducer;
