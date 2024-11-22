@@ -628,7 +628,7 @@ AS $$
 	declare result JSON;
 BEGIN 
 	SELECT json_agg(json_build_object(
-		'Accepted file type', type_accepted
+		'accepted_file_type', type_accepted
 	))
 	INTO result
 	FROM File_types_accepted
@@ -638,48 +638,7 @@ BEGIN
 END; $$; 
 --SELECT * from get_file_of_semester('232')
 
---26--Lưu otp
-CREATE OR REPLACE PROCEDURE add_otp_by_email(email_input VARCHAR, otp_code_input VARCHAR)
-LANGUAGE plpgsql AS $$ 
-DECLARE name VARCHAR; 
-BEGIN
-	SELECT username INTO name FROM users WHERE email = email_input;
-    INSERT INTO OTP (username, otp_code)
-    VALUES (name, otp_code_input);
-END;
-$$;
---CALL add_otp_by_email('tinhquach@hcmut.edu.vn','1234m5')
-
---27--Xóa otp
-CREATE OR REPLACE PROCEDURE delete_otp_by_email(email_input VARCHAR)
-LANGUAGE plpgsql AS $$
-BEGIN
-    DELETE FROM OTP
-	WHERE username = (select username from users where email = email_input);
-END;
-$$;
--- CALL delete_otp_by_email('vumakhmtk22@hcmut.edu.vn')
-
---28--Lấy thông tin otp
-CREATE OR REPLACE FUNCTION get_otp_by_email(email_input VARCHAR)
-RETURNS JSON AS $$
-DECLARE
-    result JSON;
-BEGIN
-    SELECT json_build_object(
-			'otp_code', otp_code
-       		)
-    INTO result
-    FROM OTP
-	WHERE username = (select username from users where email = email_input);
-    
-    RETURN result;
-END;
-$$ LANGUAGE plpgsql;
-
---SELECT * from get_otp_by_email('vumakhmtk22@hcmut.edu.vn')
-
---29--Lấy các thông số của học kì
+--26--Lấy các thông số in ấn của học kỳ
 CREATE OR REPLACE FUNCTION get_utility_of_semester(f_semester VARCHAR) 
 RETURNS JSON 
 LANGUAGE plpgsql
@@ -703,9 +662,74 @@ END;
 $$; 
 --SELECT * from get_utility_of_semester('232')
 
+--27--
+CREATE OR REPLACE FUNCTION get_utility_by_current_date(current_date_input DATE)
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(json_build_object(
+		'semester', semester,
+		'default_pages', default_pages,
+		'date_reset_default_page', date_reset_default_page,
+		'page_price', page_price,
+		'date_start', date_start,
+		'date_end', date_end
+	))
+	INTO result
+	FROM Utility
+	WHERE date_start <= current_date_input AND date_end >= current_date_input; 
+
+	RETURN result; 
+END; 
+$$; 
+--SELECT * from get_utility_by_current_date('2024-10-10')
+
+--28--Lưu otp
+CREATE OR REPLACE PROCEDURE add_otp_by_email(email_input VARCHAR, otp_code_input VARCHAR)
+LANGUAGE plpgsql AS $$ 
+DECLARE name VARCHAR; 
+BEGIN
+	SELECT username INTO name FROM users WHERE email = email_input;
+    INSERT INTO OTP (username, otp_code)
+    VALUES (name, otp_code_input);
+END;
+$$;
+--CALL add_otp_by_email('tinhquach@hcmut.edu.vn','1234m5')
+
+--29--Xóa otp
+CREATE OR REPLACE PROCEDURE delete_otp_by_email(email_input VARCHAR)
+LANGUAGE plpgsql AS $$
+BEGIN
+    DELETE FROM OTP
+	WHERE username = (select username from users where email = email_input);
+END;
+$$;
+-- CALL delete_otp_by_email('vumakhmtk22@hcmut.edu.vn')
+
+--30--Lấy thông tin otp
+CREATE OR REPLACE FUNCTION get_otp_by_email(email_input VARCHAR)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+    SELECT json_build_object(
+			'otp_code', otp_code
+       		)
+    INTO result
+    FROM OTP
+	WHERE username = (select username from users where email = email_input);
+    
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+--SELECT * from get_otp_by_email('vumakhmtk22@hcmut.edu.vn')
+
 ------------------------------------------------------------REPORT--------------------------------------------------------
 
---30--Lấy số lượng người dùng trong khoảng thời gian chọn
+--31--Lấy số lượng người dùng trong khoảng thời gian chọn
 --nếu không chọn thời gian thì truyền vào null
 
 CREATE OR REPLACE FUNCTION get_number_user_using_system(date_start_input DATE, date_end_input DATE)
@@ -725,7 +749,7 @@ $$ LANGUAGE plpgsql;
 
 -- SELECT get_number_user_using_system(null, null)
 
---31-- Lấy số lượng trang đã in toàn hệ thống trong khoảng thời gian chọn
+--32-- Lấy số lượng trang đã in toàn hệ thống trong khoảng thời gian chọn
 --nếu không chọn thời gian thì truyền vào null
 CREATE OR REPLACE FUNCTION get_number_page_was_printed_of_system(date_start_input DATE, date_end_input DATE)
 RETURNS JSON AS $$
