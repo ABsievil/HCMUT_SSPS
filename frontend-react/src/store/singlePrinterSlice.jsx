@@ -1,4 +1,5 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 export const addPrinter = createAsyncThunk(
     'addPrinter',
@@ -21,28 +22,42 @@ export const addPrinter = createAsyncThunk(
         }
     }
 );
-const singlePrinterSlice = createSlice({
-    name: 'singlePrinter',
-    initialState: {
-        data: [],
-        isLoading: false,
-        error: null,
-    },
-    reducers: {},
-    extraReducers: (builder) => {
-        builder
-            .addCase(addPrinter.pending, (state) => {
-                state.isLoading = true;
-                state.error = null;
-            })
-            .addCase(addPrinter.fulfilled, (state) => {
-                state.isLoading = false;
-            })
-            .addCase(addPrinter.rejected, (state, action) => {
-                state.isLoading = false;
-                state.error = action.error.message;
-            });
-    },
-});
 
-export default singlePrinterSlice.reducer;
+
+export const enablePrinter = async (printerId) => {
+    try {
+        const response = await fetch(
+            `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Printer/enablePrinter/${printerId}`,
+            {
+                method: 'PUT',
+                credentials: 'include',
+            }
+        );
+        if (!response.ok) {
+            throw new Error(`Enable printer failed: ${response.status}`);
+        }
+        console.log('Printer enabled successfully');
+        toast.success("Kích hoạt máy in thành công")
+    } catch (error) {
+        console.error('Error enabling printer:', error);
+    }
+};
+
+export const disablePrinter = async (printerId) => {
+    try {
+        const response = await fetch(
+            `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Printer/disablePrinter/${printerId}`,
+            {
+                method: 'PUT',
+                credentials: 'include',
+            }
+        );
+        if (!response.ok) {
+            throw new Error(`Disable printer failed: ${response.status}`);
+        }
+        console.log('Printer disabled successfully');
+        toast.success("Dừng máy in thành công")
+    } catch (error) {
+        console.error('Error disabling printer:', error);
+    }
+};

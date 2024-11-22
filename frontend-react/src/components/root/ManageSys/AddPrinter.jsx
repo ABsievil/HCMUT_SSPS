@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updatePrinterStatus } from '../../../store/printersSlice';
 import { Printer, Plus, Settings, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { addPrinter } from '../../../store/singlePrinterSlice';
+import { addPrinter, disablePrinter, enablePrinter } from '../../../store/singlePrinterSlice';
 import { selectPrinterList } from '../../../store/PrintersabcSlice';
 
 // Reusable components with enhanced styling
@@ -104,8 +104,6 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            console.log(formData);
-            // Handle successful form submission (e.g., dispatching an action to add the printer)
             dispatch(addPrinter(formData));
             toast.success('Máy in đã được thêm thành công!');
             onClose(); // Close the form after submission
@@ -236,7 +234,6 @@ const AddPrinter = () => {
     const { isLoading, printerList, error } = useSelector(selectPrinterList);
     const [selectedPrinterId, setSelectedPrinterId] = useState(null);
     const [showAddForm, setShowAddForm] = useState(false);
-    console.log(printerList.data);
 
     useEffect(() => {
         {
@@ -274,7 +271,7 @@ const AddPrinter = () => {
                             <Printer />
                             Quản lý máy in
                         </h2>
-                        <Button onClick={() => sethowAddForm(true)} icon={Plus}>
+                        <Button onClick={() => setShowAddForm(true)} icon={Plus}>
                             Thêm máy in mới
                         </Button>
                     </div>
@@ -300,7 +297,7 @@ const AddPrinter = () => {
                                     label="Kích hoạt"
                                     name="printerStatus"
                                     checked={selectedPrinter?.status === 'Sẵn sàng'}
-                                    onChange={() => handleStatusChange('Sẵn sàng')}
+                                    onChange={() => enablePrinter(selectedPrinterId)}
                                     icon={CheckCircle}
                                 />
                                 <RadioButton
@@ -308,7 +305,7 @@ const AddPrinter = () => {
                                     label="Dừng hoạt động"
                                     name="printerStatus"
                                     checked={selectedPrinter?.status === 'Dừng hoạt động'}
-                                    onChange={() => handleStatusChange('Dừng hoạt động')}
+                                    onChange={() => disablePrinter(selectedPrinterId)}
                                     icon={XCircle}
                                 />
                             </div>
