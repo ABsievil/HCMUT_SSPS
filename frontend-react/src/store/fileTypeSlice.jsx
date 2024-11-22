@@ -53,13 +53,6 @@ const fileTypeSlice = createSlice({
     name: 'fileTypes',
     initialState: {
         isLoading: true,
-        types: [
-            { value: '.doc', label: '.doc' },
-            { value: '.docx', label: '.docx' },
-            { value: '.pdf', label: '.pdf' },
-            { value: '.txt', label: '.txt' },
-            { value: '.rtf', label: '.rtf' },
-        ],
         availableTypes: [],
         error: null,
     },
@@ -91,6 +84,5 @@ const fileTypeSlice = createSlice({
 });
 
 export const { addFileType, removeFileType } = fileTypeSlice.actions;
-export const selectFileTypes = (state) => state.fileTypes.types;
 export const selectAvailableFileTypes = (state) => state.fileTypes;
 export default fileTypeSlice.reducer;

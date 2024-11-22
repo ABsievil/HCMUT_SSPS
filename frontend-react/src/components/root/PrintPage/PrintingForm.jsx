@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Printer, File, Copy, Layout, AlertCircle, X } from "lucide-react";
 import PrinterSelectionForm from './PrinterSelectionForm'
-import { useSelector } from 'react-redux';
-import { selectFileTypes } from '../../../store/fileTypeSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { toast } from "react-toastify";
+import { useSemester } from "../../../store/SemesterContext";
 
 const TOTAL_PAGES = 100;
 
@@ -77,8 +78,16 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter, error }) => 
 
 // Enhanced FileUpload component
 const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
-  const fileTypes = useSelector(selectFileTypes);
-  const acceptedFileTypes = fileTypes.map(type => type.value).join(',');
+  const {semester} = useSemester();
+  console.log(semester);
+  const dispatch = useDispatch();
+  useEffect(() => {
+      dispatch(fetchFileType(semester));
+  }, [semester]);
+  const {availableTypes} = useSelector(selectAvailableFileTypes);
+  // console.log(availableTypes.data);
+  
+  const acceptedFileTypes = availableTypes?.data?.map(type => type.accepted_file_type).join(',');
   const dragRef = React.useRef(null);
   const [isDragging, setIsDragging] = React.useState(false);
 
@@ -170,7 +179,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
 
       <div className="flex items-center gap-2 text-sm text-gray-500">
         <AlertCircle className="w-4 h-4" />
-        <span>Định dạng hỗ trợ: {fileTypes.map(type => type.label).join(', ')}</span>
+        <span>Định dạng hỗ trợ: {acceptedFileTypes}</span>
       </div>
     </div>
   );
