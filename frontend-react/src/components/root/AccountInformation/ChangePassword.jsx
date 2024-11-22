@@ -14,8 +14,12 @@ function ChangePassword() {
   const { username, role, userId, isLoggedIn } = useUser();
 
   const HandlePassword = (username, currentPassword, newPassword1, newPassword2) => {
+    if (!currentPassword.trim() || !newPassword1.trim() || !newPassword2.trim()) {
+      toast.error("Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
     if (newPassword1 !== newPassword2) {
-      toast.error("Mật khẩu mới và nhập lại mật khẩu mới không khớp!");
+      toast.error("Mật khẩu nhập lại không khớp!");
       return;
     }
     const reqJson = {
