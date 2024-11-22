@@ -1,9 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { updatePrinterStatus } from '../../../store/printersSlice';
 import { Printer, Plus, Settings, CheckCircle, XCircle } from 'lucide-react';
-import { toast } from 'react-toastify';
-import { addPrinter, disablePrinter, enablePrinter } from '../../../store/singlePrinterSlice';
+import { addPrinter, enablePrinter, disablePrinter } from '../../../store/PrintersabcSlice';
 import { selectPrinterList } from '../../../store/PrintersabcSlice';
 
 // Reusable components with enhanced styling
@@ -105,7 +103,6 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
         e.preventDefault();
         if (validateForm()) {
             dispatch(addPrinter(formData));
-            toast.success('Máy in đã được thêm thành công!');
             onClose(); // Close the form after submission
         }
     };
@@ -241,17 +238,11 @@ const AddPrinter = () => {
                 setSelectedPrinterId(printerList?.data[0]?.printer_id || '');
             }
         }
-    }, [printerList.data]);
+    }, [printerList.data, printerList]);
 
     const handlePrinterChange = (event) => {
         setSelectedPrinterId(event.target.value);
     };
-
-    const handleStatusChange = useCallback((state) => {
-        dispatch(updatePrinterStatus({ id: selectedPrinterId, state }));
-        toast.success('Trạng thái máy in đã được cập nhật!');
-    }, [dispatch, selectedPrinterId]);
-
 
     if (isLoading || error)
         return <div>Loading...</div>
@@ -297,7 +288,7 @@ const AddPrinter = () => {
                                     label="Kích hoạt"
                                     name="printerStatus"
                                     checked={selectedPrinter?.status === 'Sẵn sàng'}
-                                    onChange={() => enablePrinter(selectedPrinterId)}
+                                    onChange={() => dispatch(enablePrinter(selectedPrinterId))}
                                     icon={CheckCircle}
                                 />
                                 <RadioButton
@@ -305,7 +296,7 @@ const AddPrinter = () => {
                                     label="Dừng hoạt động"
                                     name="printerStatus"
                                     checked={selectedPrinter?.status === 'Dừng hoạt động'}
-                                    onChange={() => disablePrinter(selectedPrinterId)}
+                                    onChange={() => dispatch(disablePrinter(selectedPrinterId))}
                                     icon={XCircle}
                                 />
                             </div>
