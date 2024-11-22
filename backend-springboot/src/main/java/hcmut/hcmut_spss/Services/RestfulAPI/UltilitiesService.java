@@ -26,37 +26,7 @@ public class UltilitiesService {
         this.objectMapper = objectMapper;
     }
 
-    public ResponseEntity<ResponseObject> FNC_getFileOfSemester(String semesterId){
-        try {
-            String fileOfSemesterList = jdbcTemplate.queryForObject(
-                "select get_file_of_semester(?)",
-                String.class, semesterId
-            );
-            if (fileOfSemesterList == null) {
-                return ResponseEntity.status(HttpStatus.OK)
-                    .body(new ResponseObject("OK", "Query to get FNC_getFileOfSemester() successfully with data = null", fileOfSemesterList));
-            }
-
-            JsonNode jsonNode = objectMapper.readTree(fileOfSemesterList);
-
-            return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseObject("OK", "Query to get FNC_getFileOfSemester() successfully", jsonNode));
-        } catch (DataAccessException e) {
-            // Xử lý lỗi liên quan đến truy cập dữ liệu
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
-        } catch (JsonProcessingException e) {
-            // Xử lý lỗi khi parse JSON
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
-        } catch (Exception e) {
-            // Xử lý các lỗi khác
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseObject("ERROR", "Error getting FNC_getFileOfSemester(): " + e.getMessage(), null));
-        }
-    }
-
-    public ResponseEntity<ResponseObject> PROC_addFileAccepted(String semester, String typeAccepted){
+   public ResponseEntity<ResponseObject> PROC_addFileAccepted(String semester, String typeAccepted){
         try {
             jdbcTemplate.execute(
             "CALL add_file_accepted(?, ?)",
@@ -132,6 +102,96 @@ public class UltilitiesService {
             // Xử lý các lỗi khác
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(new ResponseObject("ERROR", "Error updating PROC_addUtilityOfSemester(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getFileOfSemester(String semesterId){
+        try {
+            String fileOfSemesterList = jdbcTemplate.queryForObject(
+                "select get_file_of_semester(?)",
+                String.class, semesterId
+            );
+            if (fileOfSemesterList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getFileOfSemester() successfully with data = null", fileOfSemesterList));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(fileOfSemesterList);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getFileOfSemester() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getFileOfSemester(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getUltilityOfSemester(String semesterId){
+        try {
+            String utilityOfSemesterList = jdbcTemplate.queryForObject(
+                "select get_utility_of_semester(?)",
+                String.class, semesterId
+            );
+            if (utilityOfSemesterList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getUltilityOfSemester() successfully with data = null", utilityOfSemesterList));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(utilityOfSemesterList);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getUltilityOfSemester() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getUltilityOfSemester(): " + e.getMessage(), null));
+        }
+    }
+
+    public ResponseEntity<ResponseObject> FNC_getUltilityByCurrentDate(Date currentDate){
+        try {
+            String utilityByCurrentDateList = jdbcTemplate.queryForObject(
+                "select get_utility_by_current_date(?)",
+                String.class, currentDate
+            );
+            if (utilityByCurrentDateList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getUltilityByCurrentDate() successfully with data = null", utilityByCurrentDateList));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(utilityByCurrentDateList);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getUltilityByCurrentDate() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getUltilityByCurrentDate(): " + e.getMessage(), null));
         }
     }
 

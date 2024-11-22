@@ -22,11 +22,6 @@ public class UltilitiesController {
     @Autowired
     private UltilitiesService ultilitiesService;
 
-    @GetMapping("/getFileOfSemester/{semesterId}")
-    public ResponseEntity<ResponseObject> getFileOfSemester(@PathVariable String semesterId) {
-        return ultilitiesService.FNC_getFileOfSemester(semesterId);
-    }
-
     @PutMapping("/addFileAccepted")
     public ResponseEntity<ResponseObject> addFileAccepted(
                         @RequestParam("semester") String semester, 
@@ -46,5 +41,20 @@ public class UltilitiesController {
     @PutMapping("/addUltilityOfSemester")
     public ResponseEntity<ResponseObject> addUltilityOfSemester(@RequestBody UtilityDTO utilityDTO){
         return ultilitiesService.PROC_addUltilityOfSemester(utilityDTO);
+    }
+
+    @GetMapping("/getFileOfSemester/{semesterId}")
+    public ResponseEntity<ResponseObject> getFileOfSemester(@PathVariable String semesterId) {
+        return ultilitiesService.FNC_getFileOfSemester(semesterId);
+    }
+
+    @GetMapping("/getUltilityOfSemester/{semesterId}")
+    public ResponseEntity<ResponseObject> getUltilityOfSemester(@PathVariable String semesterId) {
+        return ultilitiesService.FNC_getUltilityOfSemester(semesterId);
+    }
+
+    @GetMapping("/getUltilityByCurrentDate")
+    public ResponseEntity<ResponseObject> getUltilityByCurrentDate(@RequestParam("currentDate") Date currentDate) {
+        return ultilitiesService.FNC_getUltilityByCurrentDate(currentDate);
     }
 }
