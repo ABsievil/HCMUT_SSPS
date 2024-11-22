@@ -225,14 +225,14 @@ const ManageFile = () => {
             return;
         }
 
-        dispatch(addFileType({ value: formattedFileType, label: formattedFileType }));
+        dispatch(addFileType({semester :'241' , accepted_file_type: formattedFileType}));
         setCustomFileType('');
         toast.success('Loại tệp đã được thêm thành công!');
     }, [customFileType, dispatch, availableTypes]);
 
     const handleRemoveFileType = useCallback(
         (typeToRemove) => {
-            dispatch(removeFileType(typeToRemove));
+            dispatch(removeFileType({semester: '241', typeToRemove}));
         },
         [dispatch]
     );

@@ -15,6 +15,40 @@ export const fetchFileType = createAsyncThunk(
     }
 );
 
+const deleteFileAccepted = async (semester, typeAccepted) => {
+    try {
+        const response = await fetch(
+            `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Ultilities/deleteFileAccepted?semester=${semester}&typeAccepted=${typeAccepted}`,
+            {
+                method: 'PUT',
+                credentials: 'include',
+            }
+        );
+        if (!response.ok) {
+            throw new Error(`Delete accepted file failed: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error deleting accepted file:', error);
+    }
+};
+
+const addFileAccepted = async (semester, typeAccepted) => {
+    try {
+        const response = await fetch(
+            `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Ultilities/addFileAccepted?semester=${semester}&typeAccepted=${typeAccepted}`,
+            {
+                method: 'PUT',
+                credentials: 'include',
+            }
+        );
+        if (!response.ok) {
+            throw new Error(`Add accepted file failed: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error adding accepted file:', error);
+    }
+};
+
 const fileTypeSlice = createSlice({
     name: 'fileTypes',
     initialState: {
@@ -31,10 +65,14 @@ const fileTypeSlice = createSlice({
     },
     reducers: {
         addFileType: (state, action) => {
-            state.types.push(action.payload);
+            const {semester, accepted_file_type} = action.payload;
+            state.availableTypes.data.push({accepted_file_type});
+            addFileAccepted(semester, accepted_file_type);
         },
         removeFileType: (state, action) => {
-            state.types = state.types.filter(type => type.value !== action.payload);
+            const {semester, typeToRemove} = action.payload;
+            state.availableTypes.data = state.availableTypes.data.filter(type => type.accepted_file_type !== typeToRemove);
+            deleteFileAccepted(semester, typeToRemove);
         },
     },
     extraReducers: (builder) => { // Use extraReducers for handling async actions
