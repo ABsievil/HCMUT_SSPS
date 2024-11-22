@@ -663,7 +663,28 @@ $$;
 --SELECT * from get_utility_of_semester('232')
 
 --27--
+CREATE OR REPLACE FUNCTION get_utility_by_current_date(current_date_input DATE)
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(json_build_object(
+		'semester', semester,
+		'default_pages', default_pages,
+		'date_reset_default_page', date_reset_default_page,
+		'page_price', page_price,
+		'date_start', date_start,
+		'date_end', date_end
+	))
+	INTO result
+	FROM Utility
+	WHERE date_start <= current_date_input AND date_end >= current_date_input; 
 
+	RETURN result; 
+END; 
+$$; 
+--SELECT * from get_utility_by_current_date('2024-10-10')
 
 --28--Lưu otp
 CREATE OR REPLACE PROCEDURE add_otp_by_email(email_input VARCHAR, otp_code_input VARCHAR)
