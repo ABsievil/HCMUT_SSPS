@@ -109,11 +109,11 @@ const PersonalInfoForm = () => {
 
     // Tạo payload từ formData
     const payload = {
-      student_id: formData.studentId,
+      student_id: personalInfor.data.student_id,
       last_name: formData.fullName.split(" ")[0], // Tách họ từ fullName
       middle_name: formData.fullName.split(" ").slice(1, -1).join(" "), // Tách tên đệm
       first_name: formData.fullName.split(" ").slice(-1).join(""), // Tách tên
-      email: formData.email,
+      email: personalInfor.data.email,
       date_of_birth: formData.dateOfBirth,
       phone_number: formData.phoneNumber,
       school_year: formData.schoolYear,
