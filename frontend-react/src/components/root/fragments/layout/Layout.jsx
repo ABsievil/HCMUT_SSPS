@@ -10,7 +10,7 @@ function Layout({ children }) {
       <HeaderMain />
       <div className="flex max-md:flex-col">
         <Sidebar />
-        <main className="flex flex-col mx-5 w-full max-md:ml-0 max-md:w-full">
+        <main className="flex flex-col mx-5 w-full max-md:ml-0 max-md:w-full relative">
           {children}
         </main>
       </div>

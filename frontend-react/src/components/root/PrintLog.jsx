@@ -1,17 +1,13 @@
 import React from 'react';
 import Layout from "./fragments/layout/Layout";
-import { useUser } from '../../store/userContext';
-import StudentPrintLogTable from './PrintLog/StudentPrintLogTable';
-import AdminPrintLogTable from './PrintLog/AdminPrintLogTable';
+import PrintLogTable from './PrintLog/PrintLogTable';
 
 function PrintLog() {
-    const { username, role, userId, isLoggedIn } = useUser();
-
     return (
         <Layout>
-            {role === "ADMIN" ? <AdminPrintLogTable/> : <StudentPrintLogTable/>}
+            <PrintLogTable />
         </Layout>
-    )
+    );
 }
 
 export default PrintLog;

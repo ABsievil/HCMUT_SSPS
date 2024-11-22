@@ -82,7 +82,7 @@ public class StudentController {
         return studentService.FNC_getNumberPageWasPrinted(studentId, dateStart, dateEnd);
     }
 
-    @GetMapping("/getLogStudent/{studentId}")
+    @PostMapping("/getLogStudent/{studentId}")
     public ResponseEntity<ResponseObject> getLogStudent(
         @PathVariable String studentId, 
         @RequestBody LogStudentDTO logStudentDTO) {
@@ -90,7 +90,7 @@ public class StudentController {
         return studentService.FNC_getLogStudent(studentId, logStudentDTO);
     }
 
-    @GetMapping("/getLogAllStudent")
+    @PostMapping("/getLogAllStudent")
     public ResponseEntity<ResponseObject> getLogAllStudent(@RequestBody LogStudentDTO logStudentDTO) {
         return studentService.FNC_getLogAllStudent(logStudentDTO);
     }
