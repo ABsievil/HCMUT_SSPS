@@ -1,6 +1,6 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addFileType, removeFileType, selectFileTypes } from '../../../store/fileTypeSlice';
+import { addFileType, removeFileType, selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { File, Plus } from "lucide-react";
 import { toast } from 'react-toastify';
 
@@ -191,12 +191,14 @@ const AddNewSemesterForm = React.memo(({ onClose }) => {
 
 const ManageFile = () => {
     const dispatch = useDispatch();
-    const fileTypes = useSelector(selectFileTypes);
+    useEffect(() => {
+        dispatch(fetchFileType(241));
+    }, []);
+    const {isLoading, types, availableTypes, error} = useSelector(selectAvailableFileTypes);
     const [periodicSupply, setPeriodicSupply] = useState(200);
     const [supplyDate, setSupplyDate] = useState('2018-10-12');
     const [customFileType, setCustomFileType] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
-    const [selectedFileType, setSelectedFileType] = useState(fileTypes[0]?.value || '');
 
     // New State for Selected Semester
     const [semesters, setSemesters] = useState([
@@ -218,7 +220,7 @@ const ManageFile = () => {
 
         const formattedFileType = customFileType.startsWith('.') ? customFileType : `.${customFileType}`;
 
-        if (fileTypes.some((type) => type.value === formattedFileType)) {
+        if (availableTypes?.data.some((type) => type.value === formattedFileType)) {
             toast.error('Loại tệp này đã tồn tại!');
             return;
         }
@@ -226,17 +228,13 @@ const ManageFile = () => {
         dispatch(addFileType({ value: formattedFileType, label: formattedFileType }));
         setCustomFileType('');
         toast.success('Loại tệp đã được thêm thành công!');
-    }, [customFileType, dispatch, fileTypes]);
+    }, [customFileType, dispatch, availableTypes]);
 
     const handleRemoveFileType = useCallback(
         (typeToRemove) => {
             dispatch(removeFileType(typeToRemove));
-            if (selectedFileType === typeToRemove) {
-                setSelectedFileType(fileTypes[0]?.value || '');
-            }
-            toast.success('Loại tệp đã được xóa thành công!');
         },
-        [selectedFileType, dispatch, fileTypes]
+        [dispatch]
     );
 
     return (
@@ -291,13 +289,6 @@ const ManageFile = () => {
                     <SectionTitle>LOẠI TỆP ĐƯỢC TẢI LÊN</SectionTitle>
                     <div className="flex flex-col gap-4 mt-4">
                         <div className="flex items-center gap-4 w-full">
-                            <Select
-                                id="fileType"
-                                options={fileTypes}
-                                className="w-1/2"
-                                value={selectedFileType}
-                                onChange={(e) => setSelectedFileType(e.target.value)}
-                            />
                             <input
                                 type="text"
                                 placeholder="Thêm loại tệp mới (vd: .png)"
@@ -309,15 +300,15 @@ const ManageFile = () => {
                         </div>
 
                         <div className="flex flex-wrap gap-2">
-                            {fileTypes.map((type) => (
+                            {availableTypes.data?.map((type) => (
                                 <div
-                                    key={type.value}
+                                    key={type.accepted_file_type}
                                     className="flex items-center gap-2 bg-slate-100 px-3 py-1 rounded-full"
                                 >
-                                    <span>{type.value}</span>
-                                    {fileTypes.length > 1 && (
+                                    <span>{type.accepted_file_type}</span>
+                                    {availableTypes.data.length > 1 && (
                                         <button
-                                            onClick={() => handleRemoveFileType(type.value)}
+                                            onClick={() => handleRemoveFileType(type.accepted_file_type)}
                                             className="text-red-500 hover:text-red-700"
                                         >
                                             ×
