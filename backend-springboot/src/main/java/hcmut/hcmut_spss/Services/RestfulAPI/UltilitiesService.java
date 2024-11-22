@@ -32,6 +32,10 @@ public class UltilitiesService {
                 "select get_file_of_semester(?)",
                 String.class, semesterId
             );
+            if (fileOfSemesterList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getFileOfSemester() successfully with data = null", fileOfSemesterList));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(fileOfSemesterList);
 

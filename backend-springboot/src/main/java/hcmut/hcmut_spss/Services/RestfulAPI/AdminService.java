@@ -28,6 +28,10 @@ public class AdminService {
                 "SELECT get_admin_infor()",
                 String.class
             );
+            if (adminInfor == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getAdminInfor() successfully with data = null", adminInfor));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(adminInfor);
 

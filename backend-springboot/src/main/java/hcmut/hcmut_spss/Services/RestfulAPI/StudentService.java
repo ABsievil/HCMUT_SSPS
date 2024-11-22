@@ -64,6 +64,10 @@ public class StudentService {
                 String.class, 
                 studentId
             );
+            if (studentInfor == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getStudentInforById() successfully with data = null", studentInfor));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(studentInfor);
 
@@ -90,6 +94,10 @@ public class StudentService {
                 "SELECT get_all_student_infor()",
                 String.class
             );
+            if (studentInforList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getAllStudentInfor() successfully with data = null", studentInforList));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(studentInforList);
 
@@ -244,6 +252,10 @@ public class StudentService {
                 String.class, 
                 studentId
             );
+            if (numberPageDefaultRemain == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getNumberPageDefaultRemain() successfully with data = null", numberPageDefaultRemain));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(numberPageDefaultRemain);
 
@@ -271,6 +283,10 @@ public class StudentService {
                 String.class, 
                 studentId, dateStart, dateEnd
             );
+            if (numberPageWasPrinted == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getNumberPageWasPrinted() successfully with data = null", numberPageWasPrinted));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(numberPageWasPrinted);
 
@@ -301,6 +317,10 @@ public class StudentService {
                 logStudentDTO.getDateStart(), 
                 logStudentDTO.getDateEnd()
             );
+            if (logStudentList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getLogStudent() successfully with data = null", logStudentList));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(logStudentList);
 
@@ -330,6 +350,10 @@ public class StudentService {
                 logStudentDTO.getDateStart(),
                 logStudentDTO.getDateEnd()
             );
+            if (logAllStudentList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getLogAllStudent() successfully with data = null", logAllStudentList));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(logAllStudentList);
 
@@ -417,6 +441,10 @@ public class StudentService {
                 String.class, 
                 studentId, dateStart, dateEnd
             );
+            if (logBuyPageStudent == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getLogBuyPageStudent() successfully with data = null", logBuyPageStudent));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(logBuyPageStudent);
 
@@ -444,6 +472,10 @@ public class StudentService {
                 String.class, 
                 dateStart, dateEnd
             );
+            if (logBuyPageAllStudentList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getLogBuyPageAllStudent() successfully with data = null", logBuyPageAllStudentList));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(logBuyPageAllStudentList);
 

@@ -157,6 +157,10 @@ public class PrinterService {
                 String.class, 
                 printerId
             );
+            if (printerInfor == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getPrinterInforById() successfully with data = null", printerInfor));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(printerInfor);
 
@@ -183,6 +187,10 @@ public class PrinterService {
                 "SELECT get_infor_all_printer()",
                 String.class
             );
+            if (printerInforList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getInforAllPrinter() successfully with data = null", printerInforList));
+            }
 
             JsonNode jsonNode = objectMapper.readTree(printerInforList);
 
