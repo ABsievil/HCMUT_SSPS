@@ -249,7 +249,7 @@ function PrintingForm() {
   }, [formState.pagesToPrint, formState.printCopies, formState.pagesPerSide]);
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="max-w-[830px] mx-auto px-4 py-8">
       <div className="grid md:grid-cols-2 gap-36">
         {/* Left Column */}
         <div className="space-y-8">
@@ -276,7 +276,7 @@ function PrintingForm() {
           <h2 className="text-2xl font-bold text-gray-900">Thông tin in ấn</h2>
 
           <div className="space-y-6">
-            <div className="px-4 py-2 bg-blue-100 text-lg w-3/5 text-blue-800 rounded-lg font-medium">
+            <div className="px-4 py-2 bg-blue-100 text-lg w-[65%] text-blue-800 rounded-lg font-medium">
               Số trang có sẵn: {TOTAL_PAGES}
             </div>
             <StyledInput
