@@ -62,7 +62,7 @@ const AdminInforForm = () => {
             name={name}
             value={value}
             onChange={handleInputChange}
-            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 "
           />
         ) : (
           <div className="bg-gray-100 p-2 rounded">{value}</div>

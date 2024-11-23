@@ -254,7 +254,7 @@ const AddPrinter = () => {
     }));
 
     return (
-        <div className="mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8 h-full">
+        <div className=" bg-white shadow-lg rounded-xl p-6 space-y-8 h-full">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-4">

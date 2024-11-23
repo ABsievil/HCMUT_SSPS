@@ -99,12 +99,12 @@ const StudentPaymentLogTable = () => {
 
   return (
     <div className="overflow-x-auto drop-shadow-lg mx-10 py-4">
-      <h1 className="text-center text-xl font-bold mt-10 mb-5">
+      <h1 className="text-center text-2xl font-bold mt-10 mb-5">
         LỊCH SỬ THANH TOÁN CỦA SINH VIÊN
       </h1>
 
       <div className="mb-4 text-center">
-        <p className="text-sm text-gray-600">
+        <p className="text-base text-gray-600">
           Dưới đây là danh sách các giao dịch thanh toán của sinh viên.
         </p>
       </div>

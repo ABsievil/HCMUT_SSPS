@@ -24,7 +24,7 @@ const PrinterSelect = ({ value, onChange, printers }) => (
     <select
       value={value}
       onChange={onChange}
-      className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      className="mt-1 block w- pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
     >
       <option value="reset">Tất cả máy in</option>
       {printers.length > 0 ? (
@@ -254,12 +254,12 @@ const PrintLogTable = () => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <div className="overflow-x-auto drop-shadow-lg mx-10 py-4 min-h-screen">
-      <h1 className="text-center text-xl font-bold mt-10 mb-5">
+    <div className="overflow-x-auto drop-shadow-lg mx-10 min-h-screen ">
+      <h1 className="text-center text-2xl font-bold my-8">
         LỊCH SỬ IN CỦA {role === 'USER' ? 'SINH VIÊN' : role === 'ADMIN' ? 'HỆ THỐNG' : 'BẠN'}
       </h1>
 
-      <div className="p-4">
+      <div className="p-4 ">
         <div className="flex justify-center items-center space-x-4">
           {role === "ADMIN" && (
             <FilterInput
@@ -293,7 +293,7 @@ const PrintLogTable = () => {
 
       {logs.length > 0 ? (
         <>
-          <table className="w-full md:w-4/5 bg-white mt-3 m-auto">
+          <table className="w-full md:w-[90%] bg-white mt-3 m-auto">
             <thead>
               <tr className="bg-themecolor1">
                 {tableHeaders.map(({ key, label }) => (
@@ -320,7 +320,7 @@ const PrintLogTable = () => {
           </table>
 
           {/* Pagination Controls */}
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center mt-10">
             <button
               onClick={() => paginate(currentPage - 1)}
               disabled={currentPage === 1}

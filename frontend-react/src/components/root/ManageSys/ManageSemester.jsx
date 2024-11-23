@@ -238,7 +238,7 @@ const ManageFile = () => {
     );
 
     return (
-        <div className="w-full md:w-1/2 mx-auto bg-white shadow-lg rounded-xl p-6 space-y-8">
+        <div className="w-full md:w-1/2 bg-white shadow-lg rounded-xl p-6 space-y-8">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-4">

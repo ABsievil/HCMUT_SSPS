@@ -50,10 +50,10 @@ function ChangePassword() {
 
   return (
     <div className="w-3/5 mx-auto bg-white shadow-md rounded-lg p-10">
-      <h2 className="text-2xl font-bold mb-4 justify-center flex">
+      <h2 className="text-2xl font-bold mb-8 justify-center flex">
         THAY ĐỔI MẬT KHẨU
       </h2>
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="grid grid-cols-2 gap-6 mb-4">
         <div className="mb-4">
           <label className="block text-gray-700">MẬT KHẨU HIỆN TẠI</label>
           <InputField
