@@ -19,7 +19,9 @@ import PrintLog from "./components/root/PrintLog";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPrintersabc } from "./store/PrintersabcSlice";
 import React, { useState, useEffect, useMemo } from "react";
-
+import AdminPaymentLogTable from "./components/root/PayLog/AdminPayLogTable";
+import StudentPaymentLog from "./components/root/PayLog/StudentPayLogTable";
+import PaymentLog from "./components/root/PaymentLog";
 export default function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -29,13 +31,17 @@ export default function App() {
   return (
     <Router>
       <Routes>
-
+        {/* <Route path="/paylistadmin" element={<AdminPaymentLogTable />} />
+        <Route path="/payliststudent" element={<StudentPaymentLog />} /> */}
         <Route>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/regis" element={<RegisterPage />} />
           <Route path="/verifymail" element={<InputMail />} />
-          <Route path="/verify-newpass" element={<Verification isNewPass={true} />} />
+          <Route
+            path="/verify-newpass"
+            element={<Verification isNewPass={true} />}
+          />
           <Route path="/verify" element={<Verification />} />
           <Route path="/newpassword" element={<CreateNewPassword />} />
         </Route>
@@ -46,11 +52,13 @@ export default function App() {
           <Route path="/print" element={<PrintingSystem />} />
           <Route path="/buyPaper" element={<PrintingPage />} />
           <Route path="/printlog" element={<PrintLog />} />
+          <Route path="/payment" element={<PaymentLog />} />
         </Route>
 
         <Route>
           <Route path="/account" element={<AccountInformation />} />
           <Route path="/printlog" element={<PrintLog />} />
+          <Route path="/payment" element={<PaymentLog />} />
           <Route path="/manage" element={<ManageSystem />} />
           <Route path="/report" element={<Report />} />
         </Route>
