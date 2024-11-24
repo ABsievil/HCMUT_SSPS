@@ -16,11 +16,9 @@ import ManageSystem from "./components/root/ManageSystem";
 import Report from "./components/root/Report";
 import ChangePassword from "./components/root/ChangePassword";
 import PrintLog from "./components/root/PrintLog";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchPrintersabc } from "./store/PrintersabcSlice";
-import React, { useState, useEffect, useMemo } from "react";
-import AdminPaymentLogTable from "./components/root/PayLog/AdminPayLogTable";
-import StudentPaymentLog from "./components/root/PayLog/StudentPayLogTable";
+import React, {useEffect} from "react";
 import PaymentLog from "./components/root/PaymentLog";
 export default function App() {
   const dispatch = useDispatch();
@@ -31,8 +29,6 @@ export default function App() {
   return (
     <Router>
       <Routes>
-        {/* <Route path="/paylistadmin" element={<AdminPaymentLogTable />} />
-        <Route path="/payliststudent" element={<StudentPaymentLog />} /> */}
         <Route>
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />

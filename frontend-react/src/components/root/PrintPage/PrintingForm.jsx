@@ -79,7 +79,6 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter, error }) => 
 // Enhanced FileUpload component
 const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   const {semester} = useSemester();
-  console.log(semester);
   const dispatch = useDispatch();
   useEffect(() => {
       dispatch(fetchFileType(semester));
@@ -87,7 +86,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   const {availableTypes} = useSelector(selectAvailableFileTypes);
   // console.log(availableTypes.data);
   
-  const acceptedFileTypes = availableTypes?.data?.map(type => type.accepted_file_type).join(',');
+  const acceptedFileTypes = availableTypes?.data?.map(type => type.accepted_file_type).join(', ');
   const dragRef = React.useRef(null);
   const [isDragging, setIsDragging] = React.useState(false);
 
@@ -131,7 +130,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
         className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${isDragging
           ? 'border-blue-500 bg-blue-50'
           : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-          } ${error ? 'border-red-500 bg-red-50' : ''}`}  // Add red border if error
+          } ${error ? 'border-red-500 bg-red-50' : ''}`}  
       >
         <div className="flex flex-col items-center gap-3">
           <input
@@ -150,8 +149,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
           {selectedFile ? (
             <div className="flex items-center gap-3 w-full">
               <div className="flex-1 flex items-center gap-2">
-                <File className="w-5 h-5 text-blue-500" />
-                <span className="font-medium truncate">{selectedFile.name}</span>
+                <span className="font-medium truncate text-wrap">{selectedFile.name}</span>
               </div>
               <button
                 onClick={handleRemoveFile}

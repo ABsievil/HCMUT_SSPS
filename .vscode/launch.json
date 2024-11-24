@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-HcmutSpssApplication<hcmut_spss>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "hcmut.hcmut_spss.HcmutSpssApplication",
+            "projectName": "hcmut_spss",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

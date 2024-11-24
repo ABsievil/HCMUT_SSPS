@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import Layout from "./fragments/layout/Layout";
 import InputField from "./fragments/InputField/InputField";
 import { toast } from "react-toastify";
-import { XCircle, CheckCircle, Loader } from 'lucide-react';
+import { XCircle, CheckCircle, Loader, CreditCard, QrCode } from 'lucide-react';
 
 const PAPER_TYPES = {
   A4: { label: "A4", price: 1500 },
@@ -11,9 +11,25 @@ const PAPER_TYPES = {
 
 const AVAILABLE_PAGES = 10000;
 
+const BANKS = [
+  "Vietcombank",
+  "Techcombank",
+  "BIDV",
+  "Agribank",
+  "VPBank",
+  "MBBank",
+  "TPBank",
+  "ACB"
+];
+
+const PAYMENT_METHODS = {
+  QR: 'qr',
+  BANK: 'bank'
+};
+
 const QRPaymentModal = ({ orderId, amount, onClose }) => {
   const [paymentStatus, setPaymentStatus] = useState('pending');
-  
+
   useEffect(() => {
     let processingTimeout;
     let successTimeout;
@@ -21,16 +37,16 @@ const QRPaymentModal = ({ orderId, amount, onClose }) => {
     const checkPayment = () => {
       processingTimeout = setTimeout(() => {
         setPaymentStatus('processing');
-        
+
         successTimeout = setTimeout(() => {
           setPaymentStatus('success');
           toast.success("Thanh toán thành công!");
         }, 3000);
       }, 1000);
     };
-    
+
     checkPayment();
-    
+
     // Cleanup timeouts
     return () => {
       if (processingTimeout) clearTimeout(processingTimeout);
@@ -81,14 +97,14 @@ const QRPaymentModal = ({ orderId, amount, onClose }) => {
               {paymentStatus === 'pending' && (
                 <p className="text-gray-600">Đang chờ thanh toán...</p>
               )}
-              
+
               {paymentStatus === 'processing' && (
                 <div className="flex flex-col items-center space-y-2">
                   <Loader className="w-6 h-6 animate-spin text-blue-500" />
                   <p className="text-gray-600">Đang xác nhận thanh toán...</p>
                 </div>
               )}
-              
+
               {paymentStatus === 'success' && (
                 <div className="flex flex-col items-center space-y-4">
                   <div className="flex items-center space-x-2 text-green-600">
@@ -145,11 +161,62 @@ const Select = ({ value, onChange, options, label, id }) => (
   </div>
 );
 
+const PaymentMethodSelector = ({ selectedMethod, onMethodChange, selectedBank, onBankChange }) => (
+  <div className="space-y-4">
+    <div className="space-y-3">
+      <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+        <input
+          type="radio"
+          name="paymentMethod"
+          value={PAYMENT_METHODS.QR}
+          checked={selectedMethod === PAYMENT_METHODS.QR}
+          onChange={(e) => onMethodChange(e.target.value)}
+          className="mr-3"
+        />
+        <QrCode className="w-5 h-5 mr-2" />
+        <span>Quét mã QR code</span>
+      </label>
+
+      <label className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+        <input
+          type="radio"
+          name="paymentMethod"
+          value={PAYMENT_METHODS.BANK}
+          checked={selectedMethod === PAYMENT_METHODS.BANK}
+          onChange={(e) => onMethodChange(e.target.value)}
+          className="mr-3"
+        />
+        <CreditCard className="w-5 h-5 mr-2" />
+        <span>Thanh toán bằng ngân hàng</span>
+      </label>
+    </div>
+
+    {selectedMethod === PAYMENT_METHODS.BANK && (
+      <div className="mt-4">
+        <select
+          className="w-full px-4 py-2 text-left bg-white border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          value={selectedBank}
+          onChange={(e) => onBankChange(e.target.value)}
+        >
+          <option value="">Chọn ngân hàng</option>
+          {BANKS.map((bank) => (
+            <option key={bank} value={bank}>
+              {bank}
+            </option>
+          ))}
+        </select>
+      </div>
+    )}
+  </div>
+);
+
 const BuyPage = () => {
   const [quantity, setQuantity] = useState(100);
   const [paperType, setPaperType] = useState("A4");
   const [showQRModal, setShowQRModal] = useState(false);
   const [orderId, setOrderId] = useState("");
+  const [selectedPayment, setSelectedPayment] = useState(PAYMENT_METHODS.QR);
+  const [selectedBank, setSelectedBank] = useState("");
 
   // Generate random order ID
   const generateOrderId = () => {
@@ -173,6 +240,11 @@ const BuyPage = () => {
   const handleSubmit = () => {
     if (quantity <= 0 || quantity > AVAILABLE_PAGES) {
       toast.error("Vui lòng kiểm tra lại số lượng trang!");
+      return;
+    }
+
+    if (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank) {
+      toast.error("Vui lòng chọn ngân hàng!");
       return;
     }
 
@@ -235,15 +307,27 @@ const BuyPage = () => {
               Giấy định lượng 80gsm với độ dày cao, bề mặt giấy đẹp rất phù hợp để in photo
             </p>
           </div>
-        </div>
+          <div className="lg:w-1/3 w-full lg:pl-8 mt-6 lg:mt-0">
+            <div className="bg-white p-6 rounded-lg shadow-md">
+              <h2 className="text-2xl font-semibold mb-6">Chọn phương thức thanh toán</h2>
+              <PaymentMethodSelector
+                selectedMethod={selectedPayment}
+                onMethodChange={setSelectedPayment}
+                selectedBank={selectedBank}
+                onBankChange={setSelectedBank}
+              />
 
-        <div className="flex justify-center mt-20">
-          <Button 
-            onClick={handleSubmit}
-            disabled={quantity <= 0 || quantity > AVAILABLE_PAGES}
-          >
-            <span>Xác nhận</span>
-          </Button>
+              <div className="mt-6 pt-6 border-t">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={quantity <= 0 || quantity > AVAILABLE_PAGES || (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank)}
+                  className="w-full"
+                >
+                  Xác nhận thanh toán
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

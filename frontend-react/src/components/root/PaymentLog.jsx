@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from "./fragments/layout/Layout";
-import PayLog from './PayLog/PayLogTable';
+import PaymentLogTable from './PayLog/PaymentLogTable';
 
 function PaymentLog() {
     return (
         <Layout>
-            <PayLog />
+            <PaymentLogTable />
         </Layout>
     );
 }
