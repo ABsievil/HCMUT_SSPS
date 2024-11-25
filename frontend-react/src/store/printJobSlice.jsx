@@ -31,12 +31,17 @@ const printJobSlice = createSlice({
     reducers: {
         addPrintJob: (state, action) => {
             state.Jobs.push(action.payload);
-            console.log(state.Jobs[0]);
+            state.Jobs = state.Jobs.map((job, index) => ({ ...job, id: index }))
             // store in local storage here.
+        },
+        removePrintJob: (state, action) => {
+            const removeJobId = action.payload;
+            state.Jobs = state.Jobs.filter(job => job.id !== removeJobId);
+            state.Jobs = state.Jobs.map((job, index) => ({ ...job, id: index }))
         }
     },
 });
 
-export const { addPrintJob } = printJobSlice.actions;
+export const { addPrintJob, removePrintJob } = printJobSlice.actions;
 export const selectPrintJobs = (state) => state.printJobs.Jobs;
 export default printJobSlice.reducer;

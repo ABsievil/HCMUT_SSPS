@@ -2,16 +2,15 @@ import React, { useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { selectPrintJobs } from "../../../store/printJobSlice";
-import { useSelector } from "react-redux";
+import { removePrintJob, selectPrintJobs } from "../../../store/printJobSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 
 function PrintingResults({ setPrintingData }) {
+  const dispatch = useDispatch();
   const [checkedJobs, setCheckedJobs] = useState({});
 
   const printJobs = useSelector(selectPrintJobs);
-  console.log(printJobs);
-  
 
   const [showNotEnoughPaperModal, setShowNotEnoughPaperModal] = useState(false);
 
@@ -50,14 +49,13 @@ function PrintingResults({ setPrintingData }) {
   };
 
   const handleDelete = (id) => {
-    setPrintJobs((prevJobs) => prevJobs.filter((job) => job.id !== id));
+    dispatch(removePrintJob(id));
     setCheckedJobs((prev) => {
       const newChecked = { ...prev };
       delete newChecked[id];
       return newChecked;
     });
-  };
-  const updatedJobs = printJobs.map((job, index) => ({ ...job, id: index }));
+  }
   return (
     <>
       <section className="mt-6 max-md:mt-10 mb-12 mr-9">
@@ -78,9 +76,9 @@ function PrintingResults({ setPrintingData }) {
               </tr>
             </thead>
             <tbody>
-              {updatedJobs.map((job) => (
-                <tr key={job.id} className={`${job.id % 2 === 0 ? 'bg-white' : 'bg-purple-100'}`}>
-                  <td className="px-5 py-3 text-center">{job.printerId}</td>
+              {printJobs.map((job, index) => (
+                <tr key={index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-purple-100'}`}>
+                  <td className="px-5 py-3 text-center">{job.printerId} {job.id}</td>
                   <td className="px-5 py-3 truncate text-center">{job.fileName}</td>
                   <td className="px-5 py-3 text-center">{job.numberPageOfFile}</td>
                   <td className="px-5 py-3 text-center">{job.pageSize}</td>
