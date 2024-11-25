@@ -38,6 +38,9 @@ const printJobSlice = createSlice({
             const removeJobId = action.payload;
             state.Jobs = state.Jobs.filter(job => job.id !== removeJobId);
             state.Jobs = state.Jobs.map((job, index) => ({ ...job, id: index }))
+        },
+        requestPrintJobs: (state, action) => {
+            
         }
     },
 });

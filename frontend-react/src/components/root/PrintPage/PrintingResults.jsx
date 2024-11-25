@@ -26,20 +26,36 @@ function PrintingResults({ setPrintingData }) {
     } else if (totalPages > 0) {
       // Cập nhật dữ liệu in
       setPrintingData(totalPages);
-      
+
       // Xóa các hàng đã chọn
       // const remainingJobs = printJobs.filter(job => !checkedJobs[job.id]);
       // setPrintJobs(remainingJobs);
-      
+
       // Reset checkedJobs state
       setCheckedJobs({});
-      
+
       // Hiển thị thông báo thành công
       toast.success("Đơn in của bạn đã được xác nhận thành công");
     } else {
       toast.warn("Vui lòng chọn ít nhất một tệp để in");
     }
   };
+
+
+  const calculateTotalPage = (pagePerFile, pageSize, copies, pagePerSide) => {
+    let multiplier = 1;
+    if (pageSize === 'A3') {
+      multiplier *= 2
+    }
+    else if (pageSize === 'A5') {
+      multiplier /= 2;
+    }
+
+    if (pagePerSide === 2) {
+      multiplier /= 2;
+    }
+    return pagePerFile * copies * multiplier;
+  }
 
   const handleCheckboxChange = (id) => {
     setCheckedJobs((prev) => ({
@@ -66,11 +82,12 @@ function PrintingResults({ setPrintingData }) {
           <table className="w-full text-sm text-left text-gray-700">
             <thead className="bg-themecolor1 text-neutral-900">
               <tr>
-                <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">ID Máy in</th>
+                <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium">ID Máy in</th>
                 <th scope="col" className="px-5 py-3 w-3/12 text-center font-medium">Tên tệp</th>
-                <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">Số trang</th>
-                <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">Khổ giấy</th>
+                <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium">Số trang</th>
+                <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium">Khổ giấy</th>
                 <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium">Số bản</th>
+                <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">Tổng trang quy đổi</th>
                 <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium">Chọn</th>
                 <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium"></th>
               </tr>
@@ -78,11 +95,12 @@ function PrintingResults({ setPrintingData }) {
             <tbody>
               {printJobs.map((job, index) => (
                 <tr key={index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-purple-100'}`}>
-                  <td className="px-5 py-3 text-center">{job.printerId} {job.id}</td>
+                  <td className="px-5 py-3 text-center">{job.printerId}</td>
                   <td className="px-5 py-3 truncate text-center">{job.fileName}</td>
                   <td className="px-5 py-3 text-center">{job.numberPageOfFile}</td>
                   <td className="px-5 py-3 text-center">{job.pageSize}</td>
                   <td className="px-5 py-3 text-center">{job.numberCopy}</td>
+                  <td className="px-5 py-3 text-center">{calculateTotalPage(job.numberPageOfFile, job.pageSize, job.numberCopy, job.numberSize)}</td>
                   <td className="px-5 py-3 text-center">
                     <input
                       type="checkbox"
@@ -106,6 +124,7 @@ function PrintingResults({ setPrintingData }) {
                 <td className="px-4 py-3 text-center">Tổng số trang đã chọn:</td>
                 <td className="px-5 py-3 truncate text-center"></td>
                 <td className="px-5 py-3 text-center">{totalPages}</td>
+                <td className="px-5 py-3 truncate text-center"></td>
                 <td className="px-5 py-3 truncate text-center"></td>
                 <td className="px-5 py-3 text-center"></td>
                 <td className="px-5 py-3 text-center">
