@@ -11,7 +11,7 @@ export default function HeaderMain() {
               alt="HCMUT Official Logo"
             />
             <h2 className="ml-3 md:ml-4 text-base md:text-2xl font-semibold">
-              SPSS
+              SSPS
             </h2>
           </a>
         </div>
