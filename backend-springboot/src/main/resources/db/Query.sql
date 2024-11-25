@@ -508,20 +508,24 @@ END; $$;
 
 --19--Student mua giấy --> INSERT 1 purchase transaction
 
-CREATE OR REPLACE PROCEDURE purchase_page (username_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
+CREATE OR REPLACE PROCEDURE purchase_page (student_id_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME, paying_method_input VARCHAR)
 LANGUAGE PLPGSQL 
 AS $$ 
+DECLARE name VARCHAR;
 BEGIN 
+	SELECT username INTO name 
+	FROM users 
+	WHERE student_id = student_id_input; 
 	IF NOT EXISTS (
-		SELECT * FROM Users WHERE username = username_input
+		SELECT * FROM Users WHERE student_id = student_id_input
 	)
 	THEN 
-	 	RAISE EXCEPTION 'User % does not exist', username_input;
+	 	RAISE EXCEPTION 'User % does not exist',student_id_input ;
 	END IF;
-	INSERT INTO Purchase_transaction (username, purchase_pages, purchase_date, purchase_time) VALUES (username_input, purchase_pages_input, purchase_date_input,purchase_time_input);
-	RAISE NOTICE 'Purchase recorded successfully for user %', username_input;
+	INSERT INTO Purchase_transaction (username, purchase_pages, purchase_date, purchase_time,paying_method) VALUES (name, purchase_pages_input,purchase_date_input,purchase_time_input,paying_method_input);
+	RAISE NOTICE 'Purchase recorded successfully for user %',student_id_input;
 END; $$;
--- call purchase_page('matruongvu',0,'2025-05-21','09:30:01')
+--call purchase_page ('2111678', 5,'2024-08-21','09:32:21','the tin dung')
 --20--Lấy thông tin mua giấy của một sinh viên bằng mã số sinh viên
 --bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
 
