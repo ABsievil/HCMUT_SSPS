@@ -5,6 +5,8 @@ import printersabcSlice from './PrintersabcSlice';
 import personalInforReducer from './personalInforSlice'
 import adminInforReducer from './adminInforSlice';
 import logReducer from './printLogSlice';
+import printJobReducer from './printJobSlice';
+
 const store = configureStore({
   reducer: {
     fileTypes: fileTypeReducer,
@@ -12,6 +14,7 @@ const store = configureStore({
     personalInfor: personalInforReducer,
     adminInfor: adminInforReducer,
     logs: logReducer,
+    printJob: printJobReducer,
   },
 });
 
