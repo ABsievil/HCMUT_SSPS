@@ -122,7 +122,7 @@ public class WebSecurityConfig {
         configuration.setAllowedOrigins(Arrays.asList(
     "http://localhost:5173", 
         "http://localhost:8090", 
-        "https://hcmut-spss.netlify.app", 
+        "https://hcmut-spss.azurewebsites.net", 
         "https://hcmut-spss-v3-0.onrender.com")); // Allow your frontend origin
         // configuration.setAllowedOrigins(Arrays.asList("*"));  // Allow all origin Note: only use for testing, accepted urls should be used for security.
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
