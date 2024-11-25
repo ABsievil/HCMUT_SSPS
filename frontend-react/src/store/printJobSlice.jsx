@@ -22,21 +22,21 @@ const requestPrintJob = async (PrintDTO) => {
 };
 
 const printJobSlice = createSlice({
-    name: "printJob",
+    name: "printJobs",
     initialState: {
         isLoading: true,
-        printJob: [],
+        Jobs: [],
         error: null,
     },
     reducers: {
         addPrintJob: (state, action) => {
-            state.printJob.push(action.payload);
-            console.log(state.printJob[0]);
+            state.Jobs.push(action.payload);
+            console.log(state.Jobs[0]);
             // store in local storage here.
         }
     },
 });
 
 export const { addPrintJob } = printJobSlice.actions;
-export const selectPrintJob = (state) => state.printJob;
+export const selectPrintJobs = (state) => state.printJobs.Jobs;
 export default printJobSlice.reducer;

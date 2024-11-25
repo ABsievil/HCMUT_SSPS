@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { toast } from "react-toastify";
 import { useSemester } from "../../../store/SemesterContext";
+import { addPrintJob } from "../../../store/printJobSlice";
+import { useUser } from "../../../store/userContext";
 
 const TOTAL_PAGES = 100;
 
@@ -186,6 +188,8 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
 
 // Main PrintingForm component
 function PrintingForm() {
+  const dispatch = useDispatch();
+  const {username} = useUser();
   const [formState, setFormState] = useState({
     remainingPages: TOTAL_PAGES,
     missingPages: 0,
@@ -236,7 +240,24 @@ function PrintingForm() {
     const isValid = validateForm(formState);
 
     if (isValid) {
+      const printDTO = {
+        username: username,
+        printerId: formState.selectedPrinter.printer_id,
+        printingDate: null,
+        timeStart: null,
+        timeEnd: null,
+        fileName: formState.selectedFile.name,
+        fileType: formState.selectedFile.type,
+        numberPageOfFile: formState.pagesToPrint,
+        pageSize: formState.paperSize,
+        numberSize: formState.pagesPerSide,
+        numberCopy: formState.printCopies,
+        id: -1
+      }
+      dispatch(addPrintJob(printDTO));
+
       toast.success('Xác nhận đơn in thành công');
+
     } else {
       toast.error('Vui lòng kiểm tra lại các lỗi và thử lại');
     }

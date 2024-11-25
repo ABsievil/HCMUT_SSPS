@@ -2,20 +2,23 @@ import React, { useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { selectPrintJobs } from "../../../store/printJobSlice";
+import { useSelector } from "react-redux";
+
 
 function PrintingResults({ setPrintingData }) {
   const [checkedJobs, setCheckedJobs] = useState({});
-  const [printJobs, setPrintJobs] = useState([
-    { id: "12345", fileName: "congthuc.doc", totalPage: "100", date: "26/09/2024 2:22" },
-    { id: "12346", fileName: "baitap.pdf", totalPage: "100", date: "26/09/2024 3:15" },
-    { id: "12347", fileName: "doan.docx", totalPage: "100", date: "26/09/2024 4:30" },
-  ]); 
+
+  const printJobs = useSelector(selectPrintJobs);
+  console.log(printJobs);
+  
+
   const [showNotEnoughPaperModal, setShowNotEnoughPaperModal] = useState(false);
 
   const MAX_AVAILABLE_PAGES = 250;
 
   const totalPages = printJobs.reduce((sum, job) => {
-    return sum + (checkedJobs[job.id] ? parseInt(job.totalPage, 10) : 0);
+    return sum + (checkedJobs[job.id] ? parseInt(job.numberPageOfFile, 10) : 0);
   }, 0);
 
   const handleUpdate = () => {
@@ -26,8 +29,8 @@ function PrintingResults({ setPrintingData }) {
       setPrintingData(totalPages);
       
       // Xóa các hàng đã chọn
-      const remainingJobs = printJobs.filter(job => !checkedJobs[job.id]);
-      setPrintJobs(remainingJobs);
+      // const remainingJobs = printJobs.filter(job => !checkedJobs[job.id]);
+      // setPrintJobs(remainingJobs);
       
       // Reset checkedJobs state
       setCheckedJobs({});
@@ -54,7 +57,7 @@ function PrintingResults({ setPrintingData }) {
       return newChecked;
     });
   };
-
+  const updatedJobs = printJobs.map((job, index) => ({ ...job, id: index }));
   return (
     <>
       <section className="mt-6 max-md:mt-10 mb-12 mr-9">
@@ -68,18 +71,20 @@ function PrintingResults({ setPrintingData }) {
                 <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">ID Máy in</th>
                 <th scope="col" className="px-5 py-3 w-3/12 text-center font-medium">Tên tệp</th>
                 <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">Số trang</th>
-                <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">Ngày đăng ký</th>
+                <th scope="col" className="px-5 py-3 w-2/12 text-center font-medium">Khổ giấy</th>
+                <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium">Số bản</th>
                 <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium">Chọn</th>
                 <th scope="col" className="px-5 py-3 w-1/12 text-center font-medium"></th>
               </tr>
             </thead>
             <tbody>
-              {printJobs.map((job, index) => (
-                <tr key={index} className={`${index % 2 === 0 ? 'bg-white' : 'bg-purple-100'}`}>
-                  <td className="px-5 py-3 text-center">{job.id}</td>
+              {updatedJobs.map((job) => (
+                <tr key={job.id} className={`${job.id % 2 === 0 ? 'bg-white' : 'bg-purple-100'}`}>
+                  <td className="px-5 py-3 text-center">{job.printerId}</td>
                   <td className="px-5 py-3 truncate text-center">{job.fileName}</td>
-                  <td className="px-5 py-3 text-center">{job.totalPage}</td>
-                  <td className="px-5 py-3 text-center">{job.date}</td>
+                  <td className="px-5 py-3 text-center">{job.numberPageOfFile}</td>
+                  <td className="px-5 py-3 text-center">{job.pageSize}</td>
+                  <td className="px-5 py-3 text-center">{job.numberCopy}</td>
                   <td className="px-5 py-3 text-center">
                     <input
                       type="checkbox"
@@ -103,6 +108,7 @@ function PrintingResults({ setPrintingData }) {
                 <td className="px-4 py-3 text-center">Tổng số trang đã chọn:</td>
                 <td className="px-5 py-3 truncate text-center"></td>
                 <td className="px-5 py-3 text-center">{totalPages}</td>
+                <td className="px-5 py-3 truncate text-center"></td>
                 <td className="px-5 py-3 text-center"></td>
                 <td className="px-5 py-3 text-center">
                   <button

@@ -15,7 +15,7 @@ const store = configureStore({
     personalInfor: personalInforReducer,
     adminInfor: adminInforReducer,
     logs: printLogReducer, // Corrected reducer name (was previously `logReducer`)
-    printJob: printJobReducer,
+    printJobs: printJobReducer,
     paymentLogs: paymentLogReducer, // Added missing reducer for consistency
   },
 });
