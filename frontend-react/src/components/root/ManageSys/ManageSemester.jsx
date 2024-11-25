@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFileType, removeFileType, selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { File, Plus } from "lucide-react";
 import { toast } from 'react-toastify';
+import { addSemester } from '../../../store/SemesterContext';
 
 const SectionTitle = React.memo(({ children }) => (
     <h3 className="mt-4 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
@@ -42,50 +43,47 @@ const Select = React.memo(({ id, options, className, ...props }) => (
 
 const AddNewSemesterForm = React.memo(({ onClose }) => {
     const [formData, setFormData] = useState({
-        semester_name: '',
-        paper_supply_date: '',
-        pages_per_period: '',
-        paper_cost: '',
-        start_date: '',
-        end_date: ''
+        semesterId: '',
+        defaultpage: '',
+        dateReset: '',
+        pagePrice: '',
+        dateStart: '',
+        dateEnd: ''
     });
     const [errors, setErrors] = useState({});
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.semester_name) newErrors.semester_name = 'Tên học kỳ là bắt buộc';
-        if (!formData.paper_supply_date) newErrors.paper_supply_date = 'Ngày cung cấp giấy là bắt buộc';
-        if (!formData.pages_per_period) newErrors.pages_per_period = 'Số trang cung cấp là bắt buộc';
-        if (!formData.paper_cost) newErrors.paper_cost = 'Giá tiền mua giấy là bắt buộc';
-        if (!formData.start_date) newErrors.start_date = 'Ngày bắt đầu học kỳ là bắt buộc';
-        if (!formData.end_date) newErrors.end_date = 'Ngày kết thúc học kỳ là bắt buộc';
+        if (!formData.semesterId) newErrors.semesterId = 'Mã học kỳ là bắt buộc';
+        if (!formData.dateReset) newErrors.dateReset = 'Ngày cung cấp giấy là bắt buộc';
+        if (!formData.defaultpage) newErrors.defaultpage = 'Số trang cung cấp là bắt buộc';
+        if (!formData.pagePrice) newErrors.pagePrice = 'Giá tiền mua giấy là bắt buộc';
+        if (!formData.dateStart) newErrors.dateStart = 'Ngày bắt đầu học kỳ là bắt buộc';
+        if (!formData.dateEnd) newErrors.dateEnd = 'Ngày kết thúc học kỳ là bắt buộc';
 
         // Validate dates
-        if (formData.start_date && formData.end_date) {
-            if (new Date(formData.start_date) >= new Date(formData.end_date)) {
-                newErrors.end_date = 'Ngày kết thúc phải sau ngày bắt đầu';
+        if (formData.dateStart && formData.dateEnd) {
+            if (new Date(formData.dateStart) >= new Date(formData.dateEnd)) {
+                newErrors.dateEnd = 'Ngày kết thúc phải sau ngày bắt đầu';
             }
         }
 
         // Validate number inputs
-        if (formData.pages_per_period && isNaN(formData.pages_per_period)) {
-            newErrors.pages_per_period = 'Số trang phải là số';
+        if (formData.defaultpage && isNaN(formData.defaultpage)) {
+            newErrors.defaultpage = 'Số trang phải là số';
         }
-        if (formData.paper_cost && isNaN(formData.paper_cost)) {
-            newErrors.paper_cost = 'Giá tiền phải là số';
+        if (formData.pagePrice && isNaN(formData.pagePrice)) {
+            newErrors.pagePrice = 'Giá tiền phải là số';
         }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const dispatch = useDispatch();
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (validateForm()) {
-            dispatch(addSemester(formData));
-            toast.success('Học kỳ đã được thêm thành công!');
+            addSemester(formData);
             onClose();
         }
     };
@@ -108,26 +106,26 @@ const AddNewSemesterForm = React.memo(({ onClose }) => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-sm font-medium">Tên học kỳ</label>
+                    <label className="text-sm font-medium">Mã học kỳ</label>
                     <input
                         type="text"
-                        placeholder="VD: Học kỳ 1 2023-2024"
-                        value={formData.semester_name}
-                        onChange={handleChange('semester_name')}
-                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.semester_name ? 'border-red-500' : 'border-gray-200'}`}
+                        placeholder="VD: 232, 241"
+                        value={formData.semesterId}
+                        onChange={handleChange('semesterId')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.semesterId ? 'border-red-500' : 'border-gray-200'}`}
                     />
-                    {errors.semester_name && <p className="text-red-500 text-sm">{errors.semester_name}</p>}
+                    {errors.semesterId && <p className="text-red-500 text-sm">{errors.semesterId}</p>}
                 </div>
 
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Ngày cung cấp giấy định kỳ</label>
                     <input
                         type="date"
-                        value={formData.paper_supply_date}
-                        onChange={handleChange('paper_supply_date')}
-                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.paper_supply_date ? 'border-red-500' : 'border-gray-200'}`}
+                        value={formData.dateReset}
+                        onChange={handleChange('dateReset')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.dateReset ? 'border-red-500' : 'border-gray-200'}`}
                     />
-                    {errors.paper_supply_date && <p className="text-red-500 text-sm">{errors.paper_supply_date}</p>}
+                    {errors.dateReset && <p className="text-red-500 text-sm">{errors.dateReset}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -135,11 +133,11 @@ const AddNewSemesterForm = React.memo(({ onClose }) => {
                     <input
                         type="number"
                         placeholder="VD: 100"
-                        value={formData.pages_per_period}
-                        onChange={handleChange('pages_per_period')}
-                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.pages_per_period ? 'border-red-500' : 'border-gray-200'}`}
+                        value={formData.defaultpage}
+                        onChange={handleChange('defaultpage')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.defaultpage ? 'border-red-500' : 'border-gray-200'}`}
                     />
-                    {errors.pages_per_period && <p className="text-red-500 text-sm">{errors.pages_per_period}</p>}
+                    {errors.defaultpage && <p className="text-red-500 text-sm">{errors.defaultpage}</p>}
                 </div>
 
                 <div className="space-y-2">
@@ -147,33 +145,33 @@ const AddNewSemesterForm = React.memo(({ onClose }) => {
                     <input
                         type="number"
                         placeholder="VD: 20000"
-                        value={formData.paper_cost}
-                        onChange={handleChange('paper_cost')}
-                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.paper_cost ? 'border-red-500' : 'border-gray-200'}`}
+                        value={formData.pagePrice}
+                        onChange={handleChange('pagePrice')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.pagePrice ? 'border-red-500' : 'border-gray-200'}`}
                     />
-                    {errors.paper_cost && <p className="text-red-500 text-sm">{errors.paper_cost}</p>}
+                    {errors.pagePrice && <p className="text-red-500 text-sm">{errors.pagePrice}</p>}
                 </div>
 
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Ngày bắt đầu học kỳ</label>
                     <input
                         type="date"
-                        value={formData.start_date}
-                        onChange={handleChange('start_date')}
-                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.start_date ? 'border-red-500' : 'border-gray-200'}`}
+                        value={formData.dateStart}
+                        onChange={handleChange('dateStart')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.dateStart ? 'border-red-500' : 'border-gray-200'}`}
                     />
-                    {errors.start_date && <p className="text-red-500 text-sm">{errors.start_date}</p>}
+                    {errors.dateStart && <p className="text-red-500 text-sm">{errors.dateStart}</p>}
                 </div>
 
                 <div className="space-y-2">
                     <label className="text-sm font-medium">Ngày kết thúc học kỳ</label>
                     <input
                         type="date"
-                        value={formData.end_date}
-                        onChange={handleChange('end_date')}
-                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.end_date ? 'border-red-500' : 'border-gray-200'}`}
+                        value={formData.dateEnd}
+                        onChange={handleChange('dateEnd')}
+                        className={`w-full px-4 py-3 rounded-lg border-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${errors.dateEnd ? 'border-red-500' : 'border-gray-200'}`}
                     />
-                    {errors.end_date && <p className="text-red-500 text-sm">{errors.end_date}</p>}
+                    {errors.dateEnd && <p className="text-red-500 text-sm">{errors.dateEnd}</p>}
                 </div>
             </div>
 

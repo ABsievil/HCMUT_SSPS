@@ -1,4 +1,29 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+
+
+export const addSemester = async (semesterDTO) => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Ultilities/addUltilityOfSemester`,
+        {
+          method: 'PUT',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(semesterDTO)
+        }
+      );
+      if (!response.ok) {
+        toast.error("Thêm học kỳ thất bại");
+        throw new Error('thêm học kỳ thất bại');
+      }
+      toast.success("Thêm học kỳ thành công");
+    } catch (error) {
+      console.error('Error adding semester:', error);
+    }
+  }
 
 const SemesterContext = createContext();
 
