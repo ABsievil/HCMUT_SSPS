@@ -770,3 +770,21 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- SELECT get_number_page_was_printed_of_system(null, null)
+
+--33-- Lấy mã học kì của tất cả học kì
+
+CREATE OR REPLACE FUNCTION get_all_semeter()
+RETURNS JSON 
+LANGUAGE plpgsql
+AS $$ 
+	declare result JSON;
+BEGIN 
+	SELECT json_agg(json_build_object('semester', semester))
+	INTO result
+	FROM Utility
+
+	RETURN result; 
+END; 
+$$; 
+
+-- SELECT get_all_semester()

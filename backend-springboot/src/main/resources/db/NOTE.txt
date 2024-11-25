@@ -74,3 +74,6 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 ------------------------------------------------------------REPORT--------------------------------------------------------
 31. get_number_user_using_system(date_start_input DATE, date_end_input DATE)
 32. get_number_page_was_printed_of_system(date_start_input DATE, date_end_input DATE)
+
+----------------------------------------------------------Bổ sung---------------------------------------------------------
+33. get_all_semeter()
