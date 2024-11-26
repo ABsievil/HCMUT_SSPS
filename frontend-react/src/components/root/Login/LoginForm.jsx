@@ -60,7 +60,7 @@ function LoginForm() {
         id="emailInput"
         name="email"
         type="text"
-        placeholder="Email/MSSV"
+        placeholder="Tên tài khoản"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
