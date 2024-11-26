@@ -88,6 +88,37 @@ public class StudentService {
         }
     }
 
+    public ResponseEntity<ResponseObject> FNC_getStudentInforByUsername(String username){
+        try {
+            String studentInfor = jdbcTemplate.queryForObject(
+                "SELECT get_student_infor_by_username(?)",
+                String.class, 
+                username
+            );
+            if (studentInfor == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getStudentInforByUsername() successfully with data = null", studentInfor));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(studentInfor);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getStudentInforByUsername() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getStudentInforByUsername(): " + e.getMessage(), null));
+        }
+    }
+
     public ResponseEntity<ResponseObject> FNC_getAllStudentInfor(){
         try {
             String studentInforList = jdbcTemplate.queryForObject(

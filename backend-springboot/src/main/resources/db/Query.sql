@@ -84,6 +84,41 @@ $$ LANGUAGE plpgsql;
 
 -- SELECT get_student_infor_by_id('2211337')
 
+--2.3--Lấy thông tin của student bằng mã số sinh viên
+CREATE OR REPLACE FUNCTION get_student_infor_by_username(username_input VARCHAR)
+RETURNS JSON AS $$
+DECLARE
+    result JSON;
+BEGIN
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE username = username_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'Username % does not exist', username_input;
+	END IF;
+    SELECT json_build_object(
+			'last_name', u.last_name,
+			'middle_name', u.middle_name,
+			'first_name', u.first_name,
+			'email', u.email,
+			'date_of_birth', u.date_of_birth,
+			'role', u.role,
+			'phone_number', u.phone_number,
+			'student_id', u.student_id,
+			'school_year', u.school_year,
+			'faculty', u.faculty,
+			'page_remain', u.page_remain
+       		)
+    INTO result
+    FROM Users u
+	WHERE u.username = username_input;
+    
+    RETURN result;
+END;
+$$ LANGUAGE plpgsql;
+
+-- select get_student_infor_by_username('vu.makhmtk22')
+
 --3--Lấy thông tin toàn bộ sinh viên trong hệ thống
 CREATE OR REPLACE FUNCTION get_all_student_infor()
 RETURNS JSON AS $$

@@ -2,9 +2,9 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 export const fetchPersonalInfor = createAsyncThunk(
   "fetchPersonalInfor",
-  async (userId) => {
+  async (username) => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/getStudentInforById/${userId}`, {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/getStudentInforByUsername/${username}`, {
         method: 'GET',
         credentials: 'include'
       })

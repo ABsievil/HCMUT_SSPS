@@ -8,6 +8,7 @@
 2.2 get_student_infor_by_id(student_id_input VARCHAR)
 --> lấy thông tin cá nhân của 1 student bằng mã số sinh viên
 
+2.2 get_student_infor_by_username(username_input VARCHAR)
 3. get_all_student_infor()
 --> admin xem thông tin của tất cả student
 
