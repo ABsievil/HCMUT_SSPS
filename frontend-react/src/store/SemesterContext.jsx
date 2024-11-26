@@ -44,14 +44,13 @@ export const SemesterProvider = ({ children }) => {
       try {
 
       const currentDate = new Date().toLocaleDateString('en-CA');
-      console.log(currentDate);
       fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Ultilities/getUltilityByCurrentDate?currentDate=${currentDate}`, {
         method: 'GET',
         credentials: 'include'
       }).then(response => response.json())
         .then(data => {
           setSemester(data.data[0]);
-          console.log(data.data[0]);
+          // console.log(data.data[0]);
         })
         .catch(error => {
           console.error('Error getting ultility by current date:', error);
