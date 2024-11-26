@@ -14,7 +14,8 @@ export const UserProvider = ({ children }) => {
     });
 
     useEffect(() => {
-        const token = Cookies.get('jwt');
+        // const token = Cookies.get('jwt');
+        const token = localStorage.getItem('token');
         if (token) {
             try {
                 const decodedToken = jwtDecode(token);
