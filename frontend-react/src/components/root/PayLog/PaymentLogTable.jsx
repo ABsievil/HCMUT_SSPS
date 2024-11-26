@@ -8,14 +8,6 @@ import {
   fetchLogBuyPageAllStudent,
 } from "../../../store/paymentLogSlice";
 
-const tableHeaders = [
-  { key: "username", label: "Tên người dùng" },
-  { key: "transaction_id", label: "Mã giao dịch" },
-  { key: "purchase_page", label: "Số trang" },
-  { key: "purchase_date", label: "Ngày mua" },
-  { key: "purchase_time", label: "Thời gian" },
-];
-
 const FilterInput = ({ label, value, onChange, type = "text" }) => (
   <div className="flex flex-col">
     <label className="block text-sm font-medium text-gray-700">{label}</label>
@@ -28,21 +20,39 @@ const FilterInput = ({ label, value, onChange, type = "text" }) => (
   </div>
 );
 
+const titleMapping = {
+  studentId: "MSSV",
+  transaction_id: "Mã giao dịch",
+  purchase_page: "Số trang",
+  purchase_date: "Ngày mua",
+  purchase_time: "Thời gian",
+};
+
 const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
   if (!isOpen || !data) return null;
+
+  // Loại bỏ "username" và các trường không có giá trị khỏi dữ liệu chi tiết
+  const filteredData = Object.entries(data).filter(
+    ([key, value]) => key !== "username" && value // Chỉ giữ lại các trường có giá trị
+  );
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="relative bg-white rounded-lg w-full max-w-2xl p-6 mx-4">
-        <button onClick={onClose} className="absolute top-4 right-4 text-gray-500 hover:text-gray-700">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
           <X size={24} />
         </button>
         <h2 className="text-2xl font-bold mb-6">Chi tiết giao dịch</h2>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            {Object.entries(data).map(([key, value]) => (
+            {filteredData.map(([key, value]) => (
               <div key={key}>
-                <p className="font-medium text-gray-700">{key}:</p>
+                <p className="font-medium text-gray-700">
+                  {titleMapping[key] || key}:
+                </p>
                 <p className="mt-1">{value}</p>
               </div>
             ))}
@@ -57,62 +67,99 @@ const PaymentLogTable = () => {
   const { role, userId } = useUser();
   const dispatch = useDispatch();
   const { studentPayLogs, allStudentPayLogs, loading, error } = useSelector(selectPaymentStudentLog);
-  const [filters, setFilters] = useState({ dateStart: "", dateEnd: "" });
+  const [filters, setFilters] = useState({
+    studentId: role === "USER" ? userId : "",
+    dateStart: "",
+    dateEnd: "",
+  });
   const [selectedRow, setSelectedRow] = useState(null);
   const [showDetail, setShowDetail] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const rowsPerPage = 10;
+  const rowsPerPage = 7;
+
+  // Debounced studentId to reduce API calls
+  const debouncedStudentId = useMemo(() => {
+    return filters.studentId.trim();
+  }, [filters.studentId]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         if (role === "ADMIN") {
-          await dispatch(fetchLogBuyPageAllStudent(filters)).unwrap();
-        } else if (role === "STUDENT" && userId) {
-          await dispatch(fetchLogBuyPageStudent({ studentId: userId, ...filters })).unwrap();
+          if (debouncedStudentId) {
+            await dispatch(
+              fetchLogBuyPageStudent({ studentId: debouncedStudentId, ...filters })
+            ).unwrap();
+          } else {
+            await dispatch(fetchLogBuyPageAllStudent(filters)).unwrap();
+          }
+        } else if (role === "USER" && userId) {
+          await dispatch(
+            fetchLogBuyPageStudent({ studentId: userId, ...filters })
+          ).unwrap();
         }
       } catch (err) {
         console.error("Error fetching data:", err);
       }
     };
 
-    fetchData();
-  }, [filters, role, userId, dispatch]);
+    const debounceTimeout = setTimeout(fetchData, 500); 
+    return () => clearTimeout(debounceTimeout); 
+  }, [debouncedStudentId, filters.dateStart, filters.dateEnd, role, userId, dispatch]);
+
+  useEffect(() => {
+    if (role === "USER" && userId) {
+      setFilters((prev) => ({ ...prev, studentId: userId }));
+    }
+  }, [role, userId]);
 
   const data = useMemo(() => {
     if (role === "ADMIN") {
-      return Array.isArray(allStudentPayLogs) ? allStudentPayLogs : [];
+      return debouncedStudentId
+        ? Array.isArray(studentPayLogs) ? studentPayLogs : []
+        : Array.isArray(allStudentPayLogs) ? allStudentPayLogs : [];
     }
     return Array.isArray(studentPayLogs) ? studentPayLogs : [];
-  }, [allStudentPayLogs, studentPayLogs, role]);
+  }, [allStudentPayLogs, studentPayLogs, role, debouncedStudentId]);
   
-  console.log("AllStudentPayLogs:", allStudentPayLogs); // Debug API data
-  console.log("StudentPayLogs:", studentPayLogs); // Debug student-specific data
-  
-  // Debugging filters and role
-  console.log("Filters:", filters);
-  console.log("Role:", role, "UserId:", userId);
-    const handleFilterChange = (key) => (e) => {
-    setFilters((prev) => ({ ...prev, [key]: e.target.value }));
+  const tableHeaders = useMemo(() => {
+    const headers = [
+      { key: "transaction_id", label: "Mã giao dịch" },
+      { key: "purchase_page", label: "Số trang" },
+      { key: "purchase_date", label: "Ngày mua" },
+      { key: "purchase_time", label: "Thời gian" },
+    ];
+
+    if (role === "ADMIN" && debouncedStudentId!=="") {
+      headers.unshift({ key: "studentId", label: "MSSV" });
+    }
+
+    return headers;
+  }, [role, debouncedStudentId]);
+
+  const currentRows = useMemo(() => {
+    const enrichedRows = data.map((row) => ({
+      studentId: filters.studentId || row.studentId,
+      ...row,
+    }));
+    const indexOfLastRow = currentPage * rowsPerPage;
+    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+    return enrichedRows.slice(indexOfFirstRow, indexOfLastRow);
+  }, [data, filters.studentId, currentPage, rowsPerPage]);
+
+  const handleFilterChange = (key) => (e) => {
+    const value = e.target.value;
+    setFilters((prev) => ({ ...prev, [key]: value }));
     setCurrentPage(1);
   };
 
   const totalPages = Math.ceil(data.length / rowsPerPage);
-
-  const currentRows = useMemo(() => {
-    const indexOfLastRow = currentPage * rowsPerPage;
-    const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    return data.slice(indexOfFirstRow, indexOfLastRow);
-  }, [currentPage, data, rowsPerPage]);
 
   const paginate = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       setCurrentPage(pageNumber);
     }
   };
-
-  const calculateTotalPages = () =>
-    data.reduce((total, row) => total + (Number(row.purchase_page) || 0), 0);
 
   const handleRowClick = (row) => {
     setSelectedRow(row);
@@ -127,6 +174,14 @@ const PaymentLogTable = () => {
 
       <div className="p-4">
         <div className="flex justify-center items-center space-x-4">
+          {role === "ADMIN" && (
+            <FilterInput
+              label="MSSV"
+              value={filters.studentId || ""}
+              onChange={handleFilterChange("studentId")}
+              placeholder="Nhập MSSV để tìm kiếm"
+            />
+          )}
           <FilterInput
             label="TỪ NGÀY"
             value={filters.dateStart}
@@ -145,49 +200,47 @@ const PaymentLogTable = () => {
       {loading ? (
         <div className="text-center py-8 text-gray-600">Đang tải dữ liệu...</div>
       ) : error ? (
-        <div className="text-center py-8 text-red-600">Lỗi: {error}</div>
+        <div className="text-center py-8 text-red-600">Đã xảy ra lỗi, vui lòng thử lại sau.</div>
       ) : data.length > 0 ? (
         <>
-          <table className="w-full md:w-4/5 bg-white mt-3 m-auto border-collapse">
-            <thead>
+          <table className="w-full md:w-[70%] bg-white mt-3 m-auto">
+            <thead className="bg-themecolor1">
               <tr>
                 {tableHeaders.map((header) => (
-                  <th key={header.key} className="px-4 py-2 border-b text-center">{header.label}</th>
+                  <th key={header.key} className="py-3 text-center">{header.label}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {currentRows.map((row, index) => (
-                <tr key={index} className="text-center cursor-pointer" onClick={() => handleRowClick(row)}>
+                <tr
+                  key={index}
+                  className={`${index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-purple-100 hover:bg-purple-200'} cursor-pointer`}
+                  onClick={() => handleRowClick(row)}
+                >
                   {tableHeaders.map((header) => (
-                    <td key={header.key} className="border-b px-4 py-2">{row[header.key]}</td>
+                    <td key={header.key} className="py-4 text-center">{row[header.key]}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
-
-          <div className="flex justify-between items-center py-4">
-            <div>
-              <span className="text-sm">Tổng số trang: {calculateTotalPages()} trang</span>
-            </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => paginate(currentPage - 1)}
-                disabled={currentPage === 1}
-                className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-              >
-                Trước
-              </button>
-              <span>{currentPage}/{totalPages}</span>
-              <button
-                onClick={() => paginate(currentPage + 1)}
-                disabled={currentPage === totalPages}
-                className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50"
-              >
-                Sau
-              </button>
-            </div>
+          <div className="flex justify-center mt-10">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-indigo-500 text-white rounded-md disabled:bg-gray-300"
+            >
+              Trước
+            </button>
+            <span className="mx-4 self-center">Trang {currentPage} của {totalPages}</span>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 bg-indigo-500 text-white rounded-md disabled:bg-gray-300"
+            >
+              Sau
+            </button>
           </div>
         </>
       ) : (
@@ -204,3 +257,4 @@ const PaymentLogTable = () => {
 };
 
 export default PaymentLogTable;
+
