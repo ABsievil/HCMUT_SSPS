@@ -493,12 +493,11 @@ CREATE OR REPLACE PROCEDURE print(
 )
 LANGUAGE PLPGSQL 
 AS $$ 
-	declare page INT;
 BEGIN 
-	SELECT page_remain INTO page FROM users WHERE username = username_input; 
+	IF NOT EXISTS (SELECT * FROM Printing WHERE username = username_input AND printer_id = printer_id_input) THEN
+		INSERT INTO Printing(username, printer_id) VALUES (username_input, printer_id_input)
+	END IF;
 	INSERT INTO printed_turn (username, printer_id , printing_date , time_start , time_end , file_name, file_type , number_pages_of_file, page_size , number_side, number_copy ) VALUES (username_input , printer_id_input, printing_date_input , time_start_input , time_end_input, file_name_input , file_type_input , number_page_of_file_input , page_size_input, number_size_input , number_copy_input );
-	UPDATE users 
-	SET page_remain = page - (number_page_of_file_input * number_copy_input);
 END; $$; 
 
 --SELECT page_remain from users where username = 'matruongvu'
