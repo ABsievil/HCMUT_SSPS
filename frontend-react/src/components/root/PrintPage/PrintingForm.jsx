@@ -247,7 +247,7 @@ function PrintingForm() {
         timeStart: null,
         timeEnd: null,
         fileName: formState.selectedFile.name,
-        fileType: formState.selectedFile.type,
+        fileType: formState.selectedFile.name.split('.').pop(),
         numberPageOfFile: formState.pagesToPrint,
         pageSize: formState.paperSize,
         numberSize: formState.pagesPerSide,
@@ -262,6 +262,10 @@ function PrintingForm() {
       toast.error('Vui lòng kiểm tra lại các lỗi và thử lại');
     }
   }, [formState, validateForm]);
+
+  const getFileExtension = (mimeType) => {
+    return mimeType.replace('application/', '.');
+  };
 
   // Calculate pages effect
   useEffect(() => {
