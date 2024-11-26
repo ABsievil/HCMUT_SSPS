@@ -7,6 +7,8 @@ import adminInforReducer from './adminInforSlice';
 import printLogReducer from './printLogSlice';
 import printJobReducer from './printJobSlice';
 import paymentLogReducer from './paymentLogSlice';
+import paymentReducer from './paymentSlice';
+
 
 const store = configureStore({
   reducer: {
@@ -17,6 +19,7 @@ const store = configureStore({
     logs: printLogReducer, // Corrected reducer name (was previously `logReducer`)
     printJobs: printJobReducer,
     paymentLogs: paymentLogReducer, // Added missing reducer for consistency
+    payment: paymentReducer,
   },
 });
 

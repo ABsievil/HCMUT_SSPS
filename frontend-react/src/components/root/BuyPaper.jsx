@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createVnPayPayment } from "../../store/paymentSlice"; // Adjust path if needed
 import Layout from "./fragments/layout/Layout";
 import InputField from "./fragments/InputField/InputField";
 import { toast } from "react-toastify";
@@ -211,6 +213,7 @@ const PaymentMethodSelector = ({ selectedMethod, onMethodChange, selectedBank, o
 );
 
 const BuyPage = () => {
+  const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(100);
   const [paperType, setPaperType] = useState("A4");
   const [showQRModal, setShowQRModal] = useState(false);
@@ -237,7 +240,7 @@ const BuyPage = () => {
     setQuantity(value >= 0 && value <= AVAILABLE_PAGES ? value : 0);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (quantity <= 0 || quantity > AVAILABLE_PAGES) {
       toast.error("Vui lòng kiểm tra lại số lượng trang!");
       return;
@@ -248,8 +251,23 @@ const BuyPage = () => {
       return;
     }
 
-    setOrderId(generateOrderId());
-    setShowQRModal(true);
+    const numericAmount = PAPER_TYPES[paperType].price * quantity; // Get raw numeric value
+
+    if (selectedPayment === PAYMENT_METHODS.BANK) {
+      try {
+        const response = await dispatch(createVnPayPayment({ amount: numericAmount, bankCode: selectedBank }));
+        if (response.payload?.paymentUrl) {
+          window.location.href = response.payload.paymentUrl;  // Redirect to payment page
+        } else {
+          toast.error("Không thể nhận được URL thanh toán");
+        }
+      } catch (error) {
+        toast.error("Đã xảy ra lỗi khi xử lý thanh toán.");
+      }
+    } else {
+      setOrderId(generateOrderId());
+      setShowQRModal(true);
+    }
   };
 
   return (
