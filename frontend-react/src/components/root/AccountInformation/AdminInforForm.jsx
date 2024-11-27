@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Pencil, X } from "lucide-react";
-import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { fetchAdminInfor } from "../../../store/adminInforSlice";
+import { fetchAdminInfor, updateAdminInfor } from "../../../store/adminInforSlice";
 
 const AdminInforForm = () => {
   const dispatch = useDispatch();
@@ -34,7 +33,7 @@ const AdminInforForm = () => {
         dateOfBirth: adminInfor.data.date_of_birth,
       });
     }
-  }, [adminInfor.data]);
+  }, [adminInfor.data, isEditing]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,9 +44,15 @@ const AdminInforForm = () => {
   };
 
   const handleSubmit = () => {
-    // Here you would typically make an API call to update the information
-    toast.success("Thông tin cập nhật thành công!");
-
+    const adminDTO = {
+      last_name: formData.fullName.split(" ")[0], // Tách họ từ fullName
+      middle_name: formData.fullName.split(" ").slice(1, -1).join(" "), // Tách tên đệm
+      first_name: formData.fullName.split(" ").slice(-1).join(""), // Tách tên
+      email: formData.email,
+      date_of_birth: formData.dateOfBirth,
+      phone_number: formData.phoneNumber
+    }
+    dispatch(updateAdminInfor(adminDTO));
     setIsEditing(false);
   };
 

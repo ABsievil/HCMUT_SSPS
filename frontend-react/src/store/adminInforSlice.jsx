@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { toast } from "react-toastify";
 
 export const fetchAdminInfor = createAsyncThunk("fetchAdminInfor", async () => {
   try {
@@ -17,6 +18,29 @@ export const fetchAdminInfor = createAsyncThunk("fetchAdminInfor", async () => {
   }
 });
 
+const updateAdminInforAsync = async (adminDTO) => {
+  console.log(adminDTO);
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Admin/updateAdminInfor`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(adminDTO)
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`updatePersonalInfor failed: ${response.status}`);
+    }
+    toast.success("Thông tin cập nhật thành công!");
+  } catch (error) {
+    console.error('Error updating PersonalInfor: ', error);
+  }
+}
+
 const adminInforSlice = createSlice({
   name: "adminInfor",
   initialState: {
@@ -24,7 +48,13 @@ const adminInforSlice = createSlice({
     adminInfor: [],
     error: null,
   },
-  reducers: {},
+  reducers: {
+    updateAdminInfor: (state, action) => {
+      console.log(action.payload);
+      state.adminInfor.data = action.payload;
+      updateAdminInforAsync(action.payload);
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchAdminInfor.pending, (state) => {
@@ -39,4 +69,6 @@ const adminInforSlice = createSlice({
       });
   },
 });
+
+export const { updateAdminInfor } = adminInforSlice.actions;
 export default adminInforSlice.reducer;
