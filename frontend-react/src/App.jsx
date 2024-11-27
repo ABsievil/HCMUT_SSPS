@@ -20,6 +20,8 @@ import { useDispatch } from "react-redux";
 import { fetchPrintersabc } from "./store/PrintersabcSlice";
 import React, {useEffect} from "react";
 import PaymentLog from "./components/root/PaymentLog";
+import NotFoundPage from "../src/components/root/404NotFoundPage";
+
 export default function App() {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/regis" element={<RegisterPage />} />
+          <Route path="notfound" element={<NotFoundPage />} />
           <Route path="/verifymail" element={<InputMail />} />
           <Route
             path="/verify-newpass"
