@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFileType, removeFileType, selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { File, Plus } from "lucide-react";
 import { toast } from 'react-toastify';
-import { addSemester } from '../../../store/SemesterContext';
+import { addSemester, getAllSemesterId } from '../../../store/SemesterContext';
+import { fetchAllSemesterIds, selectSemesters } from '../../../store/semestersSlice';
 
 const SectionTitle = React.memo(({ children }) => (
     <h3 className="mt-4 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
@@ -190,20 +191,23 @@ const AddNewSemesterForm = React.memo(({ onClose }) => {
 const ManageFile = () => {
     const dispatch = useDispatch();
     useEffect(() => {
+        dispatch(fetchAllSemesterIds());
         dispatch(fetchFileType(241));
     }, []);
-    const {isLoading, types, availableTypes, error} = useSelector(selectAvailableFileTypes);
+    const { Semesters } = useSelector(selectSemesters);
+    const ids = Semesters.map(semester => ({
+        value: semester.semester,
+        label: `Học kì ${semester.semester}`
+    }));
+    const [selectedSemester, setSelectedSemester] = useState(ids?.[0]|| '');
+    
+    const { availableTypes } = useSelector(selectAvailableFileTypes);
     const [periodicSupply, setPeriodicSupply] = useState(200);
     const [supplyDate, setSupplyDate] = useState('2018-10-12');
     const [customFileType, setCustomFileType] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
 
-    // New State for Selected Semester
-    const [semesters, setSemesters] = useState([
-        { value: '241', label: '20241 - Học kỳ 1 2024-2025' },
-        { value: '242', label: '20242 - Học kỳ 2 2024-2025' },
-    ]);
-    const [selectedSemester, setSelectedSemester] = useState(semesters[0]?.value || '');
+
 
     const handleSemesterChange = useCallback((e) => {
         setSelectedSemester(e.target.value);
@@ -254,7 +258,7 @@ const ManageFile = () => {
                         <SectionTitle>CHỌN HỌC KỲ</SectionTitle>
                         <Select
                             id="selectSemester"
-                            options={semesters}
+                            options={ids}
                             className="flex-1"
                             value={selectedSemester}
                             onChange={handleSemesterChange}
