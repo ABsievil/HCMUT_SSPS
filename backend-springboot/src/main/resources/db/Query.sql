@@ -807,7 +807,7 @@ $$ LANGUAGE plpgsql;
 
 --33-- Lấy mã học kì của tất cả học kì
 
-CREATE OR REPLACE FUNCTION get_all_semeter()
+CREATE OR REPLACE FUNCTION get_all_semester()
 RETURNS JSON 
 LANGUAGE plpgsql
 AS $$ 
