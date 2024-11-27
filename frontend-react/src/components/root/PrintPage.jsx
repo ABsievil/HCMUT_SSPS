@@ -10,7 +10,7 @@ function PrintingSystem() {
   const [printingData, setPrintingData] = useState(null);
   const [remainingPages, setRemainingPages] = useState(0);
   
-  const { userId } = useUser();
+  const { username } = useUser();
   const dispatch = useDispatch();
   const { personalInfor, isLoading, error } = useSelector(
     (state) => state.personalInfor
@@ -18,8 +18,10 @@ function PrintingSystem() {
 
   // Fetch personal info when component mounts
   useEffect(() => {
-    dispatch(fetchPersonalInfor(userId));
-  }, [userId, dispatch]);
+    if(username) {
+      dispatch(fetchPersonalInfor(username));
+    }
+  }, [username, dispatch]);
 
   // Update remaining pages when personal info is loaded
   useEffect(() => {
