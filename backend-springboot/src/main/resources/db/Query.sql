@@ -787,3 +787,27 @@ END;
 $$; 
 
 -- SELECT get_all_semester()
+
+CREATE OR REPLACE PROCEDURE update_admin_infor(
+	last_name_input VARCHAR, 
+	middle_name_input VARCHAR, 
+	first_name_input VARCHAR, 
+	email_input VARCHAR, 
+	date_of_birth_input DATE, 
+	phone_number_input VARCHAR
+)
+LANGUAGE plpgsql AS $$
+BEGIN
+    UPDATE Users
+	SET 
+	    last_name = COALESCE(last_name_input, last_name),
+        middle_name = COALESCE(middle_name_input, middle_name),
+        first_name = COALESCE(first_name_input, first_name),
+        email = COALESCE(email_input, email),
+        date_of_birth = COALESCE(date_of_birth_input, date_of_birth),
+        phone_number = COALESCE(phone_number_input, phone_number)
+	WHERE role = 'ADMIN';
+END;
+$$;
+
+CALL update_admin_infor('Quan', 'Han', 'Minh', 'quanhanminh@hcmut.edu.vn', '1990-08-08', '0903037102')
