@@ -6,6 +6,7 @@ import { useUser } from "../../../../store/userContext";
 
 
 const Sidebar = () => {
+  const fullName = localStorage.getItem('fullName');
   const { username, role } = useUser(); // Lấy thông tin vai trò từ context
   const location = useLocation();
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ const Sidebar = () => {
           alt="User avatar"
           className="object-contain rounded-full aspect-square w-[70px]"
         />
-        <div className="mt-1.5">{username}</div>
+        <div className="mt-1.5">{fullName}</div>
         <nav className={`flex flex-col self-stretch mt-2 w-full ${isLoading ? 'pointer-events-none opacity-50' : ''}`}>
           {items.map((item, index) => (
             <SidebarItem

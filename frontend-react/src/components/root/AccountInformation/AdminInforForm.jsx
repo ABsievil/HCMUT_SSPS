@@ -25,9 +25,11 @@ const AdminInforForm = () => {
   });
   useEffect(() => {
     if (adminInfor.data) {
+      const fullName = adminInfor.data.last_name + ' ' + adminInfor.data.middle_name + ' ' + adminInfor.data.first_name;
+      localStorage.setItem('fullName', fullName);
       setFormData({
         email: adminInfor.data.email,
-        fullName: adminInfor.data.last_name + ' ' + adminInfor.data.middle_name + ' ' + adminInfor.data.first_name,
+        fullName: fullName,
         phoneNumber: adminInfor.data.phone_number,
         dateOfBirth: adminInfor.data.date_of_birth,
       });

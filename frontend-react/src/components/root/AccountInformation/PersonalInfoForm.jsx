@@ -37,15 +37,12 @@ const PersonalInfoForm = () => {
   useEffect(() => {
     // Update formData only when personalInfor.data is available
     if (personalInfor.data) {
+      const fullName = personalInfor.data.last_name + ' ' + personalInfor.data.middle_name + ' ' + personalInfor.data.first_name;
+      localStorage.setItem('fullName', fullName);
       setFormData({
         studentId: personalInfor.data.student_id,
         email: personalInfor.data.email,
-        fullName:
-          personalInfor.data.last_name +
-          " " +
-          personalInfor.data.middle_name +
-          " " +
-          personalInfor.data.first_name,
+        fullName: fullName,
         phoneNumber: personalInfor.data.phone_number,
         dateOfBirth: personalInfor.data.date_of_birth,
         schoolYear: personalInfor.data.school_year,
