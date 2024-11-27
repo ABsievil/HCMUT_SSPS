@@ -14,6 +14,7 @@ const PAPER_TYPES = {
 const AVAILABLE_PAGES = 10000;
 
 const BANKS = [
+  "NCB",
   "Vietcombank",
   "Techcombank",
   "BIDV",
