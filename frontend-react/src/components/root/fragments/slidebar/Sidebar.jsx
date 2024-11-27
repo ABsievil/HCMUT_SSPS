@@ -62,6 +62,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     Cookies.remove("jwt");
     localStorage.removeItem('token');
+    localStorage.removeItem('userRole');
     navigate("/login");
   };
 
