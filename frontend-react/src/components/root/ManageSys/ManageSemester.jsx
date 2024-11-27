@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFileType, removeFileType, selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { File, Plus } from "lucide-react";
 import { toast } from 'react-toastify';
-import { addSemester, getAllSemesterId } from '../../../store/SemesterContext';
-import { fetchAllSemesterIds, selectSemesters } from '../../../store/semestersSlice';
+import { addSemester } from '../../../store/SemesterContext';
+import { fetchAllSemesterIds, fetchUltilityOfSemester, selectSemesters } from '../../../store/semestersSlice';
 
 const SectionTitle = React.memo(({ children }) => (
     <h3 className="mt-4 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
@@ -194,7 +194,7 @@ const ManageFile = () => {
         dispatch(fetchAllSemesterIds());
         dispatch(fetchFileType(241));
     }, []);
-    const { Semesters } = useSelector(selectSemesters);
+    const { Semesters, Ultility } = useSelector(selectSemesters);
     const ids = Semesters.map(semester => ({
         value: semester.semester,
         label: `Học kì ${semester.semester}`
@@ -207,6 +207,16 @@ const ManageFile = () => {
     const [customFileType, setCustomFileType] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
 
+    useEffect(()=>{
+        dispatch(fetchUltilityOfSemester(selectedSemester));
+        console.log(selectedSemester);
+    }, [selectedSemester]);
+
+    useEffect(()=> {
+        setPeriodicSupply(Ultility[0]?.default_pages);
+        setSupplyDate(Ultility[0]?.date_reset_default_page);
+        dispatch(fetchFileType(selectedSemester));
+    }, [Ultility]);
 
 
     const handleSemesterChange = useCallback((e) => {
@@ -222,19 +232,19 @@ const ManageFile = () => {
 
         const formattedFileType = customFileType.startsWith('.') ? customFileType : `.${customFileType}`;
 
-        if (availableTypes?.data.some((type) => type.value === formattedFileType)) {
+        if (availableTypes?.data?.some((type) => type.value === formattedFileType)) {
             toast.error('Loại tệp này đã tồn tại!');
             return;
         }
 
-        dispatch(addFileType({semester :'241' , accepted_file_type: formattedFileType}));
+        dispatch(addFileType({semester : selectedSemester, accepted_file_type: formattedFileType}));
         setCustomFileType('');
         toast.success('Loại tệp đã được thêm thành công!');
     }, [customFileType, dispatch, availableTypes]);
 
     const handleRemoveFileType = useCallback(
         (typeToRemove) => {
-            dispatch(removeFileType({semester: '241', typeToRemove}));
+            dispatch(removeFileType({semester: selectedSemester, typeToRemove}));
         },
         [dispatch]
     );
