@@ -30,9 +30,8 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping("/getStudentIdByUsername")
-    public ResponseEntity<ResponseObject> FNC_getStudentIdByUsername(@RequestBody Map<String, String> requestBody) {
-        String username = requestBody.get("username");
+    @GetMapping("/getStudentIdByUsername/{username}")
+    public ResponseEntity<ResponseObject> getStudentIdByUsername(@PathVariable String username) {
         return studentService.FNC_getStudentIdByUsername(username);
     }
 
