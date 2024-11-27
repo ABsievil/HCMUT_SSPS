@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import InputField from '../fragments/InputField/InputField'; // Import InputField
 import { toast } from 'react-toastify'
+import { jwtDecode } from 'jwt-decode';
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
@@ -28,7 +29,11 @@ function LoginForm() {
       .then(response => response.json())
       .then(data => {
         if (data.status === "OK") {
+          const decodedToken = jwtDecode(data.data);
+          const role = decodedToken.role;
+
           localStorage.setItem('token', data.data);
+          localStorage.setItem('userRole', role); // set userRole to check authenticate in App.jsx
           // Sử dụng window.location để điều hướng
           window.location.href = '/account';
         } else if (data.status === "ERROR") {
