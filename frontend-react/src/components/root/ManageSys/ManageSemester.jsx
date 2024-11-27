@@ -192,7 +192,6 @@ const ManageFile = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchAllSemesterIds());
-        dispatch(fetchFileType(241));
     }, []);
     const { Semesters, Ultility } = useSelector(selectSemesters);
     const ids = Semesters.map(semester => ({
@@ -200,6 +199,11 @@ const ManageFile = () => {
         label: `Học kì ${semester.semester}`
     }));
     const [selectedSemester, setSelectedSemester] = useState(ids?.[0]|| '');
+
+    useEffect(()=>{
+        dispatch(fetchUltilityOfSemester(selectedSemester));
+        dispatch(fetchFileType(selectedSemester));
+    }, [selectedSemester]);
     
     const { availableTypes } = useSelector(selectAvailableFileTypes);
     const [periodicSupply, setPeriodicSupply] = useState(200);
@@ -207,15 +211,9 @@ const ManageFile = () => {
     const [customFileType, setCustomFileType] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
 
-    useEffect(()=>{
-        dispatch(fetchUltilityOfSemester(selectedSemester));
-        console.log(selectedSemester);
-    }, [selectedSemester]);
-
     useEffect(()=> {
         setPeriodicSupply(Ultility[0]?.default_pages);
         setSupplyDate(Ultility[0]?.date_reset_default_page);
-        dispatch(fetchFileType(selectedSemester));
     }, [Ultility]);
 
 
@@ -246,7 +244,7 @@ const ManageFile = () => {
         (typeToRemove) => {
             dispatch(removeFileType({semester: selectedSemester, typeToRemove}));
         },
-        [dispatch]
+        [dispatch, selectedSemester]
     );
 
     return (
