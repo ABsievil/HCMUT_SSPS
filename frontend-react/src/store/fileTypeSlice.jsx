@@ -58,7 +58,9 @@ const fileTypeSlice = createSlice({
     },
     reducers: {
         addFileType: (state, action) => {
-            const {semester, accepted_file_type} = action.payload;
+            const {semester, accepted_file_type} = action.payload
+            // Ensure data array exists, initializing it if necessary
+            state.availableTypes.data = state.availableTypes.data || [];;
             state.availableTypes.data.push({accepted_file_type});
             addFileAccepted(semester, accepted_file_type);
         },

@@ -8,6 +8,8 @@ import printLogReducer from './printLogSlice';
 import printJobReducer from './printJobSlice';
 import paymentLogReducer from './paymentLogSlice';
 import paymentReducer from './paymentSlice';
+import semestersReducer from './semestersSlice';
+
 
 
 const store = configureStore({
@@ -20,6 +22,7 @@ const store = configureStore({
     printJobs: printJobReducer,
     paymentLogs: paymentLogReducer, // Added missing reducer for consistency
     payment: paymentReducer,
+    semesters: semestersReducer
   },
 });
 

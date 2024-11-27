@@ -14,6 +14,7 @@ const PAPER_TYPES = {
 const AVAILABLE_PAGES = 10000;
 
 const BANKS = [
+  "NCB",
   "Vietcombank",
   "Techcombank",
   "BIDV",
@@ -74,7 +75,7 @@ const QRPaymentModal = ({ orderId, amount, onClose }) => {
         <div className="space-y-6">
           <div className="flex justify-center">
             <img
-              src="src/images/qr-checkout.png"
+              src="src/images/qr-checkout.jpg"
               alt="QR Code"
               className="border rounded-lg"
             />

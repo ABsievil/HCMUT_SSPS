@@ -4,6 +4,7 @@ import { addFileType, removeFileType, selectAvailableFileTypes, fetchFileType } 
 import { File, Plus } from "lucide-react";
 import { toast } from 'react-toastify';
 import { addSemester } from '../../../store/SemesterContext';
+import { fetchAllSemesterIds, fetchUltilityOfSemester, selectSemesters } from '../../../store/semestersSlice';
 
 const SectionTitle = React.memo(({ children }) => (
     <h3 className="mt-4 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
@@ -190,20 +191,31 @@ const AddNewSemesterForm = React.memo(({ onClose }) => {
 const ManageFile = () => {
     const dispatch = useDispatch();
     useEffect(() => {
-        dispatch(fetchFileType(241));
+        dispatch(fetchAllSemesterIds());
     }, []);
-    const {isLoading, types, availableTypes, error} = useSelector(selectAvailableFileTypes);
+    const { Semesters, Ultility } = useSelector(selectSemesters);
+    const ids = Semesters.map(semester => ({
+        value: semester.semester,
+        label: `Học kì ${semester.semester}`
+    }));
+    const [selectedSemester, setSelectedSemester] = useState(ids?.[0]|| '');
+
+    useEffect(()=>{
+        dispatch(fetchUltilityOfSemester(selectedSemester));
+        dispatch(fetchFileType(selectedSemester));
+    }, [selectedSemester]);
+    
+    const { availableTypes } = useSelector(selectAvailableFileTypes);
     const [periodicSupply, setPeriodicSupply] = useState(200);
     const [supplyDate, setSupplyDate] = useState('2018-10-12');
     const [customFileType, setCustomFileType] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
 
-    // New State for Selected Semester
-    const [semesters, setSemesters] = useState([
-        { value: '241', label: '20241 - Học kỳ 1 2024-2025' },
-        { value: '242', label: '20242 - Học kỳ 2 2024-2025' },
-    ]);
-    const [selectedSemester, setSelectedSemester] = useState(semesters[0]?.value || '');
+    useEffect(()=> {
+        setPeriodicSupply(Ultility[0]?.default_pages);
+        setSupplyDate(Ultility[0]?.date_reset_default_page);
+    }, [Ultility]);
+
 
     const handleSemesterChange = useCallback((e) => {
         setSelectedSemester(e.target.value);
@@ -218,21 +230,21 @@ const ManageFile = () => {
 
         const formattedFileType = customFileType.startsWith('.') ? customFileType : `.${customFileType}`;
 
-        if (availableTypes?.data.some((type) => type.value === formattedFileType)) {
+        if (availableTypes?.data?.some((type) => type.value === formattedFileType)) {
             toast.error('Loại tệp này đã tồn tại!');
             return;
         }
 
-        dispatch(addFileType({semester :'241' , accepted_file_type: formattedFileType}));
+        dispatch(addFileType({semester : selectedSemester, accepted_file_type: formattedFileType}));
         setCustomFileType('');
         toast.success('Loại tệp đã được thêm thành công!');
     }, [customFileType, dispatch, availableTypes]);
 
     const handleRemoveFileType = useCallback(
         (typeToRemove) => {
-            dispatch(removeFileType({semester: '241', typeToRemove}));
+            dispatch(removeFileType({semester: selectedSemester, typeToRemove}));
         },
-        [dispatch]
+        [dispatch, selectedSemester]
     );
 
     return (
@@ -254,7 +266,7 @@ const ManageFile = () => {
                         <SectionTitle>CHỌN HỌC KỲ</SectionTitle>
                         <Select
                             id="selectSemester"
-                            options={semesters}
+                            options={ids}
                             className="flex-1"
                             value={selectedSemester}
                             onChange={handleSemesterChange}
