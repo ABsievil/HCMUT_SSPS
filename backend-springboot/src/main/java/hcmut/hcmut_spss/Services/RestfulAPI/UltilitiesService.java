@@ -195,4 +195,33 @@ public class UltilitiesService {
         }
     }
 
+    public ResponseEntity<ResponseObject> FNC_getAllSemester(){
+        try {
+            String allSemesterList = jdbcTemplate.queryForObject(
+                "SELECT get_all_semester()",
+                String.class
+            );
+            if (allSemesterList == null) {
+                return ResponseEntity.status(HttpStatus.OK)
+                    .body(new ResponseObject("OK", "Query to get FNC_getAllSemester() successfully with data = null", allSemesterList));
+            }
+
+            JsonNode jsonNode = objectMapper.readTree(allSemesterList);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to get FNC_getAllSemester() successfully", jsonNode));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (JsonProcessingException e) {
+            // Xử lý lỗi khi parse JSON
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "JSON processing error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error getting FNC_getAllSemester(): " + e.getMessage(), null));
+        }
+    }
 }

@@ -57,4 +57,9 @@ public class UltilitiesController {
     public ResponseEntity<ResponseObject> getUltilityByCurrentDate(@RequestParam("currentDate") Date currentDate) {
         return ultilitiesService.FNC_getUltilityByCurrentDate(currentDate);
     }
+
+    @GetMapping("/getAllSemester")
+    public ResponseEntity<ResponseObject> getAllSemester() {
+        return ultilitiesService.FNC_getAllSemester();
+    }
 }
