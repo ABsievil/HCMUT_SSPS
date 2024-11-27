@@ -16,8 +16,10 @@ const PersonalInfoForm = () => {
   );
 
   useEffect(() => {
-    dispatch(fetchPersonalInfor(userId));
-  }, [userId, dispatch]);
+    if(username) {
+      dispatch(fetchPersonalInfor(username));
+    }
+  }, [username, dispatch]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
@@ -142,7 +144,7 @@ const PersonalInfoForm = () => {
         return response.json();
       })
       .then((data) => {
-        dispatch(fetchPersonalInfor(userId)); // Làm mới thông tin
+        dispatch(fetchPersonalInfor(username)); // Làm mới thông tin
         toast.success("Cập nhật thông tin thành công");
         setIsEditing(false); // Đóng chế độ chỉnh sửa
       })

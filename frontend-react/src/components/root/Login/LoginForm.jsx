@@ -28,6 +28,7 @@ function LoginForm() {
       .then(response => response.json())
       .then(data => {
         if (data.status === "OK") {
+          localStorage.setItem('token', data.data);
           // Sử dụng window.location để điều hướng
           window.location.href = '/account';
         } else if (data.status === "ERROR") {
@@ -60,7 +61,7 @@ function LoginForm() {
         id="emailInput"
         name="email"
         type="text"
-        placeholder="Email/MSSV"
+        placeholder="Tên tài khoản"
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}

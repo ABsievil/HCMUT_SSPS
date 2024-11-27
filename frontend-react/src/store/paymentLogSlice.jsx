@@ -31,7 +31,7 @@ export const fetchLogBuyPageStudent = createAsyncThunk(
       { dateStart, dateEnd }
     );
     console.log('Fetched student logs:', data);
-    return data;
+    return data.data;
   }
 );
 
@@ -44,13 +44,13 @@ export const fetchLogBuyPageAllStudent = createAsyncThunk(
       { dateStart, dateEnd }
     );
     console.log('Fetched all student logs:', data);
-    return data;
+    return data.data;
   }
 );
 
 // Slice for payment logs
 const paymentLogSlice = createSlice({
-  name: 'logs',
+  name: 'paymentLogs',
   initialState: {
     studentPayLogs: [],
     allStudentPayLogs: [],
@@ -91,7 +91,7 @@ const paymentLogSlice = createSlice({
 });
 
 // Selector
-export const selectPaymentStudentLog = (state) => state.logs;
+export const selectPaymentStudentLog = (state) => state.paymentLogs;
 
 // Reducer export
 export default paymentLogSlice.reducer;

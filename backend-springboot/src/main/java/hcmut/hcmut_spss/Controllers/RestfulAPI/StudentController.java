@@ -41,6 +41,11 @@ public class StudentController {
         return studentService.FNC_getStudentInforById(studentId);
     }
 
+    @GetMapping("/getStudentInforByUsername/{username}")
+    public ResponseEntity<ResponseObject> getStudentInforByUsername(@PathVariable String username) {
+        return studentService.FNC_getStudentInforByUsername(username);
+    }
+
     @GetMapping("/getAllStudentInfor")
     public ResponseEntity<ResponseObject> getAllStudentInfor() {
         return studentService.FNC_getAllStudentInfor();
