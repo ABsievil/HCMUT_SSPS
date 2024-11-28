@@ -74,15 +74,24 @@ public class AuthController {
             String role = user.getRole().toString();
             String token = jwtUtilities.generateToken(user.getUsername(), role);
 
-              // Thiết lập cookie chứa JWT token
-              Cookie cookie = new Cookie("jwt", token);
-            //   cookie.setHttpOnly(true); // Đảm bảo js ko truy cập được jwt, -> tăng tính bảo mật, giảm XSS
-            //   cookie.setSecure(true); // Đảm bảo bạn đang sử dụng HTTPS
-              cookie.setPath("/");
-              cookie.setMaxAge(3600); // Thời gian tồn tại của cookie là 1 giờ
-  
-              response.addCookie(cookie);
-            // note: dòng code dưới trả về token để debug postman, làm xong nhớ trả về token = null
+            // Thiết lập cookie với các flags bảo mật
+            Cookie cookie = new Cookie("jwt", token);
+            cookie.setHttpOnly(true);     // Ngăn JavaScript truy cập, Đảm bảo js ko truy cập được jwt, -> tăng tính bảo mật, giảm XSS
+            cookie.setSecure(true);        // Chỉ truyền qua HTTPS
+            cookie.setPath("/");           // Áp dụng cho toàn bộ ứng dụng
+            cookie.setMaxAge(3600);        // Thời gian tồn tại 1 giờ
+            
+            response.addCookie(cookie);
+
+            // Thêm SameSite=None thông qua header
+            response.setHeader("Set-Cookie", 
+                "jwt=" + token + 
+                "; Path=/; " + 
+                "HttpOnly; " + 
+                "Secure; " + 
+                "SameSite=None"
+            );
+
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new ResponseObject("OK", "Query create jwt token successfully", token));
         } catch (DataAccessException e) { 
