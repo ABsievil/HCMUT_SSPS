@@ -67,7 +67,7 @@ const PaymentLogTable = () => {
   // const { role, userId } = useUser();
   const role = localStorage.getItem('userRole');
   const userId = localStorage.getItem('studentId');
-  console.log("calling useUser() with role =" + role + " and userId=" + userId);
+  // console.log("calling useUser() with role =" + role + " and userId=" + userId);
 
   const dispatch = useDispatch();
   const { studentPayLogs, allStudentPayLogs, loading, error } = useSelector(selectPaymentStudentLog);
