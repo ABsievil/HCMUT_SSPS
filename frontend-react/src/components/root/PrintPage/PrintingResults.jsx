@@ -1,35 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
 import { removePrintJob, requestPrintJob, selectPrintJobs } from "../../../store/printJobSlice";
 import { useDispatch, useSelector } from "react-redux";
-
+import { selectPersonalInfor, updatePagesRemain } from "../../../store/personalInforSlice";
 
 function PrintingResults({ setPrintingData }) {
   const dispatch = useDispatch();
   const printJobs = useSelector(selectPrintJobs);
-
+  const { personalInfor } = useSelector(selectPersonalInfor);
+  const [pagesRemain, setPagesReman] = useState(0);
   const [showNotEnoughPaperModal, setShowNotEnoughPaperModal] = useState(false);
 
-  const MAX_AVAILABLE_PAGES = 250;
-
-
-  const calculateTotalPage = (pagePerFile, pageSize, copies, pagePerSide) => {
-    let multiplier = 1;
-    if (pageSize === 'A3') {
-      multiplier *= 2
-    }
-    else if (pageSize === 'A5') {
-      multiplier /= 2;
-    }
-
-    if (pagePerSide === 2) {
-      multiplier /= 2;
-    }
-    return pagePerFile * copies * multiplier;
-  }
-
+  useEffect(()=>{
+    setPagesReman(personalInfor?.data?.page_remain);
+  }, [personalInfor])
+  
   const handleDelete = (id) => {
     dispatch(removePrintJob(id));
     setCheckedJobs((prev) => {
@@ -38,11 +24,17 @@ function PrintingResults({ setPrintingData }) {
       return newChecked;
     });
   }
-
-  const handleSendPrintRequest = (id) => {
-    dispatch(requestPrintJob(id));
+  // const 
+  const handleSendPrintRequest = (id, actualPages) => {
+    if (actualPages > pagesRemain)
+      setShowNotEnoughPaperModal(true);
+    else
+    {
+      dispatch(requestPrintJob(id));
+      dispatch(updatePagesRemain(-actualPages));
+    }
   }
-  
+
   return (
     <>
       <section className="mt-6 max-md:mt-10 mb-12 mr-9">
@@ -71,11 +63,11 @@ function PrintingResults({ setPrintingData }) {
                   <td className="px-5 py-3 text-center">{job.numberPageOfFile}</td>
                   <td className="px-5 py-3 text-center">{job.pageSize}</td>
                   <td className="px-5 py-3 text-center">{job.numberCopy}</td>
-                  <td className="px-5 py-3 text-center">{calculateTotalPage(job.numberPageOfFile, job.pageSize, job.numberCopy, job.numberSize)}</td>
+                  <td className="px-5 py-3 text-center">{job.actualPages}</td>
                   <td className="px-5 py-3 text-center">
                     <button
                       className="px-2 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg w-20"
-                      onClick={() => handleSendPrintRequest(job.id)}
+                      onClick={() => handleSendPrintRequest(job.id, job.actualPages)}
                     >
                       In ngay
                     </button>
