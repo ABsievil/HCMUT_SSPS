@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addFileType, removeFileType, selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { File, Plus } from "lucide-react";
 import { toast } from 'react-toastify';
-import { addSemester } from '../../../store/SemesterContext';
-import { fetchAllSemesterIds, fetchUltilityOfSemester, selectSemesters } from '../../../store/semestersSlice';
+import { fetchAllSemesterIds, fetchUltilityOfSemester, selectSemesters, addSemester } from '../../../store/semestersSlice';
 
 const SectionTitle = React.memo(({ children }) => (
     <h3 className="mt-4 mb-3 text-xl font-medium tracking-wide uppercase text-neutral-800">
