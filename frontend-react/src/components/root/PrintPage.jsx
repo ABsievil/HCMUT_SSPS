@@ -36,7 +36,7 @@ function PrintingSystem() {
         <main className="flex gap-5 w-full max-md:flex-col max-md:max-w-full">
           <div className="flex flex-col max-md:w-full w-full px-6">
             {/* Hiển thị Loading hoặc Error nếu cần */}
-            {isLoading && <div>Loading...</div>}
+            {isLoading && <div className="text-center">Loading...</div>}
             {error && <div>Error: {error}</div>}
 
             {/* Hiển thị các component nếu không có lỗi hoặc không đang tải */}

@@ -202,7 +202,7 @@ const PrintLogTable = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedStudentId(filters.studentId);
-    }, 500); // Debounce for 500ms
+    }, 1000); // Debounce for 500ms
     return () => clearTimeout(timer); // Cleanup on change
   }, [filters.studentId]);
 
