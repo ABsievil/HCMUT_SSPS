@@ -18,7 +18,7 @@ import ChangePassword from "./components/root/ChangePassword";
 import PrintLog from "./components/root/PrintLog";
 import { useDispatch } from "react-redux";
 import { fetchPrintersabc } from "./store/PrintersabcSlice";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import PaymentLog from "./components/root/PaymentLog";
 import NotFoundPage from "../src/components/root/404NotFoundPage";
 
@@ -43,10 +43,8 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
-  // If role is specified and doesn't match, redirect to unauthorized page
-  if (requiredRole && userRole !== requiredRole) {
-    if( (userRole == "ADMIN") && (requiredRole == "USER") ) {return children;}
+  else if (requiredRole && userRole !== requiredRole) {
+    if ((userRole == "ADMIN") && (requiredRole == "USER")) { return children; }
 
     return <Navigate to="/notfound" replace />;
   }
