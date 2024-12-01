@@ -197,20 +197,20 @@ const ManageFile = () => {
         value: semester.semester,
         label: `Học kì ${semester.semester}`
     }));
-    const [selectedSemester, setSelectedSemester] = useState(ids?.[0]|| '');
+    const [selectedSemester, setSelectedSemester] = useState(ids?.[0] || '');
 
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(fetchUltilityOfSemester(selectedSemester));
         dispatch(fetchFileType(selectedSemester));
     }, [selectedSemester]);
-    
+
     const { availableTypes } = useSelector(selectAvailableFileTypes);
-    const [periodicSupply, setPeriodicSupply] = useState(200);
-    const [supplyDate, setSupplyDate] = useState('2018-10-12');
+    const [supplyDate, setSupplyDate] = useState('');
+    const [periodicSupply, setPeriodicSupply] = useState(0);
     const [customFileType, setCustomFileType] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
 
-    useEffect(()=> {
+    useEffect(() => {
         setPeriodicSupply(Ultility[0]?.default_pages);
         setSupplyDate(Ultility[0]?.date_reset_default_page);
     }, [Ultility]);
@@ -234,14 +234,14 @@ const ManageFile = () => {
             return;
         }
 
-        dispatch(addFileType({semester : selectedSemester, accepted_file_type: formattedFileType}));
+        dispatch(addFileType({ semester: selectedSemester, accepted_file_type: formattedFileType }));
         setCustomFileType('');
         toast.success('Loại tệp đã được thêm thành công!');
     }, [customFileType, dispatch, availableTypes]);
 
     const handleRemoveFileType = useCallback(
         (typeToRemove) => {
-            dispatch(removeFileType({semester: selectedSemester, typeToRemove}));
+            dispatch(removeFileType({ semester: selectedSemester, typeToRemove }));
         },
         [dispatch, selectedSemester]
     );
@@ -277,7 +277,7 @@ const ManageFile = () => {
                         <input
                             id="supplyDate"
                             type="date"
-                            value={supplyDate}
+                            value={supplyDate || '2018-10-12'}
                             className="border border-gray-300 rounded-md p-2 flex-1 text-center"
                             disabled
                         />
@@ -289,7 +289,7 @@ const ManageFile = () => {
                             id="periodicSupply"
                             type="number"
                             min={0}
-                            value={periodicSupply}
+                            value={periodicSupply || 200}
                             className="border border-gray-300 rounded-md p-2 flex-1 text-center"
                             disabled
                         />

@@ -182,7 +182,7 @@ const PrintLogTable = () => {
     ];
 
     // Add MSSV column only if in ADMIN role and studentId filter is applied
-    if (role === 'ADMIN' && filters.studentId?.trim()) {
+    if (role === 'ADMIN' && filters.studentId==='') {
       headers.unshift({ key: 'student_id', label: 'MSSV' });
     }
 
