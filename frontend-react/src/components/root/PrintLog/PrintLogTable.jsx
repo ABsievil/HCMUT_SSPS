@@ -182,7 +182,7 @@ const PrintLogTable = () => {
     ];
 
     // Add MSSV column only if in ADMIN role and studentId filter is applied
-    if (role === 'ADMIN' && filters.studentId?.trim()) {
+    if (role === 'ADMIN' && filters.studentId==='') {
       headers.unshift({ key: 'student_id', label: 'MSSV' });
     }
 
@@ -202,7 +202,7 @@ const PrintLogTable = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedStudentId(filters.studentId);
-    }, 500); // Debounce for 500ms
+    }, 1000); // Debounce for 500ms
     return () => clearTimeout(timer); // Cleanup on change
   }, [filters.studentId]);
 

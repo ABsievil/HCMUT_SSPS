@@ -526,4 +526,28 @@ public class StudentService {
                 .body(new ResponseObject("ERROR", "Error getting FNC_getLogBuyPageAllStudent(): " + e.getMessage(), null));
         }
     }
+
+    public ResponseEntity<ResponseObject> PROC_updateStudentPageRemain(String studentId, Integer pageRemain){
+        try {
+            jdbcTemplate.execute(
+            "CALL update_student_page_remain(?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, studentId);
+                ps.setInt(2, pageRemain);
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_updateStudentPageRemain() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_updateStudentPageRemain(): " + e.getMessage(), null));
+        }
+    }
 }

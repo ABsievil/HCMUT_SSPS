@@ -245,6 +245,28 @@ $$;
 
 -- CALL update_student_infor('quachgiaphu', 'Quach', 'Gia', 'Phu', 'quachgiaphu@gmail.com', '2004-9-17', '0976251672', '3', 'Electric')
 
+--6.1-- cập nhật số trang còn lại của student
+CREATE OR REPLACE PROCEDURE update_student_page_remain(
+	student_id_input VARCHAR, 
+	page_remain_input INT
+)
+LANGUAGE plpgsql AS $$
+BEGIN
+	IF NOT EXISTS (
+		SELECT * FROM Users WHERE student_id = student_id_input
+	)
+	THEN 
+	 	RAISE EXCEPTION 'Student_id % does not exist', student_id_input;
+	END IF;
+    UPDATE Users
+	SET 
+        page_remain = COALESCE(page_remain_input, page_remain)
+	WHERE student_id = student_id_input;
+END;
+$$;
+
+-- CALL update_student_page_remain('2213995', 20)
+
 --7.1--Đổi mật khẩu của sinh viên, lưu mật khẩu mới
 CREATE OR REPLACE PROCEDURE change_password(username_input VARCHAR, new_password_input VARCHAR)
 LANGUAGE plpgsql AS $$
@@ -846,3 +868,4 @@ END;
 $$;
 
 CALL update_admin_infor('Quan', 'Han', 'Minh', 'quanhanminh@hcmut.edu.vn', '1990-08-08', '0903037102')
+

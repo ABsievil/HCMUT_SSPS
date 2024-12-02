@@ -15,14 +15,63 @@ export const fetchPersonalInfor = createAsyncThunk(
   }
 );
 
+const updatePersonalInfor = async (studentDTO) => {
+  console.log(JSON.stringify(studentDTO));
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/updateStudent`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(studentDTO)
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`updatePersonalInfor failed: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error updating PersonalInfor: ', error);
+  }
+}
+
+const updatePageRemain = async (studentId, newValue) =>{
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/updateStudentPageRemain?studentId=${studentId}&pageRemain=${newValue}`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`updatePersonalInfor failed: ${response.status}`);
+    }
+  } catch (error) {
+    console.error('Error updating PersonalInfor: ', error);
+  }
+}
+
 const personalInforSlice = createSlice({
   name: 'personalInfor',
   initialState: {
-    isLoading: true,    
+    isLoading: true,
     personalInfor: [],
     error: null, // Use null for error state for clarity
   },
-  reducers: {}, // No reducers needed in this simplified case
+  reducers: {
+    updatePagesRemain: (state, action) => {
+      const newValue = state.personalInfor.data.page_remain + action.payload;
+      if (newValue < 0) {
+        console.error("số trang còn lại không thể âm, check kỹ trước khi gửi");
+        return;
+      }
+      state.personalInfor.data.page_remain = newValue;
+      updatePageRemain(state.personalInfor.data.student_id, newValue);
+    }
+  },
   extraReducers: (builder) => { // Use extraReducers for handling async actions
     builder
       .addCase(fetchPersonalInfor.pending, (state) => {
@@ -38,4 +87,6 @@ const personalInforSlice = createSlice({
   },
 });
 
+export const { updatePagesRemain } = personalInforSlice.actions;
+export const selectPersonalInfor = (state) => state.personalInfor;
 export default personalInforSlice.reducer;

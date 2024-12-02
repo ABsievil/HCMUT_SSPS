@@ -41,6 +41,9 @@ const printJobSlice = createSlice({
             state.Jobs = state.Jobs.map((job, index) => ({ ...job, id: index }));
         },
         requestPrintJob: (state, action) => {
+            const printJobId = action.payload;
+            const printDTO = state.Jobs.filter(job => job.id === printJobId)[0];
+
             const currentDate = new Date();
             const year = currentDate.getFullYear();
             const month = (currentDate.getMonth() + 1).toString().padStart(2, '0');
@@ -54,8 +57,6 @@ const printJobSlice = createSlice({
             const nextMinutes = next15minutes.getMinutes().toString().padStart(2, '0');
             const nextSeconds = next15minutes.getSeconds().toString().padStart(2, '0');
 
-            const printJobId = action.payload;
-            const printDTO = state.Jobs.filter(job => job.id === printJobId)[0];
             console.log(printDTO);
             const printDTOWithoutId = {
                 username: printDTO.username,
@@ -73,8 +74,8 @@ const printJobSlice = createSlice({
             console.log(JSON.stringify(printDTOWithoutId));
             sendPrintRequest(printDTOWithoutId);
 
-            // state.Jobs = state.Jobs.filter(job => job.id !== printJobId);
-            // state.Jobs = state.Jobs.map((job, index) => ({ ...job, id: index }));
+            state.Jobs = state.Jobs.filter(job => job.id !== printJobId);
+            state.Jobs = state.Jobs.map((job, index) => ({ ...job, id: index }));
         }
     },
 });

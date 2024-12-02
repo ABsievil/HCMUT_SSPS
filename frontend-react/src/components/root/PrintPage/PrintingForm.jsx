@@ -4,11 +4,10 @@ import PrinterSelectionForm from './PrinterSelectionForm'
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAvailableFileTypes, fetchFileType } from '../../../store/fileTypeSlice';
 import { toast } from "react-toastify";
-import { useSemester } from "../../../store/SemesterContext";
 import { addPrintJob } from "../../../store/printJobSlice";
 import { useUser } from "../../../store/userContext";
-
-const TOTAL_PAGES = 100;
+import { selectPersonalInfor } from "../../../store/personalInforSlice";
+import { fetchUltilityByCurrentDate, selectSemesters } from "../../../store/semestersSlice";
 
 const PAPER_SIZES = {
   A4: 'A4',
@@ -80,17 +79,22 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter, error }) => 
 
 // Enhanced FileUpload component
 const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
-  const {semester} = useSemester();
   const dispatch = useDispatch();
-  useEffect(() => {
-      dispatch(fetchFileType(semester));
-  }, [semester]);
+  const {CurrentUltility} = useSelector(selectSemesters);
   const {availableTypes} = useSelector(selectAvailableFileTypes);
-  // console.log(availableTypes.data);
-  
-  const acceptedFileTypes = availableTypes?.data?.map(type => type.accepted_file_type).join(', ');
+  const [acceptedFileTypes, setAcceptedTypes] = useState("");
   const dragRef = React.useRef(null);
   const [isDragging, setIsDragging] = React.useState(false);
+
+  useEffect(() => {
+    dispatch(fetchUltilityByCurrentDate());
+  }, [dispatch]);
+  useEffect(()=>{
+    dispatch(fetchFileType(CurrentUltility[0]?.semester));
+  }, [CurrentUltility])
+  useEffect(()=>{
+    setAcceptedTypes(availableTypes?.data?.map(type => type.accepted_file_type).join(', '));
+  },[availableTypes])
 
   const handleDrag = useCallback((e, isDragging) => {
     e.preventDefault();
@@ -189,9 +193,16 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
 // Main PrintingForm component
 function PrintingForm() {
   const dispatch = useDispatch();
+  const [totalPagesRemain, setTotalPagesRemain] = useState(0);
   const {username} = useUser();
+  const { isLoading, personalInfor, error } = useSelector(selectPersonalInfor);
+
+  useEffect(()=>{
+    setTotalPagesRemain(personalInfor?.data?.page_remain);
+  }, [personalInfor]);
+
   const [formState, setFormState] = useState({
-    remainingPages: TOTAL_PAGES,
+    remainingPages: totalPagesRemain,
     missingPages: 0,
     printCopies: 1,
     pagesToPrint: 1,
@@ -200,14 +211,20 @@ function PrintingForm() {
     pagesPerSide: 1,
     selectedFile: null,
     paperSize: PAPER_SIZES.A4,
-  });
-
+    actualPages: 0
+  }, [totalPagesRemain]);
   const [errors, setErrors] = useState({});
 
   // Validation
   const validateForm = useCallback((state) => {
+    const actualPages = Math.ceil(
+      (state.pagesToPrint * state.printCopies) / state.pagesPerSide * (state.paperSize === PAPER_SIZES.A4?1:2)
+    );
+    state.missingPages = Math.max(actualPages - totalPagesRemain, 0);
+    state.remainingPages = Math.max(totalPagesRemain - actualPages, 0);
+    state.actualPages = actualPages;
+    
     const newErrors = {};
-
     // Kiểm tra lỗi cho từng trường
     if (!state.selectedPrinter) {
       newErrors.printer = 'Vui lòng chọn máy in';
@@ -215,15 +232,13 @@ function PrintingForm() {
     if (!state.selectedFile) {
       newErrors.file = 'Vui lòng chọn tệp cần in';
     }
-
     if (state.missingPages > 0) {
       newErrors.pages = `Thiếu ${state.missingPages} trang để in`;
     }
-
     // Cập nhật lỗi vào state và trả về kết quả
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  }, []);
+  }, [totalPagesRemain]);
 
   // Handlers
   const handleInputChange = useCallback((field, value) => {
@@ -252,6 +267,7 @@ function PrintingForm() {
         pageSize: formState.paperSize,
         numberSize: formState.pagesPerSide,
         numberCopy: formState.printCopies,
+        actualPages: formState.actualPages,
         id: -1
       }
       dispatch(addPrintJob(printDTO));
@@ -263,22 +279,18 @@ function PrintingForm() {
     }
   }, [formState, validateForm]);
 
-  const getFileExtension = (mimeType) => {
-    return mimeType.replace('application/', '.');
-  };
-
   // Calculate pages effect
-  useEffect(() => {
-    const actualPages = Math.ceil(
-      (formState.pagesToPrint * formState.printCopies) / formState.pagesPerSide
-    );
+  // useEffect(() => {
+  //   const actualPages = Math.ceil(
+  //     (formState.pagesToPrint * formState.printCopies) / formState.pagesPerSide * (formState.paperSize === "A4")?1:2
+  //   );
 
-    setFormState(prev => ({
-      ...prev,
-      missingPages: Math.max(actualPages - TOTAL_PAGES, 0),
-      remainingPages: Math.max(TOTAL_PAGES - actualPages, 0)
-    }));
-  }, [formState.pagesToPrint, formState.printCopies, formState.pagesPerSide]);
+  //   setFormState(prev => ({
+  //     ...prev,
+  //     missingPages: Math.max(actualPages - totalPagesRemain, 0),
+  //     remainingPages: Math.max(totalPagesRemain - actualPages, 0)
+  //   }));
+  // }, [formState.pagesToPrint, formState.printCopies, formState.pagesPerSide, formState.paperSize]);
 
   return (
     <div className="max-w-[830px] mx-auto px-4 py-8">
@@ -309,7 +321,7 @@ function PrintingForm() {
 
           <div className="space-y-6">
             <div className="px-4 py-2 bg-blue-100 text-lg w-[65%] text-blue-800 rounded-lg font-medium">
-              Số trang có sẵn: {TOTAL_PAGES}
+              Số trang có sẵn: {totalPagesRemain}
             </div>
             <StyledInput
               label="Số trang cần in"
