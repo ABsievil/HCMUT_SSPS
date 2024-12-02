@@ -129,4 +129,12 @@ public class StudentController {
         dateEnd = (dateEnd != null && !dateEnd.isEmpty()) ? dateEnd: null;
         return studentService.FNC_getLogBuyPageAllStudent(dateStart, dateEnd);
     }
+
+    @PutMapping("/updateStudentPageRemain")
+    public ResponseEntity<ResponseObject> updateStudentPageRemain(
+        @RequestParam("studentId") String studentId,
+        @RequestParam("pageRemain") Integer pageRemain
+    ){
+        return studentService.PROC_updateStudentPageRemain(studentId, pageRemain);
+    }
 }

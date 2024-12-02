@@ -16,7 +16,7 @@ Thêm/Xóa và Sửa thông tin của Student
 4. add_student(username_input VARCHAR, password_input VARCHAR, last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, role_input VARCHAR, student_id_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR, page_remain_input INT)
 5. delete_student(username_input VARCHAR)
 6. update_student_infor(username_input VARCHAR,  last_name_input VARCHAR, middle_name_input VARCHAR, first_name_input VARCHAR, email_input VARCHAR, date_of_birth_input DATE, phone_number_input VARCHAR, school_year_input VARCHAR, faculty_input VARCHAR)
-
+6.1 update_student_page_remain(student_id_input VARCHAR, page_remain_input INT)
 7.1 change_password(username_input VARCHAR, new_password_input VARCHAR)
 --> đổi mật khẩu của Student
 
