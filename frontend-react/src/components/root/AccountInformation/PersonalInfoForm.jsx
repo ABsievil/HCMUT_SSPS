@@ -187,11 +187,11 @@ const PersonalInfoForm = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="text-center">Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-center">Error: {error}</div>;
   }
 
   return (

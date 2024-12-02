@@ -229,7 +229,7 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
 const AddPrinter = () => {
     const dispatch = useDispatch();
     const { isLoading, printerList, error } = useSelector(selectPrinterList);
-    const [selectedPrinterId, setSelectedPrinterId] = useState(null);
+    const [selectedPrinterId, setSelectedPrinterId] = useState('');
     const [showAddForm, setShowAddForm] = useState(false);
 
     useEffect(() => {
@@ -271,7 +271,7 @@ const AddPrinter = () => {
                         <Select
                             label="Chọn máy in"
                             options={printerOptions}
-                            value={selectedPrinterId}
+                            value={selectedPrinterId || ''}
                             onChange={handlePrinterChange}
                             icon={Printer}
                         />

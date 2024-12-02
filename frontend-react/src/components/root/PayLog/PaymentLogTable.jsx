@@ -21,7 +21,6 @@ const FilterInput = ({ label, value, onChange, type = "text" }) => (
 );
 
 const titleMapping = {
-  studentId: "MSSV",
   transaction_id: "Mã giao dịch",
   purchase_page: "Số trang",
   purchase_date: "Ngày mua",
@@ -31,10 +30,21 @@ const titleMapping = {
 const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
   if (!isOpen || !data) return null;
 
-  // Loại bỏ "username" và các trường không có giá trị khỏi dữ liệu chi tiết
+  // Filter out redundant or empty fields
   const filteredData = Object.entries(data).filter(
-    ([key, value]) => key !== "username" && value // Chỉ giữ lại các trường có giá trị
-  );
+    ([key, value]) => 
+      value && 
+      key !== "username" && 
+      // Loại bỏ cả studentId và MSSV để tránh trùng lặp
+      key !== "studentId" &&
+      key !== "MSSV"
+  ).map(([key, value]) => {
+    // Nếu là student_id, chỉ trả về một lần
+    if (key === 'student_id') {
+      return ['MSSV', value];
+    }
+    return [key, value];
+  });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
@@ -64,10 +74,8 @@ const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
 };
 
 const PaymentLogTable = () => {
-  // const { role, userId } = useUser();
   const role = localStorage.getItem('userRole');
   const userId = localStorage.getItem('studentId');
-  // console.log("calling useUser() with role =" + role + " and userId=" + userId);
 
   const dispatch = useDispatch();
   const { studentPayLogs, allStudentPayLogs, loading, error } = useSelector(selectPaymentStudentLog);
@@ -107,8 +115,8 @@ const PaymentLogTable = () => {
       }
     };
 
-    const debounceTimeout = setTimeout(fetchData, 500); 
-    return () => clearTimeout(debounceTimeout); 
+    const debounceTimeout = setTimeout(fetchData, 500);
+    return () => clearTimeout(debounceTimeout);
   }, [debouncedStudentId, filters.dateStart, filters.dateEnd, role, userId, dispatch]);
 
   useEffect(() => {
@@ -125,7 +133,7 @@ const PaymentLogTable = () => {
     }
     return Array.isArray(studentPayLogs) ? studentPayLogs : [];
   }, [allStudentPayLogs, studentPayLogs, role, debouncedStudentId]);
-  
+
   const tableHeaders = useMemo(() => {
     const headers = [
       { key: "transaction_id", label: "Mã giao dịch" },
@@ -133,22 +141,25 @@ const PaymentLogTable = () => {
       { key: "purchase_date", label: "Ngày mua" },
       { key: "purchase_time", label: "Thời gian" },
     ];
-
-    if (role === "ADMIN" && debouncedStudentId!=="") {
-      headers.unshift({ key: "studentId", label: "MSSV" });
+  
+    // Thêm MSSV vào tiêu đề bảng cho ADMIN nếu không lọc theo studentId
+    if (role === "ADMIN" && debouncedStudentId === "") {
+      headers.unshift({ key: "MSSV", label: "MSSV" });
     }
-
+  
     return headers;
   }, [role, debouncedStudentId]);
 
   const currentRows = useMemo(() => {
     const enrichedRows = data.map((row) => ({
-      studentId: filters.studentId || row.studentId,
+      MSSV: row.student_id || row.studentId, // Thêm dòng này để lấy student_id
       ...row,
     }));
     const indexOfLastRow = currentPage * rowsPerPage;
     const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-    return enrichedRows.slice(indexOfFirstRow, indexOfLastRow);
+    return enrichedRows.slice(indexOfFirstRow, indexOfLastRow).map((row) => ({
+      ...row
+    }));
   }, [data, filters.studentId, currentPage, rowsPerPage]);
 
   const handleFilterChange = (key) => (e) => {
