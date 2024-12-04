@@ -14,6 +14,18 @@ const sendOTPByEmail = async (gmail) => {
     }
 }
 
+export const deleteOTPByEmail = async (gmail) => {
+    try {
+        const url = `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Email/deleteOTPByEmail/${gmail}`;
+        const response = await fetch(url, { method: 'PUT' });
+        if (!response.ok) {
+            throw new Error(`Failed to delete otp by email. HTTP status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error('Error deleting otp by email', error);
+    }
+}
+
 const addStudent = async (studentDTO) => {
     try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/addStudent`, {
@@ -75,9 +87,11 @@ const authSlice = createSlice({
     reducers: {
         sendEmail: (state, action) => {
             const email = action.payload;
+            state.email = email;
             localStorage.setItem('email', email);
-            state.email = action.payload;
-            // sendOTPByEmail(action.payload);
+            deleteOTPByEmail(email).then(
+                sendOTPByEmail(email)
+            )
         }
     }
 });

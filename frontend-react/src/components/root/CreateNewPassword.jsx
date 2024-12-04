@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputField from './fragments/InputField/InputField';
-import { createNewPassword } from '../../store/authSlice';
+import { createNewPassword, deleteOTPByEmail } from '../../store/authSlice';
 import { toast } from "react-toastify";
 
 function CreateNewPassword() {
@@ -70,11 +70,12 @@ function CreateNewPassword() {
       username: email.split('@')[0],
       newPassword: password
     }
-    createNewPassword(createNewPasswordDTO);
     setErrorMessage(''); // Reset error message
-    toast.success("Đổi mật khẩu thành công!");
+    createNewPassword(createNewPasswordDTO);
+    deleteOTPByEmail(email);
     localStorage.removeItem('email');
     navigate('/login');
+    toast.success("Đổi mật khẩu thành công!");
   };
 
   return (

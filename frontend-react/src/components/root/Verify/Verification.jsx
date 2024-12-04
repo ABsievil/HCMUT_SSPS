@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
-import { getOTPbyEmail } from '../../../store/authSlice';
+import { getOTPbyEmail, sendEmail } from '../../../store/authSlice';
+import { useDispatch } from "react-redux";
+import { toast } from 'react-toastify';
 
 function Verification({ isNewPass = false }) { // Nhận email từ prop
   const navigate = useNavigate(); // Khởi tạo navigate
   const [otp, setOtp] = useState(Array(6).fill('')); // Mảng lưu mã OTP
   const email = localStorage.getItem('email');
-
+  const dispatch = useDispatch();
   const handleChange = (index, value) => {
     if (value.match(/^[0-9]$/) || value === '') { // Kiểm tra chỉ cho phép số từ 0-9
       const newOtp = [...otp];
@@ -28,12 +30,33 @@ function Verification({ isNewPass = false }) { // Nhận email từ prop
       if (otpCode === otpResponse.data.otp_code) {
         navigate("/newpassword");
       }
-      else{
+      else {
         return;
       }
     }
     fetchOTP();
 
+  };
+
+
+  // cool down for sending otp
+  const [cooldown, setCooldown] = useState(0);
+  useEffect(() => {
+    let timer;
+    if (cooldown > 0) {
+      timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [cooldown]);
+
+  const resendOTP = () => {
+    if (cooldown === 0) {
+      dispatch(sendEmail(email));
+      setCooldown(10);
+    }
+    else {
+      toast.info("Hãy đợi thêm " + cooldown + " giây");
+    }
   };
 
   return (
@@ -94,7 +117,7 @@ function Verification({ isNewPass = false }) { // Nhận email từ prop
 
           {/* Resend Code */}
           <div className="text-center">
-            <p className="text-gray-600">Bạn chưa nhận được mã? <a href="#" className="text-blue-700 hover:underline font-bold">Gửi lại mã</a></p>
+            <p className="text-gray-600">Bạn chưa nhận được mã? <a onClick={resendOTP} href="#" className="text-blue-700 hover:underline font-bold">Gửi lại mã</a></p>
           </div>
         </div>
       </div>
