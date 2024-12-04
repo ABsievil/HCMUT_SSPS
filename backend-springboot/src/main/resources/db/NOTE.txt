@@ -53,7 +53,7 @@ Print = add_printed_turn(username_input VARCHAR, printer_id_input INT, printing_
 
 ----------------------------------------------------------------BUY PAGE(save in STUDENT class)--------------------------------------------------------
 
-19. purchase_page(username VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
+19. purchase_page(student_id_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME)
 
 20. get_log_buy_page_a_student(student_id_input VARCHAR, date_start_input DATE, date_end_input DATE )
 
