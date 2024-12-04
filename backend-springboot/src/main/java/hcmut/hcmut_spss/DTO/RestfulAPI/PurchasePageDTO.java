@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PurchasePageDTO {
-    private String username;
+    private String studentId;
     private Integer purchasePages;
     private Date purchaseDate;
     private Time purchaseTime;
