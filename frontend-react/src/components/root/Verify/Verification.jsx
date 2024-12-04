@@ -75,7 +75,7 @@ function Verification({ isNewPass = false }) { // Nhận email từ prop
         <div className="w-full md:w-1/2 p-8 h-full">
           {/* Top Navigation */}
           <div className="flex justify-between items-center mb-8">
-            <a href={isNewPass ? "/verifymail" : "/regis"} className="text-blue-700 hover:underline text-lg font-bold">Trở về</a>
+            <a href={isNewPass ? "/verifymail" : "/register"} className="text-blue-700 hover:underline text-lg font-bold">Trở về</a>
             <div className="flex flex-col items-end">
               <span className="text-black text-lg font-bold">{isNewPass ? "Tạo mật khẩu mới" : "Đăng ký"}</span>
               <span className="text-black text-lg">{isNewPass ? "2/3" : "2/2"}</span>
