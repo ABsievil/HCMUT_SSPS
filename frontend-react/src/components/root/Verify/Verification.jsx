@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
+import { getOTPbyEmail } from '../../../store/authSlice';
 
-function Verification({ isNewPass = false, email = '' }) { // Nhận email từ prop
+function Verification({ isNewPass = false }) { // Nhận email từ prop
   const navigate = useNavigate(); // Khởi tạo navigate
   const [otp, setOtp] = useState(Array(6).fill('')); // Mảng lưu mã OTP
+  const email = localStorage.getItem('email');
 
   const handleChange = (index, value) => {
     if (value.match(/^[0-9]$/) || value === '') { // Kiểm tra chỉ cho phép số từ 0-9
@@ -21,14 +23,17 @@ function Verification({ isNewPass = false, email = '' }) { // Nhận email từ 
   const handleSubmit = (event) => {
     event.preventDefault();
     const otpCode = otp.join('');
-    console.log('OTP Submitted:', otpCode); // Xử lý OTP tại đây
-
-    // Điều hướng đến trang mới sau khi xác nhận
-    if (isNewPass) {
-      navigate("/newpassword");
-    } else {
-      navigate("/login");
+    const fetchOTP = async () => {
+      const otpResponse = await getOTPbyEmail(email);
+      if (otpCode === otpResponse.data.otp_code) {
+        navigate("/newpassword");
+      }
+      else{
+        return;
+      }
     }
+    fetchOTP();
+
   };
 
   return (
@@ -36,7 +41,7 @@ function Verification({ isNewPass = false, email = '' }) { // Nhận email từ 
       <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-4xl md:h-[500px] mx-4 my-4">
         {/* Left Image Section */}
         <div className="w-full md:w-1/2 h-64 md:h-full">
-          <img 
+          <img
             src={isNewPass ? "src/images/background-newpass.jpg" : "src/images/background-verify.jpg"} // Thay thế với đường dẫn hình ảnh thực tế
             alt="Background"
             className="object-cover w-full h-full"
