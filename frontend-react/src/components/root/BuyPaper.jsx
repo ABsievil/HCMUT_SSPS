@@ -6,14 +6,47 @@ import InputField from "./fragments/InputField/InputField";
 import { toast } from "react-toastify";
 import { XCircle, CheckCircle, Loader, CreditCard, QrCode } from 'lucide-react';
 import { updatePagesRemain } from "../../store/personalInforSlice";
+import { useUser } from "../../store/userContext"; // get user id
 
+// const updatePaymentLog = async (username, purchasePages) => 
+//   {
+//   try {
+//     const PurchasePageDTO = {
+//       username: username, // You'll need to pass the current user's username
+//       purchasePages: purchasePages,
+//       purchaseDate: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+//       purchaseTime: new Date().toTimeString().split(' ')[0] // Current time in HH:MM:SS format
+//     };
+//     console.log(PurchasePageDTO)
+//     const response = await fetch(
+//       `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/purchasePage`,
+//       {
+//         method: 'PUT',
+//         credentials: 'include',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         body: JSON.stringify(PurchasePageDTO)
+//       }
+//     );
+
+//     if (!response.ok) {
+//       throw new Error(`Payment log update failed: ${response.status}`);
+//     }
+
+//     toast.success("Đã ghi nhận giao dịch thành công");
+//     return true;
+//   } catch (error) {
+//     console.error('Error updating payment log:', error);
+//     toast.error("Không thể ghi nhận giao dịch");
+//     return false;
+//   }
+// };
 
 const PAPER_TYPES = {
   A4: { label: "A4", price: 1500 },
   A3: { label: "A3", price: 3000 },
 };
-
-const AVAILABLE_PAGES = 10000;
 
 const BANKS = [
   "NCB",
@@ -32,7 +65,7 @@ const PAYMENT_METHODS = {
   BANK: 'bank'
 };
 
-const QRPaymentModal = ({ orderId, amount, onClose, quantity, paperType }) => {
+const QRPaymentModal = ({ username, orderId, amount, onClose, quantity }) => {
   const dispatch = useDispatch();
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [loading, setLoading] = useState(false);
@@ -40,7 +73,7 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity, paperType }) => {
 
   const fetchTransactions = useCallback(async (orderId) => {
     if (paymentStatus === "success" || paymentStatus === "error") return;
-  
+
     setLoading(true);
     try {
       const response = await fetch(
@@ -51,32 +84,36 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity, paperType }) => {
           headers: { "Content-Type": "application/json" },
         }
       );
-  
+
       const data = await response.json();
-  
+
       if (!data?.data?.transactions) {
         throw new Error("Invalid response structure");
       }
-  
+
       const matchingTransactions = data.data.transactions.filter(transaction =>
         transaction.transaction_content.includes(orderId)
       );
-  
+
       // Clean amount and ensure it is formatted to 2 decimal places
       const cleanAmount = parseFloat(amount.replace(/[^0-9-]+/g, '')).toFixed(2);
-    
+
       if (matchingTransactions.length > 0) {
         const isPaymentSuccessful = matchingTransactions.some(
           transaction => parseFloat(transaction.amount_in) === parseFloat(cleanAmount)
         );
-  
+
         if (isPaymentSuccessful) {
-          // Dispatch action to update pages remain
-          dispatch(updatePagesRemain(quantity));
-          
-          setPaymentStatus("success");
-          toast.success("Thanh toán thành công!");
-          onClose();
+          // Call updatePaymentLog when the payment is successful
+          // const isPaymentLogged = await updatePaymentLog(username, quantity);
+          // if (isPaymentLogged) {
+            // If the log is updated successfully, proceed to change the payment status
+            dispatch(updatePagesRemain(quantity));
+
+            setPaymentStatus("success");
+            toast.success("Thanh toán thành công!");
+            onClose();
+          //}
         } else {
           setPaymentStatus("error");
           toast.error("Thanh toán không thành công. Vui lòng thử lại.");
@@ -101,7 +138,7 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity, paperType }) => {
   useEffect(() => {
     // Only start periodic checks if user has confirmed payment
     if (isConfirming) {
-      const intervalId = setInterval(() => fetchTransactions(orderId), 50000);
+      const intervalId = setInterval(() => fetchTransactions(orderId), 20000);
       return () => clearInterval(intervalId);
     }
   }, [orderId, fetchTransactions, isConfirming]);
@@ -145,11 +182,9 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity, paperType }) => {
       <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">QR Payment</h3>
-          {paymentStatus !== "processing" && (
-            <div onClick={onClose} className="text-gray-600 hover:text-gray-800 cursor-pointer">
-              <XCircle className="w-6 h-6" />
-            </div>
-          )}
+          <div onClick={onClose} className="text-gray-600 hover:text-gray-800 cursor-pointer">
+            <XCircle className="w-6 h-6" />
+          </div>
         </div>
 
         <div className="space-x-6 flex flex-row">
@@ -282,6 +317,7 @@ const PaymentMethodSelector = ({ selectedMethod, onMethodChange, selectedBank, o
 
 const BuyPage = () => {
   const dispatch = useDispatch();
+  const { username, role, userId, isLoggedIn } = useUser();
   const [quantity, setQuantity] = useState(1);
   const [paperType, setPaperType] = useState("A4");
   const [showQRModal, setShowQRModal] = useState(false);
@@ -298,11 +334,11 @@ const BuyPage = () => {
     if (personalInfor?.data?.page_remain !== undefined) {
       setRemainingPages(personalInfor.data.page_remain);
     }
-  }, [personalInfor]); 
+  }, [personalInfor]);
 
   const generateOrderId = () => {
     const randomDigits = Math.floor(10000 + Math.random() * 90000); // 5 random digits
-    return `HCMUT-SSPS-${randomDigits}`;
+    return `HCMUT-SSPS-185`;
   };
 
   const totalAmount = useMemo(() => {
@@ -430,10 +466,10 @@ const BuyPage = () => {
 
       {showQRModal && (
         <QRPaymentModal
+          username={username}
           orderId={orderId}
           amount={totalAmount}
           quantity={quantity}
-          paperType={paperType}
           onClose={() => setShowQRModal(false)}
         />
       )}
