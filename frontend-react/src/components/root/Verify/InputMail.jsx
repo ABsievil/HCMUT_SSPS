@@ -1,17 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
 import InputField from '../fragments/InputField/InputField'; // Import the InputField component
+import { useDispatch } from "react-redux";
+import { sendEmail } from '../../../store/authSlice';
 
 function VerificationMail() {
-  const navigate = useNavigate(); // Khởi tạo navigate
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
-    
-    console.log('Verification email form submitted with email:', email);
-    
-    // Điều hướng đến trang xác nhận mật khẩu mới
+    dispatch(sendEmail(email));
     navigate("/verify-newpass");
   };
 
