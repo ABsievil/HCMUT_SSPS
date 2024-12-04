@@ -473,6 +473,7 @@ public class StudentService {
                 ps.setInt(2, purchasePageDTO.getPurchasePages());
                 ps.setDate(3, purchasePageDTO.getPurchaseDate());
                 ps.setTime(4, purchasePageDTO.getPurchaseTime());
+                ps.setString(5, purchasePageDTO.getPayingMethod());
 
                 ps.execute();
                 return null;
