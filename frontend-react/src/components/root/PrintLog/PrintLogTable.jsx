@@ -6,6 +6,7 @@ import { selectStudentLog } from '../../../store/printLogSlice';
 import { useUser } from '../../../store/userContext';
 import { fetchLogAllStudents, fetchLogStudent } from '../../../store/printLogSlice';
 
+
 const FilterInput = ({ label, value, onChange, type = "text" }) => (
   <div className="flex flex-col">
     <label className="block text-sm font-medium text-gray-700">{label}</label>
@@ -252,6 +253,7 @@ const PrintLogTable = () => {
   // Pagination controls
   const totalPages = Math.ceil(logs.length / rowsPerPage);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  
 
   return (
     <div className="overflow-x-auto drop-shadow-lg mx-10 min-h-screen ">

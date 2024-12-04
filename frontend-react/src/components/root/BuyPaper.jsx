@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { createVnPayPayment } from "../../store/paymentSlice"; // Adjust path if needed
 import Layout from "./fragments/layout/Layout";
 import InputField from "./fragments/InputField/InputField";
 import { toast } from "react-toastify";
 import { XCircle, CheckCircle, Loader, CreditCard, QrCode } from 'lucide-react';
+import { updatePagesRemain } from "../../store/personalInforSlice";
+
 
 const PAPER_TYPES = {
   A4: { label: "A4", price: 1500 },
@@ -30,49 +32,127 @@ const PAYMENT_METHODS = {
   BANK: 'bank'
 };
 
-const QRPaymentModal = ({ orderId, amount, onClose }) => {
-  const [paymentStatus, setPaymentStatus] = useState('pending');
+const QRPaymentModal = ({ orderId, amount, onClose, quantity, paperType }) => {
+  const dispatch = useDispatch();
+  const [paymentStatus, setPaymentStatus] = useState("pending");
+  const [loading, setLoading] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  const fetchTransactions = useCallback(async (orderId) => {
+    if (paymentStatus === "success" || paymentStatus === "error") return;
+  
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/transactions/list?Limit=10`,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+  
+      const data = await response.json();
+  
+      if (!data?.data?.transactions) {
+        throw new Error("Invalid response structure");
+      }
+  
+      const matchingTransactions = data.data.transactions.filter(transaction =>
+        transaction.transaction_content.includes(orderId)
+      );
+  
+      // Clean amount and ensure it is formatted to 2 decimal places
+      const cleanAmount = parseFloat(amount.replace(/[^0-9-]+/g, '')).toFixed(2);
+    
+      if (matchingTransactions.length > 0) {
+        const isPaymentSuccessful = matchingTransactions.some(
+          transaction => parseFloat(transaction.amount_in) === parseFloat(cleanAmount)
+        );
+  
+        if (isPaymentSuccessful) {
+          // Dispatch action to update pages remain
+          dispatch(updatePagesRemain(quantity));
+          
+          setPaymentStatus("success");
+          toast.success("Thanh toán thành công!");
+          onClose();
+        } else {
+          setPaymentStatus("error");
+          toast.error("Thanh toán không thành công. Vui lòng thử lại.");
+        }
+      }
+    } catch (error) {
+      console.error("Payment verification error:", error);
+      setPaymentStatus("error");
+      toast.error("Đã xảy ra lỗi khi xác minh thanh toán.");
+    } finally {
+      setLoading(false);
+      setIsConfirming(false);
+    }
+  }, [orderId, amount, onClose, paymentStatus, dispatch, quantity]);
+
+  const handleConfirmPayment = useCallback(() => {
+    setPaymentStatus("processing");
+    setIsConfirming(true);
+    fetchTransactions(orderId);
+  }, [fetchTransactions, orderId]);
 
   useEffect(() => {
-    let processingTimeout;
-    let successTimeout;
+    // Only start periodic checks if user has confirmed payment
+    if (isConfirming) {
+      const intervalId = setInterval(() => fetchTransactions(orderId), 50000);
+      return () => clearInterval(intervalId);
+    }
+  }, [orderId, fetchTransactions, isConfirming]);
 
-    const checkPayment = () => {
-      processingTimeout = setTimeout(() => {
-        setPaymentStatus('processing');
+  const renderPaymentStatusContent = useMemo(() => {
+    if (paymentStatus === "pending" && !isConfirming) {
+      return <p className="text-gray-600">Đang chờ thanh toán... Vui lòng quét mã QR</p>;
+    }
 
-        successTimeout = setTimeout(() => {
-          setPaymentStatus('success');
-          toast.success("Thanh toán thành công!");
-        }, 3000);
-      }, 1000);
-    };
+    if (paymentStatus === "processing" || isConfirming) {
+      return (
+        <div className="flex flex-col items-center space-y-2">
+          <Loader className="w-6 h-6 animate-spin text-blue-500" />
+          <p className="text-gray-600">Đang xác nhận thanh toán...</p>
+        </div>
+      );
+    }
 
-    checkPayment();
+    if (paymentStatus === "success") {
+      return (
+        <div className="flex flex-col items-center space-y-4">
+          <div className="flex items-center space-x-2 text-green-600">
+            <CheckCircle className="w-6 h-6" />
+            <span>Thanh toán thành công!</span>
+          </div>
+          <button
+            onClick={onClose}
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+          >
+            Cảm ơn bạn đã mua hàng
+          </button>
+        </div>
+      );
+    }
 
-    // Cleanup timeouts
-    return () => {
-      if (processingTimeout) clearTimeout(processingTimeout);
-      if (successTimeout) clearTimeout(successTimeout);
-    };
-  }, []);
+    return null;
+  }, [paymentStatus, isConfirming, onClose]);
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+      <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">QR Payment</h3>
-          {paymentStatus !== 'processing' && (
-            <div
-              onClick={onClose}
-              className="text-gray-600 hover:text-gray-800 cursor-pointer"
-            >
+          {paymentStatus !== "processing" && (
+            <div onClick={onClose} className="text-gray-600 hover:text-gray-800 cursor-pointer">
               <XCircle className="w-6 h-6" />
             </div>
           )}
         </div>
 
-        <div className="space-y-6">
+        <div className="space-x-6 flex flex-row">
           <div className="flex justify-center">
             <img
               src="src/images/qr-checkout.jpg"
@@ -97,30 +177,15 @@ const QRPaymentModal = ({ orderId, amount, onClose }) => {
             </div>
 
             <div className="flex flex-col items-center space-y-4">
-              {paymentStatus === 'pending' && (
-                <p className="text-gray-600">Đang chờ thanh toán...</p>
-              )}
+              {renderPaymentStatusContent}
 
-              {paymentStatus === 'processing' && (
-                <div className="flex flex-col items-center space-y-2">
-                  <Loader className="w-6 h-6 animate-spin text-blue-500" />
-                  <p className="text-gray-600">Đang xác nhận thanh toán...</p>
-                </div>
-              )}
-
-              {paymentStatus === 'success' && (
-                <div className="flex flex-col items-center space-y-4">
-                  <div className="flex items-center space-x-2 text-green-600">
-                    <CheckCircle className="w-6 h-6" />
-                    <span>Thanh toán thành công!</span>
-                  </div>
-                  <button
-                    onClick={onClose}
-                    className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    Cảm ơn bạn đã mua hàng
-                  </button>
-                </div>
+              {paymentStatus !== "success" && !isConfirming && (
+                <button
+                  onClick={handleConfirmPayment}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Xác nhận thanh toán
+                </button>
               )}
             </div>
           </div>
@@ -129,6 +194,8 @@ const QRPaymentModal = ({ orderId, amount, onClose }) => {
     </div>
   );
 };
+
+
 
 const Button = ({ children, onClick, className = "", disabled = false }) => (
   <button
@@ -215,19 +282,29 @@ const PaymentMethodSelector = ({ selectedMethod, onMethodChange, selectedBank, o
 
 const BuyPage = () => {
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState(100);
+  const [quantity, setQuantity] = useState(1);
   const [paperType, setPaperType] = useState("A4");
   const [showQRModal, setShowQRModal] = useState(false);
   const [orderId, setOrderId] = useState("");
   const [selectedPayment, setSelectedPayment] = useState(PAYMENT_METHODS.QR);
   const [selectedBank, setSelectedBank] = useState("");
 
-  // Generate random order ID
+  // Fetch the remaining pages from the personalInfor state
+  const { personalInfor } = useSelector((state) => state.personalInfor);
+
+  const [remainingPages, setRemainingPages] = useState(10000); // Default to 10000
+
+  useEffect(() => {
+    if (personalInfor?.data?.page_remain !== undefined) {
+      setRemainingPages(personalInfor.data.page_remain);
+    }
+  }, [personalInfor]); 
+
   const generateOrderId = () => {
-    return `ORD-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+    const randomDigits = Math.floor(10000 + Math.random() * 90000); // 5 random digits
+    return `HCMUT-SSPS-${randomDigits}`;
   };
 
-  // Calculate total amount using useMemo
   const totalAmount = useMemo(() => {
     const amount = quantity * PAPER_TYPES[paperType].price;
     return new Intl.NumberFormat("vi-VN", {
@@ -238,12 +315,12 @@ const BuyPage = () => {
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
-    setQuantity(value >= 0 && value <= AVAILABLE_PAGES ? value : 0);
+    setQuantity(value >= 0 && value <= remainingPages ? value : 0); // Ensure quantity doesn't exceed remaining pages
   };
 
   const handleSubmit = async () => {
-    if (quantity <= 0 || quantity > AVAILABLE_PAGES) {
-      toast.error("Vui lòng kiểm tra lại số lượng trang!");
+    if (quantity <= 0 || quantity > remainingPages) {
+      toast.error(`Vui lòng kiểm tra lại số lượng trang! (Tối đa ${remainingPages} trang)`);
       return;
     }
 
@@ -277,7 +354,7 @@ const BuyPage = () => {
         <div className="flex flex-col md:flex-row justify-center gap-10">
           <div className="space-y-8 w-full md:w-1/3 bg-white rounded-lg shadow-md p-6">
             <p className="text-xl text-black">
-              Tổng số trang có sẵn: {AVAILABLE_PAGES}
+              Tổng số trang có sẵn: {remainingPages}
             </p>
             <Select
               id="paperType"
@@ -289,15 +366,15 @@ const BuyPage = () => {
 
             <div className="flex flex-col">
               <label htmlFor="quantity" className="text-xl text-black">
-                Số lượng (tối đa {AVAILABLE_PAGES} trang):
+                Số lượng (tối đa {remainingPages} trang):
               </label>
               <InputField
                 type="number"
                 id="quantity"
-                value={quantity}
+                value={String(quantity)}
                 onChange={handleQuantityChange}
                 min={0}
-                max={AVAILABLE_PAGES}
+                max={remainingPages}
                 className="flex-1"
               />
             </div>
@@ -326,6 +403,7 @@ const BuyPage = () => {
               Giấy định lượng 80gsm với độ dày cao, bề mặt giấy đẹp rất phù hợp để in photo
             </p>
           </div>
+
           <div className="lg:w-1/3 w-full lg:pl-8 mt-6 lg:mt-0">
             <div className="bg-white p-6 rounded-lg shadow-md">
               <h2 className="text-2xl font-semibold mb-6">Chọn phương thức thanh toán</h2>
@@ -339,7 +417,7 @@ const BuyPage = () => {
               <div className="mt-6 pt-6 border-t">
                 <Button
                   onClick={handleSubmit}
-                  disabled={quantity <= 0 || quantity > AVAILABLE_PAGES || (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank)}
+                  disabled={quantity <= 0 || quantity > remainingPages || (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank)}
                   className="w-full"
                 >
                   Xác nhận thanh toán
@@ -354,6 +432,8 @@ const BuyPage = () => {
         <QRPaymentModal
           orderId={orderId}
           amount={totalAmount}
+          quantity={quantity}
+          paperType={paperType}
           onClose={() => setShowQRModal(false)}
         />
       )}
