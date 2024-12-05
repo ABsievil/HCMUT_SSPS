@@ -63,28 +63,33 @@ Hệ thống cho phép sinh viên tải lên tài liệu, cấu hình các thu�
 
 ### 2.2. Yêu cầu phi chức năng
 
-#### 2.2.1. Hiệu năng
-
-- Hệ thống xử lý tối thiểu 100 yêu cầu in đồng thời mà không bị gián đoạn.
-
-#### 2.2.2. Khả năng mở rộng
+#### 2.2.1. Khả năng mở rộng
 
 - Hệ thống hỗ trợ tích hợp thêm máy in hoặc khu vực in mới trong tương lai.
 
-#### 2.2.3. Bảo mật
-
+#### 2.2.2. Bảo mật
+- Tất cả dữ liệu nhạy cảm (như thông tin cá nhân, tài khoản người dùng) phải được mã hóa khi truyền tải và lưu trữ.
+- đảm bảo rằng người dùng chỉ có quyền truy cập vào những dữ liệu hoặc chức năng mà họ được phép.
+- Hệ thống được kiểm tra bảo mật định kỳ bởi đội ngũ kỹ thuật.
 - Bảo vệ dữ liệu sinh viên và tài liệu được tải lên.
-- Mã hóa thông tin người dùng khi truyền tải qua mạng.
+- Xác thực JWT
 
-#### 2.2.4. Khả năng truy cập
+#### 2.2.4. Khả năng sử dụng
+- Hệ thống có giao diện người dùng dễ sử dụng, thân thiện với tất cả người dùng.
+- Tính tương thích cao, hệ thống phải hoạt động trên các nền tảng khác, cũng như trên các trình duyệt web phổ biến.
 
-- Hệ thống có thể truy cập thông qua ứng dụng web hoặc ứng dụng di động.
+#### 2.2.3. Khả năng truy cập
+
+- Hệ thống có thể truy cập thông qua ứng dụng web.
 - Giao diện thân thiện với người dùng.
 
-#### 2.2.5. Khả năng duy trì
+#### 2.2.4. Khả năng duy trì
 
-- Hệ thống dễ dàng cập nhật và bảo trì bởi đội ngũ kỹ thuật.
+- Hệ thống dễ dàng cập nhật và duy trì bởi đội ngũ kỹ thuật.
+- Hệ thống được thiết kế để dễ dàng bảo trì và cập nhật mà không làm gián đoạn dịch vụ người dùng.
 
+#### 2.2.5. Khả năng ghi chép và báo cáo
+- Hệ thống cần ghi lại tất cả các sự kiện quan trọng, bao gồm hoạt động in ấn và lịch sử thanh toán, để phục vụ cho việc phân tích và khắc phục sự cố.
 ---
 
 ## 3. Các ràng buộc hệ thống
