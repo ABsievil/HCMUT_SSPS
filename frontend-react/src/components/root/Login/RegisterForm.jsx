@@ -1,16 +1,46 @@
 import React, { useState } from 'react';
 import { IoMdArrowRoundBack } from "react-icons/io";
 import { useNavigate } from 'react-router-dom';
-import InputField from '../fragments/InputField/InputField'; // Import InputField component
+import InputField from '../fragments/InputField/InputField';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { saveRegisterInfor, sendEmail } from '../../../store/authSlice';
 
 function RegisForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [email, setEmail] = useState(''); // State to track the email input
+  const [studentId, setStudentId] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (password !== confirmPassword){
+      toast.error("Xác nhận mật khẩu không trùng khớp");
+      return;
+    }
+    const uname = email.split('@')[0];
+    const studentDTO = {
+      username: uname,
+      password: password,
+      last_name: '',
+      middle_name: '',
+      first_name: uname,
+      email: email,
+      date_of_birth: "2000-01-01",
+      phone_number: null,
+      role: 'USER',
+      student_id: studentId,
+      school_year: 1,
+      faculty: '',
+      page_remain: 10
+    };
+    dispatch(saveRegisterInfor(studentDTO));
+    dispatch(sendEmail(email));
     navigate("/verify");
   };
 
@@ -51,6 +81,8 @@ function RegisForm() {
         type="Text"
         placeholder="Mã sinh viên"
         required
+        value={studentId}
+        onChange={(e) => setStudentId(e.target.value)}
         icon="https://cdn.builder.io/api/v1/image/assets/TEMP/0acec3f0c21c585b693aab238ddf1a6054cfa9ee7646ac7df643f1272897cf03?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
       />
 
@@ -72,6 +104,8 @@ function RegisForm() {
         type="password"
         placeholder="Mật khẩu"
         required
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         icon="https://cdn.builder.io/api/v1/image/assets/TEMP/26d9c5399a667e190537f967c908e5b53fea2716a5b94db02389112e242bc353?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
         showPasswordToggle
         showPassword={showPassword}
@@ -84,6 +118,8 @@ function RegisForm() {
         type="password"
         placeholder="Nhập lại mật khẩu"
         required
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
         icon="https://cdn.builder.io/api/v1/image/assets/TEMP/26d9c5399a667e190537f967c908e5b53fea2716a5b94db02389112e242bc353?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
         showPasswordToggle
         showPassword={showConfirmPassword}

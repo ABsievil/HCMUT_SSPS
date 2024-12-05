@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
-import { getOTPbyEmail, sendEmail } from '../../../store/authSlice';
-import { useDispatch } from "react-redux";
+import { addStudent, getOTPbyEmail, selectAuth, sendEmail } from '../../../store/authSlice';
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from 'react-toastify';
 
-function Verification({ isNewPass = false }) { // Nhận email từ prop
+function Verification({ isNewPass = false }) {
   const navigate = useNavigate(); // Khởi tạo navigate
-  const [otp, setOtp] = useState(Array(6).fill('')); // Mảng lưu mã OTP
-  const email = localStorage.getItem('email');
   const dispatch = useDispatch();
+
+  const [otp, setOtp] = useState(Array(6).fill('')); // Mảng lưu mã OTP
+  const {studentDTO} = useSelector(selectAuth);
+  const email = localStorage.getItem('email');
+
   const handleChange = (index, value) => {
     if (value.match(/^[0-9]$/) || value === '') { // Kiểm tra chỉ cho phép số từ 0-9
       const newOtp = [...otp];
@@ -28,14 +31,20 @@ function Verification({ isNewPass = false }) { // Nhận email từ prop
     const fetchOTP = async () => {
       const otpResponse = await getOTPbyEmail(email);
       if (otpCode === otpResponse.data.otp_code) {
-        navigate("/newpassword");
+        if (isNewPass){
+          navigate("/newpassword");
+        }
+        else {
+          addStudent(studentDTO);
+          navigate("/login");
+        }
       }
       else {
+        toast.error("OTP không trùng khớp")
         return;
       }
     }
     fetchOTP();
-
   };
 
 
