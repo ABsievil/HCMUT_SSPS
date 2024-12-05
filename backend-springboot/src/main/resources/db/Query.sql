@@ -646,7 +646,8 @@ BEGIN
 		'purchase_page',p.purchase_pages, 
 		'purchase_date',p.purchase_date, 
 		'purchase_time',p.purchase_time
-	))
+	  )ORDER BY p.transaction_id
+	)
 	INTO result 
 	FROM purchase_transaction p
 	WHERE
