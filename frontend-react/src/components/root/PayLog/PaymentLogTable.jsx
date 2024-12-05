@@ -35,11 +35,9 @@ const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
     ([key, value]) => 
       value && 
       key !== "username" && 
-      // Loại bỏ cả studentId và MSSV để tránh trùng lặp
       key !== "studentId" &&
       key !== "MSSV"
   ).map(([key, value]) => {
-    // Nếu là student_id, chỉ trả về một lần
     if (key === 'student_id') {
       return ['MSSV', value];
     }
