@@ -59,6 +59,7 @@ CREATE TABLE Purchase_transaction (
 	purchase_pages INT NOT NULL,
 	purchase_date DATE,
 	purchase_time TIME,
+	paying_method VARCHAR(50) NOT NULL,
 	PRIMARY KEY (username, transaction_id),
 	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT check_purchase_pages CHECK (purchase_pages > 0)
@@ -81,8 +82,6 @@ CREATE TABLE File_types_accepted (
 );
 
 CREATE TABLE OTP (
-	username VARCHAR(50),
+	email VARCHAR(50) PRIMARY KEY,
 	otp_code VARCHAR(6)
-	PRIMARY KEY (username, otp_code)
-	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE
 )

@@ -80,8 +80,8 @@ const PrinterInfo = React.memo(({ selectedPrinter, onSelectPrinter, error }) => 
 // Enhanced FileUpload component
 const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   const dispatch = useDispatch();
-  const {CurrentUltility} = useSelector(selectSemesters);
-  const {availableTypes} = useSelector(selectAvailableFileTypes);
+  const { CurrentUltility } = useSelector(selectSemesters);
+  const { availableTypes } = useSelector(selectAvailableFileTypes);
   const [acceptedFileTypes, setAcceptedTypes] = useState("");
   const dragRef = React.useRef(null);
   const [isDragging, setIsDragging] = React.useState(false);
@@ -89,12 +89,12 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   useEffect(() => {
     dispatch(fetchUltilityByCurrentDate());
   }, [dispatch]);
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(fetchFileType(CurrentUltility[0]?.semester));
   }, [CurrentUltility])
-  useEffect(()=>{
+  useEffect(() => {
     setAcceptedTypes(availableTypes?.data?.map(type => type.accepted_file_type).join(', '));
-  },[availableTypes])
+  }, [availableTypes])
 
   const handleDrag = useCallback((e, isDragging) => {
     e.preventDefault();
@@ -109,10 +109,18 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
 
     const files = e.dataTransfer.files;
     if (files.length) {
-      onFileUpload({ target: { files: [files[0]] } });
-      toast.success("Tệp đã được thêm thành công!");
+      const file = files[0];
+      const fileType = file.name.split('.').pop().toLowerCase();
+      const isAccepted = acceptedFileTypes.includes(fileType);
+
+      if (isAccepted) {
+        onFileUpload({ target: { files: [file] } });
+        toast.success("Tệp đã được thêm thành công!");
+      } else {
+        toast.error(`Loại tệp không được hỗ trợ: .${fileType}`);
+      }
     }
-  }, [onFileUpload]);
+  }, [onFileUpload, acceptedFileTypes]);
 
   const handleRemoveFile = useCallback((e) => {
     e.stopPropagation();
@@ -136,7 +144,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
         className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${isDragging
           ? 'border-blue-500 bg-blue-50'
           : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
-          } ${error ? 'border-red-500 bg-red-50' : ''}`}  
+          } ${error ? 'border-red-500 bg-red-50' : ''}`}
       >
         <div className="flex flex-col items-center gap-3">
           <input
@@ -145,12 +153,22 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
             className="hidden"
             onChange={(e) => {
               if (e.target.files.length) {
-                onFileUpload(e);
-                toast.success("Tệp đã được thêm thành công!");
+                const file = e.target.files[0];
+                const fileType = file.name.split('.').pop().toLowerCase();
+                const isAccepted = acceptedFileTypes.includes(fileType);
+
+                if (isAccepted) {
+                  onFileUpload(e);
+                  toast.success("Tệp đã được thêm thành công!");
+                } else {
+                  toast.error(`Loại tệp không được hỗ trợ: .${fileType}`);
+                  e.target.value = ""; // Gỡ tệp khỏi input
+                }
               }
             }}
             accept={acceptedFileTypes}
           />
+
 
           {selectedFile ? (
             <div className="flex items-center gap-3 w-full">
@@ -194,10 +212,10 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
 function PrintingForm() {
   const dispatch = useDispatch();
   const [totalPagesRemain, setTotalPagesRemain] = useState(0);
-  const {username} = useUser();
+  const { username } = useUser();
   const { isLoading, personalInfor, error } = useSelector(selectPersonalInfor);
 
-  useEffect(()=>{
+  useEffect(() => {
     setTotalPagesRemain(personalInfor?.data?.page_remain);
   }, [personalInfor]);
 
@@ -218,12 +236,12 @@ function PrintingForm() {
   // Validation
   const validateForm = useCallback((state) => {
     const actualPages = Math.ceil(
-      (state.pagesToPrint * state.printCopies) / state.pagesPerSide * (state.paperSize === PAPER_SIZES.A4?1:2)
+      (state.pagesToPrint * state.printCopies) / state.pagesPerSide * (state.paperSize === PAPER_SIZES.A4 ? 1 : 2)
     );
     state.missingPages = Math.max(actualPages - totalPagesRemain, 0);
     state.remainingPages = Math.max(totalPagesRemain - actualPages, 0);
     state.actualPages = actualPages;
-    
+
     const newErrors = {};
     // Kiểm tra lỗi cho từng trường
     if (!state.selectedPrinter) {

@@ -749,10 +749,8 @@ $$;
 --28--Lưu otp
 CREATE OR REPLACE PROCEDURE add_otp_by_email(email_input VARCHAR, otp_code_input VARCHAR)
 LANGUAGE plpgsql AS $$ 
-DECLARE name VARCHAR; 
 BEGIN
-	SELECT username INTO name FROM users WHERE email = email_input;
-    INSERT INTO OTP (username, otp_code)
+    INSERT INTO OTP (email, otp_code)
     VALUES (name, otp_code_input);
 END;
 $$;
@@ -763,7 +761,7 @@ CREATE OR REPLACE PROCEDURE delete_otp_by_email(email_input VARCHAR)
 LANGUAGE plpgsql AS $$
 BEGIN
     DELETE FROM OTP
-	WHERE username = (select username from users where email = email_input);
+	WHERE email = email_input;
 END;
 $$;
 -- CALL delete_otp_by_email('vumakhmtk22@hcmut.edu.vn')
@@ -779,7 +777,7 @@ BEGIN
        		)
     INTO result
     FROM OTP
-	WHERE username = (select username from users where email = email_input);
+	WHERE email = email_input;
     
     RETURN result;
 END;

@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.CreateNewPasswordDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.PrintDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.PurchasePageDTO;
@@ -276,6 +277,31 @@ public class StudentService {
         }
     }
 
+    public ResponseEntity<ResponseObject> PROC_createNewPassword(CreateNewPasswordDTO createNewPasswordDTO){
+        try {
+            // call to change_password method in db because of common function
+            jdbcTemplate.execute(
+            "CALL change_password(?, ?)",
+            (PreparedStatementCallback<Void>) ps -> {
+                ps.setString(1, createNewPasswordDTO.getUsername());
+                ps.setString(2, passwordEncoder.encode(createNewPasswordDTO.getNewPassword()));
+                ps.execute();
+                return null;
+            }
+        );
+            return ResponseEntity.status(HttpStatus.OK)
+                .body(new ResponseObject("OK", "Query to update PROC_createNewPassword() successfully", null));
+        } catch (DataAccessException e) {
+            // Xử lý lỗi liên quan đến truy cập dữ liệu
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Database error: " + e.getMessage(), null));
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ResponseObject("ERROR", "Error updating PROC_createNewPassword(): " + e.getMessage(), null));
+        }
+    }
+
     public ResponseEntity<ResponseObject> FNC_getNumberPageDefaultRemain (String studentId){
         try {
             String numberPageDefaultRemain = jdbcTemplate.queryForObject(
@@ -441,12 +467,13 @@ public class StudentService {
     public ResponseEntity<ResponseObject> PROC_purchasePage(PurchasePageDTO purchasePageDTO){
         try {
             jdbcTemplate.execute(
-            "CALL purchase_page(?, ?, ?, ?)",
+            "CALL purchase_page(?, ?, ?, ?, ?)",
             (PreparedStatementCallback<Void>) ps -> {
-                ps.setString(1, purchasePageDTO.getUsername());
+                ps.setString(1, purchasePageDTO.getStudentId());
                 ps.setInt(2, purchasePageDTO.getPurchasePages());
                 ps.setDate(3, purchasePageDTO.getPurchaseDate());
                 ps.setTime(4, purchasePageDTO.getPurchaseTime());
+                ps.setString(5, purchasePageDTO.getPayingMethod());
 
                 ps.execute();
                 return null;

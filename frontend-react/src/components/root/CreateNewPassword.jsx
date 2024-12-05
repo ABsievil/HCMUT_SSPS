@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import InputField from './fragments/InputField/InputField';
+import { createNewPassword, deleteOTPByEmail } from '../../store/authSlice';
+import { toast } from "react-toastify";
 
 function CreateNewPassword() {
   const navigate = useNavigate();
-
   const TickIcon = ({ color = "gray", size = "1.3em" }) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -64,10 +65,17 @@ function CreateNewPassword() {
       setErrorMessage('Mật khẩu và xác nhận mật khẩu không khớp.');
       return;
     }
-
+    const email = localStorage.getItem('email');
+    const createNewPasswordDTO = {
+      username: email.split('@')[0],
+      newPassword: password
+    }
     setErrorMessage(''); // Reset error message
-    console.log('Password Reset Submitted');
+    createNewPassword(createNewPasswordDTO);
+    deleteOTPByEmail(email);
+    localStorage.removeItem('email');
     navigate('/login');
+    toast.success("Đổi mật khẩu thành công!");
   };
 
   return (
