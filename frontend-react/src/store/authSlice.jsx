@@ -3,8 +3,8 @@ import { toast } from 'react-toastify';
 
 const sendOTPByEmail = async (gmail) => {
     try {
-        const url = `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Email/sendEmail?toGmail=${gmail}`;
-        const response = await fetch(url, { method: 'GET' });
+        await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Email/deleteOTPByEmail/${gmail}`, { method: 'PUT' });
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Email/sendEmail?toGmail=${gmail}`, { method: 'GET' });
         if (!response.ok) {
             throw new Error(`Failed to send email. HTTP status: ${response.status}`);
         }
@@ -28,6 +28,7 @@ export const deleteOTPByEmail = async (gmail) => {
 }
 
 export const addStudent = async (studentDTO) => {
+    console.log(studentDTO);
     try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/addStudent`, {
             method: 'PUT',
@@ -93,9 +94,7 @@ const authSlice = createSlice({
             const email = action.payload;
             state.email = email;
             localStorage.setItem('email', email);
-            deleteOTPByEmail(email).then(
-                sendOTPByEmail(email)  
-            )
+            sendOTPByEmail(email);  
         },
         saveRegisterInfor: (state, action) => {
             state.studentDTO = action.payload;
