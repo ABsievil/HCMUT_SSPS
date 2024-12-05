@@ -35,11 +35,9 @@ const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
     ([key, value]) => 
       value && 
       key !== "username" && 
-      // Loại bỏ cả studentId và MSSV để tránh trùng lặp
       key !== "studentId" &&
       key !== "MSSV"
   ).map(([key, value]) => {
-    // Nếu là student_id, chỉ trả về một lần
     if (key === 'student_id') {
       return ['MSSV', value];
     }
@@ -126,12 +124,14 @@ const PaymentLogTable = () => {
   }, [role, userId]);
 
   const data = useMemo(() => {
-    if (role === "ADMIN") {
-      return debouncedStudentId
+    const fetchedData = role === "ADMIN"
+      ? debouncedStudentId
         ? Array.isArray(studentPayLogs) ? studentPayLogs : []
-        : Array.isArray(allStudentPayLogs) ? allStudentPayLogs : [];
-    }
-    return Array.isArray(studentPayLogs) ? studentPayLogs : [];
+        : Array.isArray(allStudentPayLogs) ? allStudentPayLogs : []
+      : Array.isArray(studentPayLogs) ? studentPayLogs : [];
+    
+    // Tạo bản sao dữ liệu trước khi đảo ngược
+    return [...fetchedData].reverse();
   }, [allStudentPayLogs, studentPayLogs, role, debouncedStudentId]);
 
   const tableHeaders = useMemo(() => {

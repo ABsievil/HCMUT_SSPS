@@ -585,37 +585,48 @@ END; $$;
 --20--Lấy thông tin mua giấy của một sinh viên bằng mã số sinh viên
 --bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
 
-CREATE OR REPLACE FUNCTION get_log_buy_page_a_student(student_id_input VARCHAR, date_start_input DATE, date_end_input DATE )
+CREATE OR REPLACE FUNCTION get_log_buy_page_a_student(
+    student_id_input VARCHAR, 
+    date_start_input DATE, 
+    date_end_input DATE
+)
 RETURNS JSON 
 LANGUAGE PLPGSQL 
 AS $$  
-	DECLARE 
-		result json;
-		name VARCHAR; 
+DECLARE 
+    result json;
+    name VARCHAR; 
 BEGIN 
-	SELECT u.username
-	INTO name
-	FROM users u 
-	WHERE u.student_id = student_id_input;  
-	
-	IF name is NULL 
-		THEN RAISE EXCEPTION 'Student_id % does not exists',student_id_input; 
-	END IF; 
-	SELECT json_agg(json_build_object(
-		'student_id', student_id_input, 
-		'username', name,
-		'transaction_id',p.transaction_id, 
-		'purchase_page',p.purchase_pages, 
-		'purchase_date',p.purchase_date, 
-		'purchase_time',p.purchase_time
-	))
-	INTO result 
-	FROM purchase_transaction p
-	WHERE p.username = name AND 
-	(date_start_input IS NULL OR p.purchase_date >= date_start_input) AND 
-	(date_end_input IS NULL OR p.purchase_date <= date_end_input );
-	RETURN result; 
-END;$$;
+    -- Validate if the student exists
+    SELECT u.username
+    INTO name
+    FROM users u 
+    WHERE u.student_id = student_id_input;  
+    
+    IF name IS NULL THEN
+        RAISE EXCEPTION 'Student_id % does not exist', student_id_input; 
+    END IF; 
+    
+    -- Fetch transactions and aggregate them into JSON
+    SELECT json_agg(
+        json_build_object(
+            'student_id', student_id_input, 
+            'username', name,
+            'transaction_id', p.transaction_id, 
+            'purchase_page', p.purchase_pages, 
+            'purchase_date', p.purchase_date, 
+            'purchase_time', p.purchase_time
+        ) ORDER BY p.transaction_id DESC
+    )
+    INTO result 
+    FROM purchase_transaction p
+    WHERE p.username = name AND 
+          (date_start_input IS NULL OR p.purchase_date >= date_start_input) AND 
+          (date_end_input IS NULL OR p.purchase_date <= date_end_input);
+
+    RETURN result; 
+END; 
+$$;
 
 select * from get_log_buy_page_a_student('2213969','2024-08-21',null)
 
@@ -630,14 +641,15 @@ AS $$
 		result json;
 BEGIN 
 	SELECT json_agg(json_build_object(
-		'username', p.username,
+		'student_id', u.student_id,
 		'transaction_id',p.transaction_id, 
 		'purchase_page',p.purchase_pages, 
 		'purchase_date',p.purchase_date, 
 		'purchase_time',p.purchase_time
-	))
+	  )ORDER BY p.transaction_id DESC
+	)
 	INTO result 
-	FROM purchase_transaction p
+	FROM purchase_transaction p JOIN users u ON p.username = u.username
 	WHERE
 	(date_start_input IS NULL OR p.purchase_date >= date_start_input) AND 
 	(date_end_input IS NULL OR p.purchase_date <= date_end_input );

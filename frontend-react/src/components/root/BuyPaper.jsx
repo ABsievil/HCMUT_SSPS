@@ -6,42 +6,41 @@ import InputField from "./fragments/InputField/InputField";
 import { toast } from "react-toastify";
 import { XCircle, CheckCircle, Loader, CreditCard, QrCode } from 'lucide-react';
 import { updatePagesRemain } from "../../store/personalInforSlice";
-import { useUser } from "../../store/userContext"; // get user id
 
-// const updatePaymentLog = async (username, purchasePages) => 
-//   {
-//   try {
-//     const PurchasePageDTO = {
-//       username: username, // You'll need to pass the current user's username
-//       purchasePages: purchasePages,
-//       purchaseDate: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
-//       purchaseTime: new Date().toTimeString().split(' ')[0] // Current time in HH:MM:SS format
-//     };
-//     console.log(PurchasePageDTO)
-//     const response = await fetch(
-//       `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/purchasePage`,
-//       {
-//         method: 'PUT',
-//         credentials: 'include',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(PurchasePageDTO)
-//       }
-//     );
+const updatePaymentLog = async (studentId, purchasePages) => 
+  {
+  try {
+    const PurchasePageDTO = {
+      studentId: studentId,
+      purchasePages: purchasePages,
+      purchaseDate: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+      purchaseTime: new Date().toTimeString().split(' ')[0], // Current time in HH:MM:SS format
+      payingMethod: "QRcode"
+    };
+    console.log(PurchasePageDTO)
+    const response = await fetch(
+      `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/purchasePage`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(PurchasePageDTO)
+      }
+    );
 
-//     if (!response.ok) {
-//       throw new Error(`Payment log update failed: ${response.status}`);
-//     }
+    if (!response.ok) {
+      throw new Error(`Payment log update failed: ${response.status}`);
+    }
 
-//     toast.success("Đã ghi nhận giao dịch thành công");
-//     return true;
-//   } catch (error) {
-//     console.error('Error updating payment log:', error);
-//     toast.error("Không thể ghi nhận giao dịch");
-//     return false;
-//   }
-// };
+    return true;
+  } catch (error) {
+    console.error('Error updating payment log:', error);
+    toast.error("Không thể ghi nhận giao dịch");
+    return false;
+  }
+};
 
 const PAPER_TYPES = {
   A4: { label: "A4", price: 1500 },
@@ -65,7 +64,7 @@ const PAYMENT_METHODS = {
   BANK: 'bank'
 };
 
-const QRPaymentModal = ({ username, orderId, amount, onClose, quantity }) => {
+const QRPaymentModal = ({orderId, amount, onClose, quantity }) => {
   const dispatch = useDispatch();
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [loading, setLoading] = useState(false);
@@ -104,16 +103,15 @@ const QRPaymentModal = ({ username, orderId, amount, onClose, quantity }) => {
         );
 
         if (isPaymentSuccessful) {
-          // Call updatePaymentLog when the payment is successful
-          // const isPaymentLogged = await updatePaymentLog(username, quantity);
-          // if (isPaymentLogged) {
-            // If the log is updated successfully, proceed to change the payment status
+          const studentId=localStorage.getItem('studentId')
+          const isPaymentLogged = await updatePaymentLog(studentId, quantity);
+          if (isPaymentLogged) {
             dispatch(updatePagesRemain(quantity));
 
             setPaymentStatus("success");
             toast.success("Thanh toán thành công!");
             onClose();
-          //}
+          }
         } else {
           setPaymentStatus("error");
           toast.error("Thanh toán không thành công. Vui lòng thử lại.");
@@ -317,7 +315,6 @@ const PaymentMethodSelector = ({ selectedMethod, onMethodChange, selectedBank, o
 
 const BuyPage = () => {
   const dispatch = useDispatch();
-  const { username, role, userId, isLoggedIn } = useUser();
   const [quantity, setQuantity] = useState(1);
   const [paperType, setPaperType] = useState("A4");
   const [showQRModal, setShowQRModal] = useState(false);
@@ -338,7 +335,7 @@ const BuyPage = () => {
 
   const generateOrderId = () => {
     const randomDigits = Math.floor(10000 + Math.random() * 90000); // 5 random digits
-    return `HCMUT-SSPS-185`;
+    return `HCMUT-SSPS-${randomDigits}`;
   };
 
   const totalAmount = useMemo(() => {
@@ -466,7 +463,6 @@ const BuyPage = () => {
 
       {showQRModal && (
         <QRPaymentModal
-          username={username}
           orderId={orderId}
           amount={totalAmount}
           quantity={quantity}
