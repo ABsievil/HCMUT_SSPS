@@ -126,12 +126,14 @@ const PaymentLogTable = () => {
   }, [role, userId]);
 
   const data = useMemo(() => {
-    if (role === "ADMIN") {
-      return debouncedStudentId
+    const fetchedData = role === "ADMIN"
+      ? debouncedStudentId
         ? Array.isArray(studentPayLogs) ? studentPayLogs : []
-        : Array.isArray(allStudentPayLogs) ? allStudentPayLogs : [];
-    }
-    return Array.isArray(studentPayLogs) ? studentPayLogs : [];
+        : Array.isArray(allStudentPayLogs) ? allStudentPayLogs : []
+      : Array.isArray(studentPayLogs) ? studentPayLogs : [];
+    
+    // Tạo bản sao dữ liệu trước khi đảo ngược
+    return [...fetchedData].reverse();
   }, [allStudentPayLogs, studentPayLogs, role, debouncedStudentId]);
 
   const tableHeaders = useMemo(() => {
