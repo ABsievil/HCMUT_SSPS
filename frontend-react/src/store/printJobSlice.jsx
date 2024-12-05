@@ -17,7 +17,7 @@ const sendPrintRequest = async (PrintDTO) => {
         if (!response.ok) {
             throw new Error(`print failed: ${response.status}`);
         }
-        toast.success("Đã gửi file về hệ thống")
+        toast.success("Đã in file thành công");
     } catch (error) {
         console.error('Error sending print job request:', error);
     }
