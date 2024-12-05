@@ -35,7 +35,7 @@ const enablePrinterAsync = async (printerId) => {
     if (!response.ok) {
       throw new Error(`Enable printer failed: ${response.status}`);
     }
-    console.log('Printer enabled successfully');
+    // console.log('Printer enabled successfully');
     toast.success("Kích hoạt máy in thành công")
   } catch (error) {
     console.error('Error enabling printer:', error);
@@ -54,7 +54,7 @@ const disablePrinterAsync = async (printerId) => {
     if (!response.ok) {
       throw new Error(`Disable printer failed: ${response.status}`);
     }
-    console.log('Printer disabled successfully');
+    // console.log('Printer disabled successfully');
     toast.success("Dừng máy in thành công")
   } catch (error) {
     console.error('Error disabling printer:', error);

@@ -29,15 +29,15 @@ function RegisForm() {
       password: password,
       last_name: '',
       middle_name: '',
-      first_name: uname,
+      first_name: '',
       email: email,
-      date_of_birth: "2000-01-01",
-      phone_number: null,
+      date_of_birth: '',
+      phone_number: '',
       role: 'USER',
       student_id: studentId,
       school_year: 1,
       faculty: '',
-      page_remain: 10
+      page_remain: 90
     };
     dispatch(saveRegisterInfor(studentDTO));
     dispatch(sendEmail(email));
