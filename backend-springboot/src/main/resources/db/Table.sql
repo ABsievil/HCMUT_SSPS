@@ -81,8 +81,6 @@ CREATE TABLE File_types_accepted (
 );
 
 CREATE TABLE OTP (
-	username VARCHAR(50),
+	email VARCHAR(50) PRIMARY KEY,
 	otp_code VARCHAR(6)
-	PRIMARY KEY (username, otp_code)
-	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE
 )

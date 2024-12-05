@@ -66,7 +66,7 @@ export default function App() {
         {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/regis" element={<RegisterPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/notfound" element={<NotFoundPage />} />
         <Route path="/verifymail" element={<InputMail />} />
         <Route

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import hcmut.hcmut_spss.DTO.ResponseObject;
 import hcmut.hcmut_spss.DTO.RestfulAPI.ChangePasswordDTO;
+import hcmut.hcmut_spss.DTO.RestfulAPI.CreateNewPasswordDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.LogStudentDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.PrintDTO;
 import hcmut.hcmut_spss.DTO.RestfulAPI.PurchasePageDTO;
@@ -65,9 +66,16 @@ public class StudentController {
         return studentService.PROC_updateStudent(updateStudentDTO);
     }
 
+    // the func to update new password when there is a old pwd
     @PutMapping("/changeStudentPassword")
     public ResponseEntity<ResponseObject> changeStudentPassword(@RequestBody ChangePasswordDTO changePasswordDTO){
         return studentService.PROC_changeStudentPassword(changePasswordDTO);
+    }
+
+    // the func to update new password when forgot old pwd
+    @PutMapping("/createNewPassword")
+    public ResponseEntity<ResponseObject> createNewPassword(@RequestBody CreateNewPasswordDTO createNewPassword){
+        return studentService.PROC_createNewPassword(createNewPassword);
     }
     
     @GetMapping("/getNumberPageDefaultRemain/{studentId}")

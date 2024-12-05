@@ -41,7 +41,7 @@ function VerificationMail() {
           {/* Password Reset Form */}
           <h2 className="text-2xl font-semibold mb-4">Quên mật khẩu</h2>
           <p className="text-gray-700 mb-6">
-            Nhập Email của bạn để gửi mã xác nhận thay đổi mật khẩu.
+            Nhập Email tài khoản của bạn để gửi mã xác nhận thay đổi mật khẩu.
           </p>
 
           <form onSubmit={handleSubmit} className="mb-6">

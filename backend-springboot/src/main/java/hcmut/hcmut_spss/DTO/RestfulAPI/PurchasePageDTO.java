@@ -16,4 +16,5 @@ public class PurchasePageDTO {
     private Integer purchasePages;
     private Date purchaseDate;
     private Time purchaseTime;
+    private String payingMethod;
 }

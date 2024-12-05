@@ -102,7 +102,7 @@ function LoginForm() {
         </button>
         <div className="flex gap-3 self-start mt-6 text-sm">
           <p className="grow text-stone-950">Bạn chưa có tài khoản?</p>
-          <a href="/regis" className="text-blue-700 underline font-bold">
+          <a href="/register" className="text-blue-700 underline font-bold">
             Tạo tài khoản
           </a>
         </div>

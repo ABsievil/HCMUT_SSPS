@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // Nhập useNavigate
+import { getOTPbyEmail, sendEmail } from '../../../store/authSlice';
+import { useDispatch } from "react-redux";
+import { toast } from 'react-toastify';
 
-function Verification({ isNewPass = false, email = '' }) { // Nhận email từ prop
+function Verification({ isNewPass = false }) { // Nhận email từ prop
   const navigate = useNavigate(); // Khởi tạo navigate
   const [otp, setOtp] = useState(Array(6).fill('')); // Mảng lưu mã OTP
-
+  const email = localStorage.getItem('email');
+  const dispatch = useDispatch();
   const handleChange = (index, value) => {
     if (value.match(/^[0-9]$/) || value === '') { // Kiểm tra chỉ cho phép số từ 0-9
       const newOtp = [...otp];
@@ -21,13 +25,37 @@ function Verification({ isNewPass = false, email = '' }) { // Nhận email từ 
   const handleSubmit = (event) => {
     event.preventDefault();
     const otpCode = otp.join('');
-    console.log('OTP Submitted:', otpCode); // Xử lý OTP tại đây
+    const fetchOTP = async () => {
+      const otpResponse = await getOTPbyEmail(email);
+      if (otpCode === otpResponse.data.otp_code) {
+        navigate("/newpassword");
+      }
+      else {
+        return;
+      }
+    }
+    fetchOTP();
 
-    // Điều hướng đến trang mới sau khi xác nhận
-    if (isNewPass) {
-      navigate("/newpassword");
-    } else {
-      navigate("/login");
+  };
+
+
+  // cool down for sending otp
+  const [cooldown, setCooldown] = useState(0);
+  useEffect(() => {
+    let timer;
+    if (cooldown > 0) {
+      timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [cooldown]);
+
+  const resendOTP = () => {
+    if (cooldown === 0) {
+      dispatch(sendEmail(email));
+      setCooldown(10);
+    }
+    else {
+      toast.info("Hãy đợi thêm " + cooldown + " giây");
     }
   };
 
@@ -36,7 +64,7 @@ function Verification({ isNewPass = false, email = '' }) { // Nhận email từ 
       <div className="flex flex-col md:flex-row bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-4xl md:h-[500px] mx-4 my-4">
         {/* Left Image Section */}
         <div className="w-full md:w-1/2 h-64 md:h-full">
-          <img 
+          <img
             src={isNewPass ? "src/images/background-newpass.jpg" : "src/images/background-verify.jpg"} // Thay thế với đường dẫn hình ảnh thực tế
             alt="Background"
             className="object-cover w-full h-full"
@@ -47,7 +75,7 @@ function Verification({ isNewPass = false, email = '' }) { // Nhận email từ 
         <div className="w-full md:w-1/2 p-8 h-full">
           {/* Top Navigation */}
           <div className="flex justify-between items-center mb-8">
-            <a href={isNewPass ? "/verifymail" : "/regis"} className="text-blue-700 hover:underline text-lg font-bold">Trở về</a>
+            <a href={isNewPass ? "/verifymail" : "/register"} className="text-blue-700 hover:underline text-lg font-bold">Trở về</a>
             <div className="flex flex-col items-end">
               <span className="text-black text-lg font-bold">{isNewPass ? "Tạo mật khẩu mới" : "Đăng ký"}</span>
               <span className="text-black text-lg">{isNewPass ? "2/3" : "2/2"}</span>
@@ -89,7 +117,7 @@ function Verification({ isNewPass = false, email = '' }) { // Nhận email từ 
 
           {/* Resend Code */}
           <div className="text-center">
-            <p className="text-gray-600">Bạn chưa nhận được mã? <a href="#" className="text-blue-700 hover:underline font-bold">Gửi lại mã</a></p>
+            <p className="text-gray-600">Bạn chưa nhận được mã? <a onClick={resendOTP} href="#" className="text-blue-700 hover:underline font-bold">Gửi lại mã</a></p>
           </div>
         </div>
       </div>
