@@ -616,7 +616,7 @@ BEGIN
             'purchase_page', p.purchase_pages, 
             'purchase_date', p.purchase_date, 
             'purchase_time', p.purchase_time
-        ) ORDER BY p.transaction_id
+        ) ORDER BY p.transaction_id DESC
     )
     INTO result 
     FROM purchase_transaction p
@@ -646,7 +646,7 @@ BEGIN
 		'purchase_page',p.purchase_pages, 
 		'purchase_date',p.purchase_date, 
 		'purchase_time',p.purchase_time
-	  )ORDER BY p.transaction_id
+	  )ORDER BY p.transaction_id DESC
 	)
 	INTO result 
 	FROM purchase_transaction p
