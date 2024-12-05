@@ -641,7 +641,7 @@ AS $$
 		result json;
 BEGIN 
 	SELECT json_agg(json_build_object(
-		'username', p.username,
+		'student_id', u.student_id,
 		'transaction_id',p.transaction_id, 
 		'purchase_page',p.purchase_pages, 
 		'purchase_date',p.purchase_date, 
@@ -649,7 +649,7 @@ BEGIN
 	  )ORDER BY p.transaction_id DESC
 	)
 	INTO result 
-	FROM purchase_transaction p
+	FROM purchase_transaction p JOIN users u ON p.username = u.username
 	WHERE
 	(date_start_input IS NULL OR p.purchase_date >= date_start_input) AND 
 	(date_end_input IS NULL OR p.purchase_date <= date_end_input );
