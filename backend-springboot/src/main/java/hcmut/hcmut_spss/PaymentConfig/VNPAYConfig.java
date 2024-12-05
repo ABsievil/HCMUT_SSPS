@@ -47,13 +47,18 @@ public class VNPAYConfig {
         vnpParamsMap.put("vnp_OrderType", this.orderType);
         vnpParamsMap.put("vnp_Locale", "vn");
         vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        
+        // Sử dụng ZonedDateTime để xác định chính xác múi giờ tại VN
+        ZonedDateTime vietnamTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        String vnpCreateDate = formatter.format(calendar.getTime());
+        
+        String vnpCreateDate = formatter.format(Date.from(vietnamTime.toInstant()));
         vnpParamsMap.put("vnp_CreateDate", vnpCreateDate);
-        calendar.add(Calendar.MINUTE, 15);
-        String vnp_ExpireDate = formatter.format(calendar.getTime());
+        
+        ZonedDateTime expireTime = vietnamTime.plusMinutes(15);
+        String vnp_ExpireDate = formatter.format(Date.from(expireTime.toInstant()));
         vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
+        
         return vnpParamsMap;
     }
 }
