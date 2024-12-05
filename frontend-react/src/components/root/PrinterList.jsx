@@ -17,7 +17,7 @@ const PrinterList = () => {
     return <div>Error: {error}</div>;
   }
 
-  console.log(printerList);
+  // console.log(printerList);
   return (
     <div>
       {printerList.data.map((printer, index) => (

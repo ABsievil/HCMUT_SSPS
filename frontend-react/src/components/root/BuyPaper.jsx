@@ -17,7 +17,7 @@ const updatePaymentLog = async (studentId, purchasePages) =>
       purchaseTime: new Date().toTimeString().split(' ')[0], // Current time in HH:MM:SS format
       payingMethod: "QRcode"
     };
-    console.log(PurchasePageDTO)
+    // console.log(PurchasePageDTO)
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/purchasePage`,
       {

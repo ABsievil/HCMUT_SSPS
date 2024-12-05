@@ -17,7 +17,7 @@ const sendPrintRequest = async (PrintDTO) => {
         if (!response.ok) {
             throw new Error(`print failed: ${response.status}`);
         }
-        toast.success("Đã gửi file về hệ thống")
+        toast.success("Đã in file thành công");
     } catch (error) {
         console.error('Error sending print job request:', error);
     }
@@ -57,7 +57,6 @@ const printJobSlice = createSlice({
             const nextMinutes = next15minutes.getMinutes().toString().padStart(2, '0');
             const nextSeconds = next15minutes.getSeconds().toString().padStart(2, '0');
 
-            console.log(printDTO);
             const printDTOWithoutId = {
                 username: printDTO.username,
                 printerId: printDTO.printerId,
@@ -71,7 +70,6 @@ const printJobSlice = createSlice({
                 numberSize: printDTO.numberSize,
                 numberCopy: printDTO.numberCopy,
             };
-            console.log(JSON.stringify(printDTOWithoutId));
             sendPrintRequest(printDTOWithoutId);
 
             state.Jobs = state.Jobs.filter(job => job.id !== printJobId);
