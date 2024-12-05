@@ -16,7 +16,7 @@ export const fetchPersonalInfor = createAsyncThunk(
 );
 
 const updatePersonalInfor = async (studentDTO) => {
-  console.log(JSON.stringify(studentDTO));
+  // console.log(JSON.stringify(studentDTO));
   try {
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/updateStudent`,

@@ -19,7 +19,7 @@ export const fetchAdminInfor = createAsyncThunk("fetchAdminInfor", async () => {
 });
 
 const updateAdminInforAsync = async (adminDTO) => {
-  console.log(adminDTO);
+  // console.log(adminDTO);
   try {
     const response = await fetch(
       `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Admin/updateAdminInfor`,
@@ -50,7 +50,7 @@ const adminInforSlice = createSlice({
   },
   reducers: {
     updateAdminInfor: (state, action) => {
-      console.log(action.payload);
+      // console.log(action.payload);
       state.adminInfor.data = action.payload;
       updateAdminInforAsync(action.payload);
     }

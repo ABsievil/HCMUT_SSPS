@@ -28,7 +28,7 @@ export const deleteOTPByEmail = async (gmail) => {
 }
 
 export const addStudent = async (studentDTO) => {
-    console.log(studentDTO);
+    // console.log(studentDTO);
     try {
         const response = await fetch(`${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/addStudent`, {
             method: 'PUT',
