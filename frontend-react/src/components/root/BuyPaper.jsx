@@ -143,13 +143,13 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
 
   const renderPaymentStatusContent = useMemo(() => {
     if (paymentStatus === "pending" && !isConfirming) {
-      return <p className="text-gray-600">Đang chờ thanh toán... Vui lòng quét mã QR</p>;
+      return <p className="text-gray-600 mt-10">Đang chờ thanh toán... Vui lòng quét mã QR trước khi nhấn Xác nhận thanh toán</p>;
     }
 
     if (paymentStatus === "processing" || isConfirming) {
       return (
         <div className="flex flex-col items-center space-y-2">
-          <Loader className="w-6 h-6 animate-spin text-blue-500" />
+          <Loader className="w-6 h-6 animate-spin text-blue-500 mt-10" />
           <p className="text-gray-600">Đang xác nhận thanh toán...</p>
         </div>
       );
@@ -197,19 +197,19 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="font-medium">Mã đơn hàng:</span>
-              <span className="font-mono">{orderId}</span>
+              <span className="font-bold text-lg">{orderId}</span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="font-medium">Số tiền:</span>
-              <span className="font-semibold">{amount}</span>
+              <span className="font-bold text-lg">{amount}</span>
             </div>
 
             <div className="bg-blue-50 border-blue-200 text-blue-700 rounded-lg p-4 mb-4">
               <p className="text-sm">Lưu ý: Vui lòng ghi mã đơn hàng trong nội dung chuyển khoản.</p>
             </div>
 
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-5">
               {renderPaymentStatusContent}
 
               {paymentStatus !== "success" && !isConfirming && (
@@ -341,8 +341,8 @@ const BuyPage = () => {
   }, [personalInfor]);
 
   const generateOrderId = () => {
-    const randomDigits = Math.floor(100000 + Math.random() * 900000); // 6 random digits
-    return `${randomDigits}`;
+    const randomDigits = Math.floor(10000000 + Math.random() * 90000000); // 6 random digits
+    return `QR${randomDigits}`;
   };
 
   const totalAmount = useMemo(() => {
