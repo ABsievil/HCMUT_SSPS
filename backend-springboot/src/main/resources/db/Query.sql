@@ -564,10 +564,11 @@ END; $$;
 
 --19--Student mua giấy --> INSERT 1 purchase transaction
 
-CREATE OR REPLACE PROCEDURE purchase_page (student_id_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME, paying_method_input VARCHAR)
+CREATE OR REPLACE PROCEDURE purchase_page (student_id_input VARCHAR, purchase_pages_input INT, purchase_date_input DATE, purchase_time_input TIME, paying_method_input VARCHAR, order_code_input VARCHAR)
 LANGUAGE PLPGSQL 
 AS $$ 
 DECLARE name VARCHAR;
+		price_page INT;
 BEGIN 
 	SELECT username INTO name 
 	FROM users 
@@ -578,10 +579,15 @@ BEGIN
 	THEN 
 	 	RAISE EXCEPTION 'User % does not exist',student_id_input ;
 	END IF;
-	INSERT INTO Purchase_transaction (username, purchase_pages, purchase_date, purchase_time,paying_method) VALUES (name, purchase_pages_input,purchase_date_input,purchase_time_input,paying_method_input);
+	SELECT page_price INTO price_page
+	FROM utility
+	WHERE purchase_date_input >= date_start AND purchase_date_input <= date_end;
+	
+	INSERT INTO Purchase_transaction (username, purchase_pages, purchase_date, purchase_time, paying_method, order_code, total_cash) VALUES (name, purchase_pages_input,purchase_date_input,purchase_time_input,paying_method_input,order_code_input, purchase_pages_input * price_page);
 	RAISE NOTICE 'Purchase recorded successfully for user %',student_id_input;
 END; $$;
---call purchase_page ('2111678', 5,'2024-08-21','09:32:21','the tin dung')
+
+-- call purchase_page('2213995', 20, '2024-12-7', '12:00:00', 'VNPay', 'HCMUT-SPSS-2031')
 --20--Lấy thông tin mua giấy của một sinh viên bằng mã số sinh viên
 --bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
 
@@ -615,7 +621,10 @@ BEGIN
             'transaction_id', p.transaction_id, 
             'purchase_page', p.purchase_pages, 
             'purchase_date', p.purchase_date, 
-            'purchase_time', p.purchase_time
+            'purchase_time', p.purchase_time,
+			'paying_method', p.paying_method,
+			'order_code', p.order_code,
+			'total_cash', p.total_cash
         ) ORDER BY p.transaction_id DESC
     )
     INTO result 
@@ -628,7 +637,7 @@ BEGIN
 END; 
 $$;
 
-select * from get_log_buy_page_a_student('2213969','2024-08-21',null)
+-- select * from get_log_buy_page_a_student('2213969','2024-08-21',null)
 
 --21--Lấy thông tin mua giấy của toàn bộ sinh viên
 --bộ lọc bằng date_start date_end, nếu lấy tất cả thì 2 giá trị này bằng null.
@@ -640,12 +649,14 @@ AS $$
 	DECLARE 
 		result json;
 BEGIN 
-	SELECT json_agg(json_build_object(
-		'student_id', u.student_id,
-		'transaction_id',p.transaction_id, 
-		'purchase_page',p.purchase_pages, 
-		'purchase_date',p.purchase_date, 
-		'purchase_time',p.purchase_time
+	SELECT json_agg(json_build_object( 
+            'transaction_id', p.transaction_id, 
+            'purchase_page', p.purchase_pages, 
+            'purchase_date', p.purchase_date, 
+            'purchase_time', p.purchase_time,
+			'paying_method', p.paying_method,
+			'order_code', p.order_code,
+			'total_cash', p.total_cash
 	  )ORDER BY p.transaction_id DESC
 	)
 	INTO result 
@@ -656,7 +667,7 @@ BEGIN
 	RETURN result; 
 END;$$;
 
-select * from get_log_buy_page_aLL_student(null,null)
+-- select * from get_log_buy_page_aLL_student(null,null)
 ----------------------------------------------------------------ULTILITY--------------------------------------------------------
 
 --22--Thêm loại file in được
