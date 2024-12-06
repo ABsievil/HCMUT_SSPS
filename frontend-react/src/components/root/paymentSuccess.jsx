@@ -1,15 +1,71 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CircleCheckBig } from 'lucide-react';
 
+
+const updatePaymentLog = async (studentId, purchasePages) => {
+  try {
+    const PurchasePageDTO = {
+      studentId: studentId,
+      purchasePages: purchasePages,
+      purchaseDate: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
+      purchaseTime: new Date().toTimeString().split(' ')[0], // Current time in HH:MM:SS format
+      payingMethod: "VNPay"
+    };
+    // console.log(PurchasePageDTO)
+    const response = await fetch(
+      `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/purchasePage`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(PurchasePageDTO)
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`Payment log update failed: ${response.status}`);
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error updating payment log:', error);
+    toast.error("Không thể ghi nhận giao dịch");
+    return false;
+  }
+};
+
 const PaymentSuccess = () => {
+
+  const [params, setParams] = useState({});
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const paramsObject = {
+      vnp_Amount: queryParams.get('vnp_Amount'),
+      vnp_BankCode: queryParams.get('vnp_BankCode'),
+      vnp_BankTranNo: queryParams.get('vnp_BankTranNo'),
+      vnp_CardType: queryParams.get('vnp_CardType'),
+      vnp_OrderInfo: queryParams.get('vnp_OrderInfo'),
+      vnp_PayDate: queryParams.get('vnp_PayDate'),
+      vnp_ResponseCode: queryParams.get('vnp_ResponseCode'),
+      vnp_TmnCode: queryParams.get('vnp_TmnCode'),
+      vnp_TransactionNo: queryParams.get('vnp_TransactionNo'),
+      vnp_TransactionStatus: queryParams.get('vnp_TransactionStatus'),
+      vnp_TxnRef: queryParams.get('vnp_TxnRef'),
+      vnp_SecureHash: queryParams.get('vnp_SecureHash')
+    };
+    setParams(paramsObject);
+  }, []);
+
   const handleViewOrder = () => {
     // Redirect to order details page
-    window.location.href = '/don-hang';
+    window.location.href = '/payment';
   };
 
   const handleBackToHome = () => {
     // Navigate back to home page
-    window.location.href = '/';
+    window.location.href = '/buyPaper';
   };
 
   return (
@@ -22,8 +78,12 @@ const PaymentSuccess = () => {
           />
         </div>
         
-        <h1 className="text-3xl font-bold text-gray-800 mb-4">
+        <h1 className="text-3xl font-bold text-gray-800 mb-1">
           Thanh Toán Thành Công
+        </h1>
+
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+          {params.vnp_Amount / 100} VNĐ
         </h1>
         
         <p className="text-gray-600 mb-6">
@@ -33,9 +93,9 @@ const PaymentSuccess = () => {
         <div className="flex flex-col space-y-4">
           <button 
             onClick={handleViewOrder}
-            className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition-colors"
+            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition-colors"
           >
-            Xem Chi Tiết Đơn Hàng
+            Xem Lịch Sử Mua Hàng
           </button>
           
           <button 
@@ -47,7 +107,7 @@ const PaymentSuccess = () => {
         </div>
         
         <div className="mt-6 text-sm text-gray-500">
-          Mã đơn hàng: <span className="font-bold">#{Math.floor(Math.random() * 1000000)}</span>
+          Mã đơn hàng: <span className="font-bold">{params.vnp_BankTranNo}</span>
         </div>
       </div>
     </div>
@@ -55,3 +115,5 @@ const PaymentSuccess = () => {
 };
 
 export default PaymentSuccess;
+
+
