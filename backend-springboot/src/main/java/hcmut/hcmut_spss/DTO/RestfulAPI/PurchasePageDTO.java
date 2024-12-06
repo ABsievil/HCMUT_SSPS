@@ -17,4 +17,5 @@ public class PurchasePageDTO {
     private Date purchaseDate;
     private Time purchaseTime;
     private String payingMethod;
+    private String orderCode;
 }
