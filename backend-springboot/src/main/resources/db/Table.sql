@@ -60,6 +60,7 @@ CREATE TABLE Purchase_transaction (
 	purchase_date DATE,
 	purchase_time TIME,
 	paying_method VARCHAR(50) NOT NULL,
+	order_code VARCHAR(50) NOT NULL,
 	PRIMARY KEY (username, transaction_id),
 	FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT check_purchase_pages CHECK (purchase_pages > 0)

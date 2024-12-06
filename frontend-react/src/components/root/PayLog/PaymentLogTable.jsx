@@ -25,6 +25,10 @@ const titleMapping = {
   purchase_page: "Số trang",
   purchase_date: "Ngày mua",
   purchase_time: "Thời gian",
+  MSSV: "Mã số sinh viên",
+  paying_method: "Phương thức thanh toán",
+  order_code: "Mã đơn hàng",
+  total_cash: "Tổng tiền (VNĐ)",
 };
 
 const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
@@ -56,14 +60,14 @@ const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
         <h2 className="text-2xl font-bold mb-6">Chi tiết giao dịch</h2>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            {filteredData.map(([key, value]) => (
-              <div key={key}>
-                <p className="font-medium text-gray-700">
-                  {titleMapping[key] || key}:
-                </p>
-                <p className="mt-1">{value}</p>
-              </div>
-            ))}
+          {filteredData.map(([key, value]) => (
+  <div key={key}>
+    <p className="font-medium text-gray-700">
+      {titleMapping[key] || key}:
+    </p>
+    <p className="mt-1">{value}</p>
+  </div>
+))}
           </div>
         </div>
       </div>
@@ -136,15 +140,18 @@ const PaymentLogTable = () => {
 
   const tableHeaders = useMemo(() => {
     const headers = [
-      { key: "transaction_id", label: "Mã giao dịch" },
+      { key: "order_code", label: "Mã đơn hàng" },
       { key: "purchase_page", label: "Số trang" },
       { key: "purchase_date", label: "Ngày mua" },
       { key: "purchase_time", label: "Thời gian" },
     ];
   
-    // Thêm MSSV vào tiêu đề bảng cho ADMIN nếu không lọc theo studentId
-    if (role === "ADMIN" && debouncedStudentId === "") {
-      headers.unshift({ key: "MSSV", label: "MSSV" });
+    // Add MSSV column dynamically based on the filter
+    if (role === "ADMIN") {
+      headers.unshift({
+        key:"student_id",
+        label: "MSSV",
+      });
     }
   
     return headers;
