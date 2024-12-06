@@ -8,14 +8,15 @@ import { toast } from "react-toastify";
 import { XCircle, CheckCircle, Loader, CreditCard, QrCode } from 'lucide-react';
 import { updatePagesRemain } from "../../store/personalInforSlice";
 
-const updatePaymentLog = async (studentId, purchasePages) => {
+const updatePaymentLog = async (studentId, purchasePages, orderId) => {
   try {
     const PurchasePageDTO = {
       studentId: studentId,
       purchasePages: purchasePages,
       purchaseDate: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
       purchaseTime: new Date().toTimeString().split(' ')[0], // Current time in HH:MM:SS format
-      payingMethod: "QRcode"
+      payingMethod: "QRcode",
+      orderCode: orderId
     };
     // console.log(PurchasePageDTO)
     const response = await fetch(
@@ -104,7 +105,7 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
 
         if (isPaymentSuccessful) {
           const studentId = localStorage.getItem('studentId')
-          const isPaymentLogged = await updatePaymentLog(studentId, quantity);
+          const isPaymentLogged = await updatePaymentLog(studentId, quantity,orderId);
           if (isPaymentLogged) {
             dispatch(updatePagesRemain(quantity));
 
@@ -143,13 +144,13 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
 
   const renderPaymentStatusContent = useMemo(() => {
     if (paymentStatus === "pending" && !isConfirming) {
-      return <p className="text-gray-600 mt-10">Đang chờ thanh toán... Vui lòng quét mã QR trước khi nhấn Xác nhận thanh toán</p>;
+      return <p className="text-gray-600 ">Sau khi thanh toán thành công hãy nhấn nút bên dưới.</p>;
     }
 
     if (paymentStatus === "processing" || isConfirming) {
       return (
-        <div className="flex flex-col items-center space-y-2">
-          <Loader className="w-6 h-6 animate-spin text-blue-500 mt-10" />
+        <div className="flex flex-col items-center space-y-4">
+          <Loader className="w-6 h-6 animate-spin text-blue-500 " />
           <p className="text-gray-600">Đang xác nhận thanh toán...</p>
         </div>
       );
@@ -209,7 +210,7 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
               <p className="text-sm">Lưu ý: Vui lòng ghi mã đơn hàng trong nội dung chuyển khoản.</p>
             </div>
 
-            <div className="flex flex-col items-center space-y-5">
+            <div className="flex flex-col items-center space-y-5 ">
               {renderPaymentStatusContent}
 
               {paymentStatus !== "success" && !isConfirming && (

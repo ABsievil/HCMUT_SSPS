@@ -36,9 +36,9 @@ const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
 
   // Filter out redundant or empty fields
   const filteredData = Object.entries(data).filter(
-    ([key, value]) => 
-      value && 
-      key !== "username" && 
+    ([key, value]) =>
+      value &&
+      key !== "username" &&
       key !== "studentId" &&
       key !== "MSSV"
   ).map(([key, value]) => {
@@ -60,14 +60,14 @@ const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
         <h2 className="text-2xl font-bold mb-6">Chi tiết giao dịch</h2>
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-          {filteredData.map(([key, value]) => (
-  <div key={key}>
-    <p className="font-medium text-gray-700">
-      {titleMapping[key] || key}:
-    </p>
-    <p className="mt-1">{value}</p>
-  </div>
-))}
+            {filteredData.map(([key, value]) => (
+              <div key={key}>
+                <p className="font-medium text-gray-700">
+                  {titleMapping[key] || key}:
+                </p>
+                <p className="mt-1">{value}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -128,15 +128,13 @@ const PaymentLogTable = () => {
   }, [role, userId]);
 
   const data = useMemo(() => {
-    const fetchedData = role === "ADMIN"
+    return role === "ADMIN"
       ? debouncedStudentId
         ? Array.isArray(studentPayLogs) ? studentPayLogs : []
         : Array.isArray(allStudentPayLogs) ? allStudentPayLogs : []
       : Array.isArray(studentPayLogs) ? studentPayLogs : [];
-    
-    // Tạo bản sao dữ liệu trước khi đảo ngược
-    return [...fetchedData].reverse();
   }, [allStudentPayLogs, studentPayLogs, role, debouncedStudentId]);
+
 
   const tableHeaders = useMemo(() => {
     const headers = [
@@ -145,15 +143,15 @@ const PaymentLogTable = () => {
       { key: "purchase_date", label: "Ngày mua" },
       { key: "purchase_time", label: "Thời gian" },
     ];
-  
+
     // Add MSSV column dynamically based on the filter
     if (role === "ADMIN") {
       headers.unshift({
-        key:"student_id",
+        key: "student_id",
         label: "MSSV",
       });
     }
-  
+
     return headers;
   }, [role, debouncedStudentId]);
 

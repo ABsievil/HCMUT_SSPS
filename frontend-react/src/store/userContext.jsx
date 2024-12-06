@@ -1,6 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import Cookies from 'js-cookie';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useDispatch } from 'react-redux';
 
@@ -38,7 +37,6 @@ export const UserProvider = ({ children }) => {
                 const decodedToken = jwtDecode(token);
                 const username = decodedToken.sub;
                 const role = decodedToken.role;
-                
                 setUser({
                     username,
                     role,
