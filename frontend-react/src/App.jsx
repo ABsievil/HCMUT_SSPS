@@ -21,6 +21,7 @@ import { fetchPrintersabc } from "./store/PrintersabcSlice";
 import React, {useEffect} from "react";
 import PaymentLog from "./components/root/PaymentLog";
 import NotFoundPage from "../src/components/root/404NotFoundPage";
+import PaymentSuccess from "./components/root/paymentSuccess";
 
 // Authentication utility
 const isTokenValid = () => {
@@ -83,6 +84,7 @@ export default function App() {
         <Route path="/buyPaper" element={<ProtectedRoute requiredRole="USER"> <PrintingPage /> </ProtectedRoute>} />
         <Route path="/printlog" element={<ProtectedRoute requiredRole="USER"> <PrintLog /> </ProtectedRoute>} />
         <Route path="/payment" element={<ProtectedRoute requiredRole="USER"> <PaymentLog /> </ProtectedRoute>} />
+        <Route path="/api/v1/payment/vn-pay-callback" element={<ProtectedRoute requiredRole="USER"> <PaymentSuccess /> </ProtectedRoute>} />
 
         {/* ADMIN ROLE Protected Routes */}
         {/* <Route path="/account" element={<ProtectedRoute requiredRole="ADMIN"> <AccountInformation /> </ProtectedRoute>} /> */}
