@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { createVnPayPayment } from "../../store/paymentSlice"; // Adjust path if needed
 import Layout from "./fragments/layout/Layout";
 import InputField from "./fragments/InputField/InputField";
@@ -7,8 +8,7 @@ import { toast } from "react-toastify";
 import { XCircle, CheckCircle, Loader, CreditCard, QrCode } from 'lucide-react';
 import { updatePagesRemain } from "../../store/personalInforSlice";
 
-const updatePaymentLog = async (studentId, purchasePages) => 
-  {
+const updatePaymentLog = async (studentId, purchasePages) => {
   try {
     const PurchasePageDTO = {
       studentId: studentId,
@@ -64,7 +64,7 @@ const PAYMENT_METHODS = {
   BANK: 'bank'
 };
 
-const QRPaymentModal = ({orderId, amount, onClose, quantity }) => {
+const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
   const dispatch = useDispatch();
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [loading, setLoading] = useState(false);
@@ -103,7 +103,7 @@ const QRPaymentModal = ({orderId, amount, onClose, quantity }) => {
         );
 
         if (isPaymentSuccessful) {
-          const studentId=localStorage.getItem('studentId')
+          const studentId = localStorage.getItem('studentId')
           const isPaymentLogged = await updatePaymentLog(studentId, quantity);
           if (isPaymentLogged) {
             dispatch(updatePagesRemain(quantity));
@@ -314,6 +314,7 @@ const PaymentMethodSelector = ({ selectedMethod, onMethodChange, selectedBank, o
 );
 
 const BuyPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [paperType, setPaperType] = useState("A4");
@@ -325,11 +326,17 @@ const BuyPage = () => {
   // Fetch the remaining pages from the personalInfor state
   const { personalInfor } = useSelector((state) => state.personalInfor);
 
-  const [remainingPages, setRemainingPages] = useState(10000); // Default to 10000
+  const [remainingPages, setRemainingPages] = useState(() => {
+    // Ưu tiên lấy từ Redux state, nếu không có thì lấy từ localStorage
+    return personalInfor?.data?.page_remain ??
+      parseInt(localStorage.getItem('remainingPages') ?? '10000');
+  });
 
   useEffect(() => {
     if (personalInfor?.data?.page_remain !== undefined) {
       setRemainingPages(personalInfor.data.page_remain);
+      // Lưu vào localStorage để sử dụng sau này
+      localStorage.setItem('remainingPages', personalInfor.data.page_remain);
     }
   }, [personalInfor]);
 
@@ -351,6 +358,49 @@ const BuyPage = () => {
     setQuantity(value >= 0 && value <= remainingPages ? value : 0); // Ensure quantity doesn't exceed remaining pages
   };
 
+  const pollCallbackStatus = useCallback(() => {
+    const intervalId = setInterval(async () => {
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/payment/vn-pay-callback`,
+          {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
+
+        const data = await response.json();
+        console.log('Full response:', data); // Log toàn bộ response
+
+        if (data.status === 'OK') {
+          clearInterval(intervalId);
+          toast.success("Thanh toán thành công!");
+          dispatch(updatePagesRemain(quantity));
+
+          // Thử nhiều phương án điều hướng
+          window.location.href = `${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`;
+          // hoặc
+          navigate(`${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`, { replace: true });
+        } else {
+          clearInterval(intervalId);
+          window.location.href = `${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`;
+          // hoặc
+          navigate(`${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`, { replace: true });
+          toast.error(data.message || "Thanh toán thất bại, vui lòng thử lại.");
+        }
+      } catch (error) {
+        console.error("Error fetching callback status:", error);
+        window.location.href = `${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`;
+          // hoặc
+        navigate(`${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`, { replace: true });
+        toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
+      }
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, [dispatch, quantity, navigate]);
+
   const handleSubmit = async () => {
     if (quantity <= 0 || quantity > remainingPages) {
       toast.error(`Vui lòng kiểm tra lại số lượng trang! (Tối đa ${remainingPages} trang)`);
@@ -368,7 +418,8 @@ const BuyPage = () => {
       try {
         const response = await dispatch(createVnPayPayment({ amount: numericAmount, bankCode: selectedBank }));
         if (response.payload?.paymentUrl) {
-          window.location.href = response.payload.paymentUrl;  // Redirect to payment page
+          window.location.href = response.payload.paymentUrl;
+          pollCallbackStatus();
         } else {
           toast.error("Không thể nhận được URL thanh toán");
         }
