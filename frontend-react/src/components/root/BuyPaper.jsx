@@ -341,7 +341,7 @@ const BuyPage = () => {
   }, [personalInfor]);
 
   const generateOrderId = () => {
-    const randomDigits = Math.floor(10000 + Math.random() * 90000); // 5 random digits
+    const randomDigits = Math.floor(100000 + Math.random() * 900000); // 6 random digits
     return `${randomDigits}`;
   };
 
@@ -357,49 +357,6 @@ const BuyPage = () => {
     const value = parseInt(e.target.value);
     setQuantity(value >= 0 && value <= remainingPages ? value : 0); // Ensure quantity doesn't exceed remaining pages
   };
-
-  const pollCallbackStatus = useCallback(() => {
-    const intervalId = setInterval(async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/payment/vn-pay-callback`,
-          {
-            method: 'GET',
-            credentials: 'include',
-            headers: { 'Content-Type': 'application/json' },
-          }
-        );
-
-        const data = await response.json();
-        console.log('Full response:', data); // Log toàn bộ response
-
-        if (data.status === 'OK') {
-          clearInterval(intervalId);
-          toast.success("Thanh toán thành công!");
-          dispatch(updatePagesRemain(quantity));
-
-          // Thử nhiều phương án điều hướng
-          window.location.href = `${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`;
-          // hoặc
-          navigate(`${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`, { replace: true });
-        } else {
-          clearInterval(intervalId);
-          window.location.href = `${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`;
-          // hoặc
-          navigate(`${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`, { replace: true });
-          toast.error(data.message || "Thanh toán thất bại, vui lòng thử lại.");
-        }
-      } catch (error) {
-        console.error("Error fetching callback status:", error);
-        window.location.href = `${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`;
-          // hoặc
-        navigate(`${import.meta.env.VITE_REACT_APP_FE_API_URL}/buypaper`, { replace: true });
-        toast.error("Đã có lỗi xảy ra. Vui lòng thử lại.");
-      }
-    }, 5000);
-
-    return () => clearInterval(intervalId);
-  }, [dispatch, quantity, navigate]);
 
   const handleSubmit = async () => {
     if (quantity <= 0 || quantity > remainingPages) {
@@ -419,7 +376,6 @@ const BuyPage = () => {
         const response = await dispatch(createVnPayPayment({ amount: numericAmount, bankCode: selectedBank }));
         if (response.payload?.paymentUrl) {
           window.location.href = response.payload.paymentUrl;
-          pollCallbackStatus();
         } else {
           toast.error("Không thể nhận được URL thanh toán");
         }
