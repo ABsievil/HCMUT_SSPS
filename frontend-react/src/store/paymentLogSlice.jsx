@@ -30,7 +30,6 @@ export const fetchLogBuyPageStudent = createAsyncThunk(
       `${import.meta.env.VITE_REACT_APP_BE_API_URL}/api/v1/Student/getLogBuyPageStudent/${studentId}`,
       { dateStart, dateEnd }
     );
-    console.log('Fetched student logs:', data);
     return data.data;
   }
 );
