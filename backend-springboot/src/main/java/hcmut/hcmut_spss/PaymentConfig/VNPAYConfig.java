@@ -12,8 +12,6 @@ import javax.crypto.spec.SecretKeySpec;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,18 +47,13 @@ public class VNPAYConfig {
         vnpParamsMap.put("vnp_OrderType", this.orderType);
         vnpParamsMap.put("vnp_Locale", "vn");
         vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
-        
-        // Sử dụng ZonedDateTime để xác định chính xác múi giờ tại VN
-        ZonedDateTime vietnamTime = ZonedDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-        
-        String vnpCreateDate = formatter.format(Date.from(vietnamTime.toInstant()));
+        String vnpCreateDate = formatter.format(calendar.getTime());
         vnpParamsMap.put("vnp_CreateDate", vnpCreateDate);
-        
-        ZonedDateTime expireTime = vietnamTime.plusMinutes(15);
-        String vnp_ExpireDate = formatter.format(Date.from(expireTime.toInstant()));
+        calendar.add(Calendar.MINUTE, 15);
+        String vnp_ExpireDate = formatter.format(calendar.getTime());
         vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
-        
         return vnpParamsMap;
     }
 }
