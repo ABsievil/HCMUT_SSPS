@@ -31,7 +31,7 @@ const PrinterSelect = ({ value, onChange, printers }) => (
       {printers.length > 0 ? (
         printers.map((printer) => (
           <option key={printer.printer_id} value={printer.printer_id}>
-            {`${printer.brand_name} ${printer.printer_model} - ${printer.building} ${printer.room} - ${printer.state ? "sẵn sàng" : "ngừng hoạt động"}`}
+            {`ID:${printer.printer_id} - ${printer.brand_name} ${printer.printer_model} - ${printer.building} ${printer.room} - ${printer.state ? "sẵn sàng" : "ngừng hoạt động"}`}
           </option>
         ))
       ) : (
