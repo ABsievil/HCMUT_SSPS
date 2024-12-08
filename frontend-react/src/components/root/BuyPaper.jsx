@@ -356,15 +356,10 @@ const BuyPage = () => {
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
-    setQuantity(value >= 0 && value <= remainingPages ? value : 0); // Ensure quantity doesn't exceed remaining pages
+    setQuantity(value >= 0 ? value : 0); // Ensure quantity doesn't exceed remaining pages
   };
 
   const handleSubmit = async () => {
-    if (quantity <= 0 || quantity > remainingPages) {
-      toast.error(`Vui lòng kiểm tra lại số lượng trang! (Tối đa ${remainingPages} trang)`);
-      return;
-    }
-
     if (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank) {
       toast.error("Vui lòng chọn ngân hàng!");
       return;
@@ -407,7 +402,7 @@ const BuyPage = () => {
 
             <div className="flex flex-col">
               <label htmlFor="quantity" className="text-xl text-black">
-                Số lượng (tối đa {remainingPages} trang):
+                Số lượng:
               </label>
               <InputField
                 type="number"
@@ -415,7 +410,7 @@ const BuyPage = () => {
                 value={String(quantity)}
                 onChange={handleQuantityChange}
                 min={0}
-                max={remainingPages}
+                // max={remainingPages}
                 className="flex-1"
               />
             </div>
@@ -458,7 +453,7 @@ const BuyPage = () => {
               <div className="mt-6 pt-6 border-t">
                 <Button
                   onClick={handleSubmit}
-                  disabled={quantity <= 0 || quantity > remainingPages || (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank)}
+                  disabled={quantity <= 0 || (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank)}
                   className="w-full"
                 >
                   Xác nhận thanh toán
