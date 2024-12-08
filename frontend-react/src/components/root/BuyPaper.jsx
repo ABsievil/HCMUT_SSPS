@@ -342,7 +342,7 @@ const BuyPage = () => {
   }, [personalInfor]);
 
   const generateOrderId = () => {
-    const randomDigits = Math.floor(10000000 + Math.random() * 90000000); // 6 random digits
+    const randomDigits = Math.floor(10000000 + Math.random() * 90000000);
     return `QR${randomDigits}`;
   };
 
