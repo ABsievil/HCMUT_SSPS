@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { createVnPayPayment } from "../../store/paymentSlice"; // Adjust path if needed
 import Layout from "./fragments/layout/Layout";
 import InputField from "./fragments/InputField/InputField";
@@ -7,15 +8,15 @@ import { toast } from "react-toastify";
 import { XCircle, CheckCircle, Loader, CreditCard, QrCode } from 'lucide-react';
 import { updatePagesRemain } from "../../store/personalInforSlice";
 
-const updatePaymentLog = async (studentId, purchasePages) => 
-  {
+const updatePaymentLog = async (studentId, purchasePages, orderId) => {
   try {
     const PurchasePageDTO = {
       studentId: studentId,
       purchasePages: purchasePages,
       purchaseDate: new Date().toISOString().split('T')[0], // Current date in YYYY-MM-DD format
       purchaseTime: new Date().toTimeString().split(' ')[0], // Current time in HH:MM:SS format
-      payingMethod: "QRcode"
+      payingMethod: "QRcode",
+      orderCode: orderId
     };
     // console.log(PurchasePageDTO)
     const response = await fetch(
@@ -64,7 +65,7 @@ const PAYMENT_METHODS = {
   BANK: 'bank'
 };
 
-const QRPaymentModal = ({orderId, amount, onClose, quantity }) => {
+const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
   const dispatch = useDispatch();
   const [paymentStatus, setPaymentStatus] = useState("pending");
   const [loading, setLoading] = useState(false);
@@ -103,8 +104,8 @@ const QRPaymentModal = ({orderId, amount, onClose, quantity }) => {
         );
 
         if (isPaymentSuccessful) {
-          const studentId=localStorage.getItem('studentId')
-          const isPaymentLogged = await updatePaymentLog(studentId, quantity);
+          const studentId = localStorage.getItem('studentId')
+          const isPaymentLogged = await updatePaymentLog(studentId, quantity,orderId);
           if (isPaymentLogged) {
             dispatch(updatePagesRemain(quantity));
 
@@ -143,13 +144,13 @@ const QRPaymentModal = ({orderId, amount, onClose, quantity }) => {
 
   const renderPaymentStatusContent = useMemo(() => {
     if (paymentStatus === "pending" && !isConfirming) {
-      return <p className="text-gray-600">Đang chờ thanh toán... Vui lòng quét mã QR</p>;
+      return <p className="text-gray-600 ">Sau khi thanh toán thành công hãy nhấn nút bên dưới.</p>;
     }
 
     if (paymentStatus === "processing" || isConfirming) {
       return (
-        <div className="flex flex-col items-center space-y-2">
-          <Loader className="w-6 h-6 animate-spin text-blue-500" />
+        <div className="flex flex-col items-center space-y-4">
+          <Loader className="w-6 h-6 animate-spin text-blue-500 " />
           <p className="text-gray-600">Đang xác nhận thanh toán...</p>
         </div>
       );
@@ -197,19 +198,19 @@ const QRPaymentModal = ({orderId, amount, onClose, quantity }) => {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="font-medium">Mã đơn hàng:</span>
-              <span className="font-mono">{orderId}</span>
+              <span className="font-bold text-lg">{orderId}</span>
             </div>
 
             <div className="flex justify-between items-center">
               <span className="font-medium">Số tiền:</span>
-              <span className="font-semibold">{amount}</span>
+              <span className="font-bold text-lg">{amount}</span>
             </div>
 
             <div className="bg-blue-50 border-blue-200 text-blue-700 rounded-lg p-4 mb-4">
               <p className="text-sm">Lưu ý: Vui lòng ghi mã đơn hàng trong nội dung chuyển khoản.</p>
             </div>
 
-            <div className="flex flex-col items-center space-y-4">
+            <div className="flex flex-col items-center space-y-5 ">
               {renderPaymentStatusContent}
 
               {paymentStatus !== "success" && !isConfirming && (
@@ -314,6 +315,7 @@ const PaymentMethodSelector = ({ selectedMethod, onMethodChange, selectedBank, o
 );
 
 const BuyPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState(1);
   const [paperType, setPaperType] = useState("A4");
@@ -325,17 +327,23 @@ const BuyPage = () => {
   // Fetch the remaining pages from the personalInfor state
   const { personalInfor } = useSelector((state) => state.personalInfor);
 
-  const [remainingPages, setRemainingPages] = useState(10000); // Default to 10000
+  const [remainingPages, setRemainingPages] = useState(() => {
+    // Ưu tiên lấy từ Redux state, nếu không có thì lấy từ localStorage
+    return personalInfor?.data?.page_remain ??
+      parseInt(localStorage.getItem('remainingPages') ?? '10000');
+  });
 
   useEffect(() => {
     if (personalInfor?.data?.page_remain !== undefined) {
       setRemainingPages(personalInfor.data.page_remain);
+      // Lưu vào localStorage để sử dụng sau này
+      localStorage.setItem('remainingPages', personalInfor.data.page_remain);
     }
   }, [personalInfor]);
 
   const generateOrderId = () => {
-    const randomDigits = Math.floor(10000 + Math.random() * 90000); // 5 random digits
-    return `${randomDigits}`;
+    const randomDigits = Math.floor(10000000 + Math.random() * 90000000);
+    return `QR${randomDigits}`;
   };
 
   const totalAmount = useMemo(() => {
@@ -348,15 +356,10 @@ const BuyPage = () => {
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
-    setQuantity(value >= 0 && value <= remainingPages ? value : 0); // Ensure quantity doesn't exceed remaining pages
+    setQuantity(value >= 0 ? value : 0); // Ensure quantity doesn't exceed remaining pages
   };
 
   const handleSubmit = async () => {
-    if (quantity <= 0 || quantity > remainingPages) {
-      toast.error(`Vui lòng kiểm tra lại số lượng trang! (Tối đa ${remainingPages} trang)`);
-      return;
-    }
-
     if (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank) {
       toast.error("Vui lòng chọn ngân hàng!");
       return;
@@ -368,7 +371,7 @@ const BuyPage = () => {
       try {
         const response = await dispatch(createVnPayPayment({ amount: numericAmount, bankCode: selectedBank }));
         if (response.payload?.paymentUrl) {
-          window.location.href = response.payload.paymentUrl;  // Redirect to payment page
+          window.location.href = response.payload.paymentUrl;
         } else {
           toast.error("Không thể nhận được URL thanh toán");
         }
@@ -399,7 +402,7 @@ const BuyPage = () => {
 
             <div className="flex flex-col">
               <label htmlFor="quantity" className="text-xl text-black">
-                Số lượng (tối đa {remainingPages} trang):
+                Số lượng:
               </label>
               <InputField
                 type="number"
@@ -407,7 +410,7 @@ const BuyPage = () => {
                 value={String(quantity)}
                 onChange={handleQuantityChange}
                 min={0}
-                max={remainingPages}
+                // max={remainingPages}
                 className="flex-1"
               />
             </div>
@@ -450,7 +453,7 @@ const BuyPage = () => {
               <div className="mt-6 pt-6 border-t">
                 <Button
                   onClick={handleSubmit}
-                  disabled={quantity <= 0 || quantity > remainingPages || (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank)}
+                  disabled={quantity <= 0 || (selectedPayment === PAYMENT_METHODS.BANK && !selectedBank)}
                   className="w-full"
                 >
                   Xác nhận thanh toán

@@ -25,6 +25,10 @@ const titleMapping = {
   purchase_page: "Số trang",
   purchase_date: "Ngày mua",
   purchase_time: "Thời gian",
+  MSSV: "Mã số sinh viên",
+  paying_method: "Phương thức thanh toán",
+  order_code: "Mã đơn hàng",
+  total_cash: "Tổng tiền (VNĐ)",
 };
 
 const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
@@ -32,9 +36,9 @@ const PaymentHistoryDetail = ({ isOpen, onClose, data }) => {
 
   // Filter out redundant or empty fields
   const filteredData = Object.entries(data).filter(
-    ([key, value]) => 
-      value && 
-      key !== "username" && 
+    ([key, value]) =>
+      value &&
+      key !== "username" &&
       key !== "studentId" &&
       key !== "MSSV"
   ).map(([key, value]) => {
@@ -124,29 +128,30 @@ const PaymentLogTable = () => {
   }, [role, userId]);
 
   const data = useMemo(() => {
-    const fetchedData = role === "ADMIN"
+    return role === "ADMIN"
       ? debouncedStudentId
         ? Array.isArray(studentPayLogs) ? studentPayLogs : []
         : Array.isArray(allStudentPayLogs) ? allStudentPayLogs : []
       : Array.isArray(studentPayLogs) ? studentPayLogs : [];
-    
-    // Tạo bản sao dữ liệu trước khi đảo ngược
-    return [...fetchedData].reverse();
   }, [allStudentPayLogs, studentPayLogs, role, debouncedStudentId]);
+
 
   const tableHeaders = useMemo(() => {
     const headers = [
-      { key: "transaction_id", label: "Mã giao dịch" },
+      { key: "order_code", label: "Mã đơn hàng" },
       { key: "purchase_page", label: "Số trang" },
       { key: "purchase_date", label: "Ngày mua" },
       { key: "purchase_time", label: "Thời gian" },
     ];
-  
-    // Thêm MSSV vào tiêu đề bảng cho ADMIN nếu không lọc theo studentId
-    if (role === "ADMIN" && debouncedStudentId === "") {
-      headers.unshift({ key: "MSSV", label: "MSSV" });
+
+    // Add MSSV column dynamically based on the filter
+    if (role === "ADMIN") {
+      headers.unshift({
+        key: "student_id",
+        label: "MSSV",
+      });
     }
-  
+
     return headers;
   }, [role, debouncedStudentId]);
 

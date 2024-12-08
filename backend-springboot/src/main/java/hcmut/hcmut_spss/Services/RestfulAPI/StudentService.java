@@ -467,14 +467,15 @@ public class StudentService {
     public ResponseEntity<ResponseObject> PROC_purchasePage(PurchasePageDTO purchasePageDTO){
         try {
             jdbcTemplate.execute(
-            "CALL purchase_page(?, ?, ?, ?, ?)",
+            "CALL purchase_page(?, ?, ?, ?, ?, ?)",
             (PreparedStatementCallback<Void>) ps -> {
                 ps.setString(1, purchasePageDTO.getStudentId());
                 ps.setInt(2, purchasePageDTO.getPurchasePages());
                 ps.setDate(3, purchasePageDTO.getPurchaseDate());
                 ps.setTime(4, purchasePageDTO.getPurchaseTime());
                 ps.setString(5, purchasePageDTO.getPayingMethod());
-
+                ps.setString(6, purchasePageDTO.getOrderCode());
+                
                 ps.execute();
                 return null;
             }
