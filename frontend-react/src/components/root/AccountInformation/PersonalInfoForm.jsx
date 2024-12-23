@@ -16,14 +16,13 @@ const PersonalInfoForm = () => {
   );
 
   useEffect(() => {
-    if(username) {
+    if (username) {
       dispatch(fetchPersonalInfor(username));
     }
   }, [username, dispatch]);
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    // sample data
     studentId: "2211445",
     email: "name.lastname@hcmut.edu.vn",
     fullName: "Nguyen Van A",
@@ -35,12 +34,16 @@ const PersonalInfoForm = () => {
   });
 
   useEffect(() => {
-    // Update formData only when personalInfor.data is available
     if (personalInfor.data) {
-      const fullName = personalInfor.data.last_name + ' ' + personalInfor.data.middle_name + ' ' + personalInfor.data.first_name;
+      const fullName =
+        personalInfor.data.last_name +
+        " " +
+        personalInfor.data.middle_name +
+        " " +
+        personalInfor.data.first_name;
       const studentId = personalInfor.data.student_id;
-      localStorage.setItem('fullName', fullName);
-      localStorage.setItem('studentId', studentId);
+      localStorage.setItem("fullName", fullName);
+      localStorage.setItem("studentId", studentId);
       setFormData({
         studentId: studentId,
         email: personalInfor.data.email,
@@ -61,7 +64,6 @@ const PersonalInfoForm = () => {
       [name]: value,
     }));
 
-    // Xóa lỗi nếu dữ liệu hợp lệ
     setErrors((prevErrors) => {
       const newErrors = { ...prevErrors };
       if (name === "fullName" && value.trim()) {
@@ -83,7 +85,6 @@ const PersonalInfoForm = () => {
   const handleSubmit = () => {
     const newErrors = {};
 
-    // Kiểm tra các trường bắt buộc
     if (!formData.fullName.trim())
       newErrors.fullName = "Họ và tên không được để trống";
     if (!/^\d{10,11}$/.test(formData.phoneNumber.trim())) {
@@ -96,24 +97,21 @@ const PersonalInfoForm = () => {
     ) {
       newErrors.schoolYear = "Sinh viên năm phải là số hợp lệ và lớn hơn 0";
     }
-    if (!formData.faculty.trim())
-      newErrors.faculty = "Khoa không được để trống";
+    if (!formData.faculty.trim()) newErrors.faculty = "Khoa không được để trống";
 
-    // Nếu có lỗi, hiển thị và dừng việc gửi yêu cầu
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       toast.error("Vui lòng điền đầy đủ thông tin hợp lệ!");
       return;
     }
 
-    setErrors({}); // Xóa lỗi nếu không có
+    setErrors({}); 
 
-    // Tạo payload từ formData
     const payload = {
       student_id: personalInfor.data.student_id,
-      last_name: formData.fullName.split(" ")[0], // Tách họ từ fullName
-      middle_name: formData.fullName.split(" ").slice(1, -1).join(" "), // Tách tên đệm
-      first_name: formData.fullName.split(" ").slice(-1).join(""), // Tách tên
+      last_name: formData.fullName.split(" ")[0],
+      middle_name: formData.fullName.split(" ").slice(1, -1).join(" "),
+      first_name: formData.fullName.split(" ").slice(-1).join(""),
       email: personalInfor.data.email,
       date_of_birth: formData.dateOfBirth,
       phone_number: formData.phoneNumber,
@@ -121,7 +119,6 @@ const PersonalInfoForm = () => {
       faculty: formData.faculty,
     };
 
-    // Gửi yêu cầu cập nhật
     fetch(
       `${
         import.meta.env.VITE_REACT_APP_BE_API_URL
@@ -143,15 +140,13 @@ const PersonalInfoForm = () => {
         return response.json();
       })
       .then((data) => {
-        dispatch(fetchPersonalInfor(username)); // Làm mới thông tin
+        dispatch(fetchPersonalInfor(username));
         toast.success("Cập nhật thông tin thành công");
-        setIsEditing(false); // Đóng chế độ chỉnh sửa
+        setIsEditing(false);
       })
       .catch((error) => {
         console.error(error);
-        toast.error(
-          error.message || "Cập nhật thông tin thất bại. Vui lòng thử lại"
-        );
+        toast.error(error.message || "Cập nhật thông tin thất bại. Vui lòng thử lại");
       });
   };
 
@@ -159,10 +154,7 @@ const PersonalInfoForm = () => {
     return (
       <div className="mb-4">
         <label className="block text-gray-700 font-medium mb-2">{label}</label>
-        {isEditing &&
-        !["remainingPages", "usedPages", "studentId", "email"].includes(
-          name
-        ) ? (
+        {isEditing && !["remainingPages", "usedPages", "studentId", "email"].includes(name) ? (
           <>
             <input
               type={type}
@@ -195,7 +187,7 @@ const PersonalInfoForm = () => {
   }
 
   return (
-    <div className="w-10/12 mx-auto bg-white shadow-md rounded-lg p-6">
+    <div className="w-full sm:w-10/12 mx-auto bg-white shadow-md rounded-lg p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">THÔNG TIN CÁ NHÂN</h2>
         <button
@@ -221,7 +213,7 @@ const PersonalInfoForm = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
         {renderField("MÃ SỐ SINH VIÊN", "studentId", formData.studentId)}
         {renderField("EMAIL", "email", formData.email)}
         {renderField("HỌ VÀ TÊN", "fullName", formData.fullName)}
@@ -229,18 +221,14 @@ const PersonalInfoForm = () => {
         {renderField("NGÀY SINH", "dateOfBirth", formData.dateOfBirth, "date")}
         {renderField("SINH VIÊN NĂM", "schoolYear", formData.schoolYear)}
         {renderField("KHOA", "faculty", formData.faculty)}
-        {renderField(
-          "SỐ TRANG IN CÒN LẠI",
-          "remainingPages",
-          formData.remainingPages
-        )}
+        {renderField("SỐ TRANG IN CÒN LẠI", "remainingPages", formData.remainingPages)}
       </div>
 
       {isEditing && (
         <div className="flex justify-center mt-6">
           <button
             onClick={handleSubmit}
-            className="px-12 py-4 text-base font-semibold text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-xl shadow-lg transition-colors"
+            className="px-12 py-3 md:py-4 text-base font-semibold text-white uppercase bg-blue-700 hover:bg-blue-800 rounded-xl shadow-lg transition-colors"
           >
             XÁC NHẬN
           </button>
