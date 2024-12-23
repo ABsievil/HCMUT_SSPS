@@ -19,7 +19,7 @@ function RegisForm() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (password !== confirmPassword){
+    if (password !== confirmPassword) {
       toast.error("Xác nhận mật khẩu không trùng khớp");
       return;
     }
@@ -53,26 +53,26 @@ function RegisForm() {
   };
 
   return (
-    <form className="flex flex-col max-w-full w-[500px] px-5" onSubmit={handleSubmit}>
+    <form className="flex flex-col max-w-full p-5 px-10 bg-white shadow-md rounded-md w-[450px] md:w-[500px]" onSubmit={handleSubmit}>
       <div className="flex justify-between items-center mb-2">
         <div className='flex justify-center items-center'>
           <IoMdArrowRoundBack size={20} color='blue' />
           <a href="/login" className="text-left text-blue-700 hover:underline text-lg font-bold">Trở về</a>
         </div>
-        <div className="flex flex-col items-end mt-6">
-          <span className="text-black text-lg font-bold">Đăng ký</span>
-          <span className="text-black text-lg">1/2</span>
+        <div className="flex flex-col items-end mt-4">
+          <span className="text-black text-lg sm:text-xl font-bold">Đăng ký</span>
+          <span className="text-black text-sm sm:text-lg">1/2</span>
         </div>
       </div>
 
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d7576939ba90f1483dc1b48490e69d0dc4888cc061d7e09535e09ea9924476c?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
-        alt=""
-        className="object-contain self-center max-w-full aspect-[0.99] w-[140px]"
+        alt="Logo"
+        className="object-contain self-center max-w-[90px] sm:max-w-[120px] aspect-[0.99] w-full"
       />
       <h2 className="self-center mt-7 text-2xl text-black">Trang đăng ký</h2>
-      <p className="self-center my-2 text-base text-black">Vui lòng nhập đầy đủ thông tin</p>
+      <p className="self-center my-2 text-base sm:text-lg text-black">Vui lòng nhập đầy đủ thông tin</p>
 
       {/* Student ID Input */}
       <InputField
@@ -128,12 +128,12 @@ function RegisForm() {
 
       <button
         type="submit"
-        className="mt-8 py-4 text-white bg-blue-700 rounded-md hover:bg-blue-800"
+        className="mt-8 py-4 text-white bg-blue-700 rounded-md hover:bg-blue-800 text-lg sm:text-xl"
       >
         Tiếp tục
       </button>
 
-      <p className="self-center mt-4 text-base">
+      <p className="self-center mt-4 text-base sm:text-lg">
         Bạn đã có tài khoản? <a href="/login" className="text-blue-700 underline font-bold">Đăng nhập</a>
       </p>
     </form>

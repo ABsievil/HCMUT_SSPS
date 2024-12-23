@@ -5,9 +5,7 @@ import ChangePassword from './AccountInformation/ChangePassword';
 function AccountInformation() {
     return (
         <Layout>
-            <div className='my-auto'>
-                <ChangePassword />
-            </div>
+            <ChangePassword />
         </Layout>
     )
 }

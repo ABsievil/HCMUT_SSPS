@@ -29,7 +29,7 @@ const RadioButton = React.memo(({ id, label, name, checked, onChange, icon: Icon
 ));
 
 const Button = React.memo(({ children, variant = 'primary', className = '', icon: Icon, ...props }) => {
-    const baseStyle = "px-1 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-1";
+    const baseStyle = "px-2 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-1";
     const variants = {
         primary: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800",
         secondary: "bg-gray-100 text-gray-700 hover:bg-gray-200 active:bg-gray-300",
@@ -119,7 +119,7 @@ const AddNewPrinterForm = React.memo(({ onClose }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleSubmit} className="space-y-8 ">
             <h3 className="text-xl font-bold text-gray-900 flex items-center">
                 Thêm máy in mới
             </h3>
@@ -254,15 +254,15 @@ const AddPrinter = () => {
     }));
 
     return (
-        <div className=" bg-white shadow-lg rounded-xl p-6 space-y-8 h-full">
+        <div className=" bg-white shadow-lg rounded-xl p-6 space-y-8 h-full w-[420px]">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-4">
-                        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                        <h2 className="md:text-2xl text-xl font-bold text-gray-900 flex items-center gap-2">
                             <Printer />
                             Quản lý máy in
                         </h2>
-                        <Button onClick={() => setShowAddForm(true)} icon={Plus}>
+                        <Button onClick={() => setShowAddForm(true)} icon={Plus} className="px-3 py-3 md:w-[170px]">
                             Thêm máy in mới
                         </Button>
                     </div>

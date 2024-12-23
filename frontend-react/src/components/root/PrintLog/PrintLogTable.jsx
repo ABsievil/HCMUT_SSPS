@@ -6,26 +6,25 @@ import { selectStudentLog } from '../../../store/printLogSlice';
 import { useUser } from '../../../store/userContext';
 import { fetchLogAllStudents, fetchLogStudent } from '../../../store/printLogSlice';
 
-
 const FilterInput = ({ label, value, onChange, type = "text" }) => (
-  <div className="flex flex-col">
+  <div className="flex flex-col w-full sm:w-auto">
     <label className="block text-sm font-medium text-gray-700">{label}</label>
     <input
       type={type}
       value={value || ''} // Ensure value is never null
       onChange={onChange}
-      className="mt-1 block w-full pl-3 pr-2 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      className="mt-1 block w-full sm:w-40 pl-3 pr-2 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
     />
   </div>
 );
 
 const PrinterSelect = ({ value, onChange, printers }) => (
-  <div>
+  <div className="w-full sm:w-auto">
     <label className="block text-sm font-medium text-gray-700">CHỌN MÁY IN</label>
     <select
       value={value}
       onChange={onChange}
-      className="mt-1 block w- pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+      className="mt-1 block w-full sm:w-40 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
     >
       <option value="reset">Tất cả máy in</option>
       {printers.length > 0 ? (
@@ -95,9 +94,9 @@ const PrintHistoryDetail = React.memo(({ isOpen, onClose, data }) => {
           <X size={24} />
         </button>
         <h2 className="text-2xl font-bold mb-6">Chi tiết lịch sử in</h2>
-        
+
         {/* Adding a scrollable content area */}
-        <div className="grid grid-cols-2 gap-4 overflow-auto max-h-[70vh]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-auto max-h-[70vh]">
           {Object.values(sections).map((section) => (
             <DetailSection key={section.title} {...section} />
           ))}
@@ -106,7 +105,6 @@ const PrintHistoryDetail = React.memo(({ isOpen, onClose, data }) => {
     </div>
   );
 });
-
 
 const PrintLogTable = () => {
   const { role, userId } = useUser();
@@ -183,7 +181,7 @@ const PrintLogTable = () => {
     ];
 
     // Add MSSV column only if in ADMIN role and studentId filter is applied
-    if (role === 'ADMIN' ) {
+    if (role === 'ADMIN') {
       headers.unshift({ key: 'student_id', label: 'MSSV' });
     }
 
@@ -197,26 +195,25 @@ const PrintLogTable = () => {
       [field]: value
     }));
   }, []);
-  
 
   // Debounce logic for studentId filter
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedStudentId(filters.studentId);
-    }, 1000); // Debounce for 500ms
+    }, 1000); // Debounce for 1000ms
     return () => clearTimeout(timer); // Cleanup on change
   }, [filters.studentId]);
 
   useEffect(() => {
     // Reset pagination whenever filters change
     setCurrentPage(1);
-  
+
     const logStudentDTO = {
       printerId: filters.printerId === 'reset' ? '' : filters.printerId,
       dateStart: filters.dateStart,
       dateEnd: filters.dateEnd
     };
-  
+
     if (role === 'USER' && userId) {
       dispatch(fetchLogStudent({
         studentId: userId,
@@ -224,7 +221,7 @@ const PrintLogTable = () => {
       }));
       return;
     }
-  
+
     if (role === 'ADMIN') {
       if (debouncedStudentId?.trim()) {
         dispatch(fetchLogStudent({
@@ -248,21 +245,20 @@ const PrintLogTable = () => {
   // Pagination logic: calculate the rows to display based on the current page
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = logs.slice(indexOfFirstRow, indexOfLastRow);
+  const currentRows = logs?.slice(indexOfFirstRow, indexOfLastRow) || [];
 
-  // Pagination controls
-  const totalPages = Math.ceil(logs.length / rowsPerPage);
+  const totalPages = Math.ceil(logs?.length / rowsPerPage);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  
 
   return (
-    <div className="overflow-x-auto drop-shadow-lg mx-10 min-h-screen ">
+    <div className="overflow-x-auto drop-shadow-lg mx-4 sm:mx-10 min-h-screen">
       <h1 className="text-center text-2xl font-bold my-8">
         LỊCH SỬ IN CỦA {role === 'USER' ? 'SINH VIÊN' : role === 'ADMIN' ? 'HỆ THỐNG' : 'BẠN'}
       </h1>
 
-      <div className="p-4 ">
-        <div className="flex justify-center items-center space-x-4">
+      <div className="p-4">
+        <div className="flex flex-wrap justify-center items-center space-x-4 space-y-4 sm:space-y-0">
           {role === "ADMIN" && (
             <FilterInput
               label="MSSV"
@@ -295,31 +291,37 @@ const PrintLogTable = () => {
 
       {logs.length > 0 ? (
         <>
-          <table className="w-full md:w-[90%] bg-white mt-3 m-auto">
-            <thead>
-              <tr className="bg-themecolor1">
-                {tableHeaders.map(({ key, label }) => (
-                  <th key={key} className="py-3 text-center">{label}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {currentRows.map((row, index) => (
-                <tr
-                  key={index}
-                  className={`${index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-purple-100 hover:bg-purple-200'} cursor-pointer transition-colors duration-150`}
-                  onClick={() => handleRowClick(row)}
-                >
-                  {tableHeaders.map(({ key }) => (
-                    <td key={key} className="py-4 text-center">
-                      {/* Check if the current column is 'student_id' */}
-                      {key === 'student_id' ? row.student_id : row[key]} {/* Ensure student_id is accessed correctly */}
-                    </td>
+          <div className="overflow-x-auto">
+            <table className="w-full bg-white mt-3">
+              <thead>
+                <tr className="bg-themecolor1">
+                  {tableHeaders.map(({ key, label }) => (
+                    <th key={key} className={`py-3 text-center text-sm sm:text-base ${['student_id', 'printer_id', 'file_name', 'printing_date'].includes(key) ? '' : 'hidden sm:table-cell'}`}>
+                      {label}
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {currentRows.map((row, index) => (
+                  <tr
+                    key={index}
+                    className={`${index % 2 === 0 ? 'bg-white hover:bg-gray-200' : 'bg-purple-100 hover:bg-purple-200'} cursor-pointer transition-colors duration-150`}
+                    onClick={() => handleRowClick(row)}
+                  >
+                    {tableHeaders.map(({ key }) => (
+                      <td
+                        key={key}
+                        className={`py-4 text-center text-sm sm:text-base ${['student_id', 'printer_id', 'file_name', 'printing_date'].includes(key) ? '' : 'hidden sm:table-cell'}`}
+                      >
+                        {key === 'student_id' ? row.student_id : row[key]} {/* Ensure student_id is accessed correctly */}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           {/* Pagination Controls */}
           <div className="flex justify-center mt-10">

@@ -68,7 +68,7 @@ const Sidebar = () => {
 
   return (
     <aside className="flex flex-col max-md:w-full w-[220px]">
-      <div className="flex flex-col grow items-center px-1 pt-3.5 text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-20 rounded-lg shadow-lg fixed h-[calc(100vh-2rem)] top-4 left-5 overflow-y-auto">
+      <div className="flex flex-col grow items-center px-1 pt-3.5 text-sm leading-snug text-white bg-[#2D5E82] max-md:pb-15 rounded-lg shadow-lg fixed h-[calc(100vh-2rem)] top-4 left-5 overflow-y-auto">
         <img
           loading="lazy"
           src="src/images/ellipse-1.png"
