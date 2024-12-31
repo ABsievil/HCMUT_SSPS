@@ -25,7 +25,7 @@ const AdminInforForm = () => {
 
   useEffect(() => {
     if (adminInfor.data) {
-      const fullName = adminInfor.data.last_name + ' ' + adminInfor.data.middle_name + ' ' + adminInfor.data.first_name;
+      const fullName = adminInfor.data.last_name;
       localStorage.setItem('fullName', fullName);
       setFormData({
         email: adminInfor.data.email,

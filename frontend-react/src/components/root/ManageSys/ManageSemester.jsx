@@ -246,15 +246,17 @@ const ManageFile = () => {
     );
 
     return (
-        <div className="md:w-1/2 bg-white shadow-lg rounded-xl p-5 space-y-8 w-[420px]">
+        <div className="md:w-1/2 bg-white shadow-xl rounded-xl p-5 space-y-8 w-[440px]">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-6">
-                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 flex items-center gap-4">
-                            <File />
+                        <h2 className="text-xl md:text-[23px] font-bold text-gray-900 flex items-center gap-4">
+                            <span className="hidden sm:block"> {/* Ẩn trên mobile, chỉ hiển thị từ sm trở lên */}
+                                <File />
+                            </span>
                             Điều chỉnh thông tin học kì
                         </h2>
-                        <Button onClick={() => setShowAddForm(true)} icon={Plus} className="py-3 w-[250px] md:w-[180px]">
+                        <Button onClick={() => setShowAddForm(true)} icon={Plus} className="py-3 w-[200px] md:w-[170px]">
                             Thêm học kì mới
                         </Button>
                     </div>
