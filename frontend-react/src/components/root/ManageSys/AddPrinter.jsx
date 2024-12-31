@@ -254,12 +254,14 @@ const AddPrinter = () => {
     }));
 
     return (
-        <div className=" bg-white shadow-lg rounded-xl p-6 space-y-8 h-full w-[420px]">
+        <div className=" bg-white shadow-lg rounded-xl p-6 space-y-8 h-full w-[440px]">
             {!showAddForm ? (
                 <>
                     <div className="flex items-center justify-between gap-4">
                         <h2 className="md:text-2xl text-xl font-bold text-gray-900 flex items-center gap-2">
-                            <Printer />
+                            <span className="hidden sm:block"> {/* Ẩn trên mobile, chỉ hiển thị từ sm trở lên */}
+                                <Printer />
+                            </span>
                             Quản lý máy in
                         </h2>
                         <Button onClick={() => setShowAddForm(true)} icon={Plus} className="px-3 py-3 md:w-[170px]">
