@@ -215,7 +215,6 @@ const ManageFile = () => {
         setSupplyDate(Ultility[0]?.date_reset_default_page);
     }, [Ultility]);
 
-
     const handleSemesterChange = useCallback((e) => {
         setSelectedSemester(e.target.value);
     }, []);
@@ -247,21 +246,23 @@ const ManageFile = () => {
     );
 
     return (
-        <div className="w-full md:w-1/2 bg-white shadow-lg rounded-xl p-5 space-y-8">
+        <div className="md:w-1/2 bg-white shadow-xl rounded-xl p-5 space-y-8 w-[440px]">
             {!showAddForm ? (
                 <>
-                    <div className="flex items-center justify-between gap-4">
-                        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                            <File />
+                    <div className="flex items-center justify-between gap-6">
+                        <h2 className="text-xl md:text-[23px] font-bold text-gray-900 flex items-center gap-4">
+                            <span className="hidden sm:block"> {/* Ẩn trên mobile, chỉ hiển thị từ sm trở lên */}
+                                <File />
+                            </span>
                             Điều chỉnh thông tin học kì
                         </h2>
-                        <Button onClick={() => setShowAddForm(true)} icon={Plus}>
+                        <Button onClick={() => setShowAddForm(true)} icon={Plus} className="py-3 w-[200px] md:w-[170px]">
                             Thêm học kì mới
                         </Button>
                     </div>
 
                     {/* Select Semester Section */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         <SectionTitle>CHỌN HỌC KỲ</SectionTitle>
                         <Select
                             id="selectSemester"
@@ -272,7 +273,7 @@ const ManageFile = () => {
                         />
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         <SectionTitle>NGÀY CUNG CẤP ĐỊNH KỲ</SectionTitle>
                         <input
                             id="supplyDate"
@@ -283,7 +284,7 @@ const ManageFile = () => {
                         />
                     </div>
 
-                    <div className="flex items-center gap-4">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
                         <SectionTitle>SỐ TRANG CUNG CẤP ĐỊNH KỲ</SectionTitle>
                         <input
                             id="periodicSupply"
@@ -297,7 +298,7 @@ const ManageFile = () => {
 
                     <SectionTitle>LOẠI TỆP ĐƯỢC TẢI LÊN</SectionTitle>
                     <div className="flex flex-col gap-4 mt-4">
-                        <div className="flex items-center gap-4 w-full">
+                        <div className="flex flex-col sm:flex-row gap-4 w-full">
                             <input
                                 type="text"
                                 placeholder="Thêm loại tệp mới (vd: .png)"
@@ -305,7 +306,7 @@ const ManageFile = () => {
                                 onChange={handleCustomFileTypeChange}
                                 className="border border-gray-300 rounded-md p-2 flex-1"
                             />
-                            <Button onClick={handleAddFileType}>Thêm</Button>
+                            <Button onClick={handleAddFileType} className="mr-auto px-5">Thêm</Button>
                         </div>
 
                         <div className="flex flex-wrap gap-2">

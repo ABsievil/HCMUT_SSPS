@@ -9,7 +9,7 @@ function Layout({ children }) {
   return (
     <div className="flex flex-col min-h-screen bg-gray-200">
       {/* Mobile Menu Button */}
-      <div className="lg:hidden p-4">
+      <div className="lg:hidden px-4 pt-3">
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className="p-2 hover:bg-gray-100 rounded-lg"

@@ -22,9 +22,10 @@ const AdminInforForm = () => {
     phoneNumber: "0999999999",
     dateOfBirth: "2024-01-01",
   });
+
   useEffect(() => {
     if (adminInfor.data) {
-      const fullName = adminInfor.data.last_name + ' ' + adminInfor.data.middle_name + ' ' + adminInfor.data.first_name;
+      const fullName = adminInfor.data.last_name;
       localStorage.setItem('fullName', fullName);
       setFormData({
         email: adminInfor.data.email,
@@ -45,13 +46,13 @@ const AdminInforForm = () => {
 
   const handleSubmit = () => {
     const adminDTO = {
-      last_name: formData.fullName.split(" ")[0], // Tách họ từ fullName
-      middle_name: formData.fullName.split(" ").slice(1, -1).join(" "), // Tách tên đệm
-      first_name: formData.fullName.split(" ").slice(-1).join(""), // Tách tên
+      last_name: formData.fullName.split(" ")[0],
+      middle_name: formData.fullName.split(" ").slice(1, -1).join(" "),
+      first_name: formData.fullName.split(" ").slice(-1).join(""),
       email: formData.email,
       date_of_birth: formData.dateOfBirth,
       phone_number: formData.phoneNumber
-    }
+    };
     dispatch(updateAdminInfor(adminDTO));
     setIsEditing(false);
   };
@@ -87,7 +88,7 @@ const AdminInforForm = () => {
   }
 
   return (
-    <div className="w-10/12 mx-auto bg-white shadow-md rounded-lg p-6">
+    <div className="w-full sm:w-10/12 mx-auto bg-white shadow-md rounded-lg p-6">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">THÔNG TIN CÁ NHÂN</h2>
         <button
@@ -102,7 +103,7 @@ const AdminInforForm = () => {
               </>
             ) : (
               <>
-                 CHỈNH SỬA
+                CHỈNH SỬA
                 <Pencil className="w-5 h-5 text-gray-600" />
               </>
             )}
@@ -110,7 +111,7 @@ const AdminInforForm = () => {
         </button>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
         {renderField("EMAIL", "email", formData.email)}
         {renderField("HỌ VÀ TÊN", "fullName", formData.fullName)}
         {renderField("SỐ ĐIỆN THOẠI", "phoneNumber", formData.phoneNumber)}

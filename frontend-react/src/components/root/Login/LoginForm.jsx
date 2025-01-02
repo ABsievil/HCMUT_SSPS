@@ -34,10 +34,8 @@ function LoginForm() {
 
           localStorage.setItem('token', data.data);
           localStorage.setItem('userRole', role); // set userRole to check authenticate in App.jsx
-          // Sử dụng window.location để điều hướng
           window.location.href = '/account';
         } else if (data.status === "ERROR") {
-          // Điều hướng bằng cách cập nhật URL
           toast.error("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
         }
       })
@@ -52,14 +50,19 @@ function LoginForm() {
   };
 
   return (
-    <form className="flex flex-col max-w-full w-[400px]" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col max-w-full mx-auto p-10 bg-white shadow-md rounded-md w-[450px] md:w-[500px]"
+      onSubmit={handleSubmit}
+    >
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d7576939ba90f1483dc1b48490e69d0dc4888cc061d7e09535e09ea9924476c?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
         alt="Logo"
-        className="object-contain self-center max-w-full aspect-[0.99] w-[140px]"
+        className="object-contain self-center w-[90px] sm:w-[120px] mb-4"
       />
-      <h2 className="self-center my-5 text-xl text-black">Trang đăng nhập</h2>
+      <h2 className="self-center text-lg sm:text-xl text-black mb-4">
+        Trang đăng nhập
+      </h2>
 
       {/* Email InputField */}
       <InputField
@@ -88,21 +91,21 @@ function LoginForm() {
         onTogglePassword={togglePasswordVisibility}
       />
 
-      <div className="flex flex-col pl-2.5 mt-6 w-full">
-        <div className="flex gap-6 w-full justify-end">
-          <a href="/verifymail" className="text-sm text-blue-700 font-bold">
+      <div className="flex flex-col mt-6 w-full">
+        <div className="flex justify-end text-sm mb-4">
+          <a href="/verifymail" className="text-blue-700 font-bold">
             Quên mật khẩu?
           </a>
         </div>
         <button
           type="submit"
-          className="self-stretch w-full px-5 py-3 mt-6 text-sm text-center text-white bg-blue-700 rounded-md hover:bg-blue-800 transition-colors duration-300"
+          className="w-full px-4 py-3 text-sm sm:text-base text-white bg-blue-700 rounded-md hover:bg-blue-800 transition duration-300"
         >
           Đăng nhập
         </button>
-        <div className="flex gap-3 self-start mt-6 text-sm">
-          <p className="grow text-stone-950">Bạn chưa có tài khoản?</p>
-          <a href="/register" className="text-blue-700 underline font-bold">
+        <div className="flex flex-wrap gap-2 mt-4 text-sm">
+          <p className="text-gray-700">Bạn chưa có tài khoản?</p>
+          <a href="/register" className="text-blue-700 font-bold underline">
             Tạo tài khoản
           </a>
         </div>
