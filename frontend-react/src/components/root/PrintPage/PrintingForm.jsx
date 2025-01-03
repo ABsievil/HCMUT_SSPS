@@ -89,9 +89,13 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   useEffect(() => {
     dispatch(fetchUltilityByCurrentDate());
   }, [dispatch]);
-  if (CurrentUltility && CurrentUltility.length > 0) {
-    dispatch(fetchFileType(CurrentUltility[0].semester));
-  }
+
+  useEffect(() => {
+    
+        dispatch(fetchFileType(CurrentUltility[0]?.semester));
+    
+      }, [CurrentUltility])
+
   useEffect(() => {
     setAcceptedTypes(availableTypes?.data?.map(type => type.accepted_file_type).join(', '));
   }, [availableTypes])
