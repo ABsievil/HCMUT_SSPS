@@ -84,6 +84,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   const { availableTypes } = useSelector(selectAvailableFileTypes);
   const [acceptedFileTypes, setAcceptedTypes] = useState("");
   const dragRef = React.useRef(null);
+  const fileInputRef = React.useRef(null);  // Add ref for file input
   const [isDragging, setIsDragging] = React.useState(false);
 
   useEffect(() => {
@@ -91,14 +92,26 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
   }, [dispatch]);
 
   useEffect(() => {
-    
-        dispatch(fetchFileType(CurrentUltility[0]?.semester));
-    
-      }, [CurrentUltility])
+    dispatch(fetchFileType(CurrentUltility[0]?.semester));
+  }, [CurrentUltility])
 
   useEffect(() => {
     setAcceptedTypes(availableTypes?.data?.map(type => type.accepted_file_type).join(', '));
   }, [availableTypes])
+
+  const handleFileValidation = useCallback((file) => {
+    const fileType = file.name.split('.').pop().toLowerCase();
+    const isAccepted = acceptedFileTypes.includes(fileType);
+
+    if (isAccepted) {
+      onFileUpload({ target: { files: [file] } });
+      toast.success("Tệp đã được thêm thành công!");
+      return true;
+    } else {
+      toast.error(`Loại tệp không được hỗ trợ: .${fileType}`);
+      return false;
+    }
+  }, [onFileUpload, acceptedFileTypes]);
 
   const handleDrag = useCallback((e, isDragging) => {
     e.preventDefault();
@@ -113,22 +126,24 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
 
     const files = e.dataTransfer.files;
     if (files.length) {
-      const file = files[0];
-      const fileType = file.name.split('.').pop().toLowerCase();
-      const isAccepted = acceptedFileTypes.includes(fileType);
-
-      if (isAccepted) {
-        onFileUpload({ target: { files: [file] } });
-        toast.success("Tệp đã được thêm thành công!");
-      } else {
-        toast.error(`Loại tệp không được hỗ trợ: .${fileType}`);
-      }
+      handleFileValidation(files[0]);
     }
-  }, [onFileUpload, acceptedFileTypes]);
+  }, [handleFileValidation]);
+
+  const handleFileChange = useCallback((e) => {
+    if (e.target.files.length) {
+      handleFileValidation(e.target.files[0]);
+    }
+    // Reset input value to allow re-uploading the same file
+    e.target.value = '';
+  }, [handleFileValidation]);
 
   const handleRemoveFile = useCallback((e) => {
     e.stopPropagation();
     onFileUpload({ target: { files: [] } });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';  // Reset input value when removing file
+    }
     toast.info("Tệp đã bị gỡ bỏ.");
   }, [onFileUpload]);
 
@@ -146,33 +161,19 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
         onDragLeave={e => handleDrag(e, false)}
         onDrop={handleDrop}
         className={`p-6 border-2 border-dashed rounded-lg transition-all duration-200 ${isDragging
-          ? 'border-blue-500 bg-blue-50'
-          : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
+            ? 'border-blue-500 bg-blue-50'
+            : 'border-gray-300 hover:border-blue-400 hover:bg-gray-50'
           } ${error ? 'border-red-500 bg-red-50' : ''}`}
       >
         <div className="flex flex-col items-center gap-3">
           <input
+            ref={fileInputRef}
             type="file"
             id="fileUpload"
             className="hidden"
-            onChange={(e) => {
-              if (e.target.files.length) {
-                const file = e.target.files[0];
-                const fileType = file.name.split('.').pop().toLowerCase();
-                const isAccepted = acceptedFileTypes.includes(fileType);
-
-                if (isAccepted) {
-                  onFileUpload(e);
-                  toast.success("Tệp đã được thêm thành công!");
-                } else {
-                  toast.error(`Loại tệp không được hỗ trợ: .${fileType}`);
-                  e.target.value = ""; // Gỡ tệp khỏi input
-                }
-              }
-            }}
+            onChange={handleFileChange}
             accept={acceptedFileTypes}
           />
-
 
           {selectedFile ? (
             <div className="flex items-center gap-3 w-full">
@@ -201,7 +202,7 @@ const FileUpload = React.memo(({ selectedFile, onFileUpload, error }) => {
         </div>
       </div>
 
-      {error && <p className="text-sm text-red-600 mt-2">{error}</p>} {/* Show error message */}
+      {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
 
       <div className="flex items-center gap-2 text-sm text-gray-500">
         <AlertCircle className="w-4 h-4" />
