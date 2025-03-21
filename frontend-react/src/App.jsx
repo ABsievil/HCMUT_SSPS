@@ -1,38 +1,36 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// Components
-import HomePage from "../src/components/root/HomePage";
-import PrintingSystem from "../src/components/root/PrintPage";
-import PrintingPage from "../src/components/root/BuyPaper";
-import LoginPage from "../src/components/root/LoginPage";
-import RegisterPage from "../src/components/root/RegisterPage";
-import Verification from "./components/root/Verify/Verification";
-import InputMail from "./components/root/Verify/InputMail";
-import CreateNewPassword from "./components/root/CreateNewPassword";
-import AccountInformation from "./components/root/AccountInformation";
-// import ProtectedRoute from "./components/root/Login/ProtectedRouter";
-import ManageSystem from "./components/root/ManageSystem";
-import Report from "./components/root/Report";
-import ChangePassword from "./components/root/ChangePassword";
-import PrintLog from "./components/root/PrintLog";
+import React, { useEffect, Suspense, lazy } from "react";
 import { useDispatch } from "react-redux";
 import { fetchPrintersabc } from "./store/PrintersabcSlice";
-import React, {useEffect} from "react";
-import PaymentLog from "./components/root/PaymentLog";
-import NotFoundPage from "../src/components/root/404NotFoundPage";
-import PaymentSuccess from "./components/root/paymentSuccess";
+
+// Lazy load components
+const HomePage = lazy(() => import("../src/components/root/HomePage"));
+const PrintingSystem = lazy(() => import("../src/components/root/PrintPage"));
+const PrintingPage = lazy(() => import("../src/components/root/BuyPaper"));
+const LoginPage = lazy(() => import("../src/components/root/LoginPage"));
+const RegisterPage = lazy(() => import("../src/components/root/RegisterPage"));
+const Verification = lazy(() => import("./components/root/Verify/Verification"));
+const InputMail = lazy(() => import("./components/root/Verify/InputMail"));
+const CreateNewPassword = lazy(() => import("./components/root/CreateNewPassword"));
+const AccountInformation = lazy(() => import("./components/root/AccountInformation"));
+const ManageSystem = lazy(() => import("./components/root/ManageSystem"));
+const Report = lazy(() => import("./components/root/Report"));
+const ChangePassword = lazy(() => import("./components/root/ChangePassword"));
+const PrintLog = lazy(() => import("./components/root/PrintLog"));
+const PaymentLog = lazy(() => import("./components/root/PaymentLog"));
+const NotFoundPage = lazy(() => import("../src/components/root/404NotFoundPage"));
+const PaymentSuccess = lazy(() => import("./components/root/paymentSuccess"));
 
 // Authentication utility
 const isTokenValid = () => {
-  const token = localStorage.getItem('token');
-  // Basic token validation - you might want to add more sophisticated checks
+  const token = localStorage.getItem("token");
   return !!token; // Returns true if token exists
 };
 
-// Role-based authentication
 const getUserRole = () => {
-  return localStorage.getItem('userRole') || null;
+  return localStorage.getItem("userRole") || null;
 };
 
 // Protected Route Component
@@ -40,15 +38,14 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
   const isAuthenticated = isTokenValid();
   const userRole = getUserRole();
 
-  // If no token, redirect to login
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  // If role is specified and doesn't match, redirect to unauthorized page
   if (requiredRole && userRole !== requiredRole) {
-    if( (userRole == "ADMIN") && (requiredRole == "USER") ) {return children;}
-
+    if (userRole === "ADMIN" && requiredRole === "USER") {
+      return children;
+    }
     return <Navigate to="/notfound" replace />;
   }
 
@@ -58,45 +55,40 @@ const ProtectedRoute = ({ children, requiredRole = null }) => {
 export default function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchPrintersabc()); // printerList is used alot throughout the app, fetching it here maybe effective
-  }, []);
+    dispatch(fetchPrintersabc());
+  }, [dispatch]);
 
   return (
     <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/notfound" element={<NotFoundPage />} />
-        <Route path="/verifymail" element={<InputMail />} />
-        <Route
-          path="/verify-newpass"
-          element={<Verification isNewPass={true} />}
-        />
-        <Route path="/verify" element={<Verification />} />
-        <Route path="/newpassword" element={<CreateNewPassword />} />
+      <Suspense fallback={<div>Đang tải...</div>}>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/notfound" element={<NotFoundPage />} />
+          <Route path="/verifymail" element={<InputMail />} />
+          <Route path="/verify-newpass" element={<Verification isNewPass={true} />} />
+          <Route path="/verify" element={<Verification />} />
+          <Route path="/newpassword" element={<CreateNewPassword />} />
 
-        {/* USER ROLE Protected Routes */}
-        <Route path="/account" element={<ProtectedRoute requiredRole="USER"> <AccountInformation /> </ProtectedRoute>} />
-        <Route path="/change-password" element={<ProtectedRoute requiredRole="USER"> <ChangePassword /> </ProtectedRoute>} />
-        <Route path="/print" element={<ProtectedRoute requiredRole="USER"> <PrintingSystem /> </ProtectedRoute>} />
-        <Route path="/buyPaper" element={<ProtectedRoute requiredRole="USER"> <PrintingPage /> </ProtectedRoute>} />
-        <Route path="/printlog" element={<ProtectedRoute requiredRole="USER"> <PrintLog /> </ProtectedRoute>} />
-        <Route path="/payment" element={<ProtectedRoute requiredRole="USER"> <PaymentLog /> </ProtectedRoute>} />
-        <Route path="/api/v1/payment/vn-pay-callback" element={<ProtectedRoute requiredRole="USER"> <PaymentSuccess /> </ProtectedRoute>} />
+          {/* USER ROLE Protected Routes */}
+          <Route path="/account" element={<ProtectedRoute requiredRole="USER"><AccountInformation /></ProtectedRoute>} />
+          <Route path="/change-password" element={<ProtectedRoute requiredRole="USER"><ChangePassword /></ProtectedRoute>} />
+          <Route path="/print" element={<ProtectedRoute requiredRole="USER"><PrintingSystem /></ProtectedRoute>} />
+          <Route path="/buyPaper" element={<ProtectedRoute requiredRole="USER"><PrintingPage /></ProtectedRoute>} />
+          <Route path="/printlog" element={<ProtectedRoute requiredRole="USER"><PrintLog /></ProtectedRoute>} />
+          <Route path="/payment" element={<ProtectedRoute requiredRole="USER"><PaymentLog /></ProtectedRoute>} />
+          <Route path="/api/v1/payment/vn-pay-callback" element={<ProtectedRoute requiredRole="USER"><PaymentSuccess /></ProtectedRoute>} />
 
-        {/* ADMIN ROLE Protected Routes */}
-        {/* <Route path="/account" element={<ProtectedRoute requiredRole="ADMIN"> <AccountInformation /> </ProtectedRoute>} /> */}
-        {/* <Route path="/printlog" element={<ProtectedRoute requiredRole="ADMIN"> <PrintLog /> </ProtectedRoute>} /> */}
-        {/* <Route path="/payment" element={<ProtectedRoute requiredRole="ADMIN"> <PaymentLog /> </ProtectedRoute>} /> */}
-        <Route path="/report" element={<ProtectedRoute requiredRole="ADMIN"> <Report /> </ProtectedRoute>} />
-        <Route path="/manage" element={<ProtectedRoute requiredRole="ADMIN"> <ManageSystem /> </ProtectedRoute>} />
-        {/* <Route path="/change-password" element={<ProtectedRoute requiredRole="ADMIN"> <ChangePassword /> </ProtectedRoute>} /> */}
+          {/* ADMIN ROLE Protected Routes */}
+          <Route path="/report" element={<ProtectedRoute requiredRole="ADMIN"><Report /></ProtectedRoute>} />
+          <Route path="/manage" element={<ProtectedRoute requiredRole="ADMIN"><ManageSystem /></ProtectedRoute>} />
 
-        {/* catch unknown url */}
-        <Route path="*" element={<Navigate to="/notfound" replace />} />
-      </Routes>
+          {/* Catch unknown URL */}
+          <Route path="*" element={<Navigate to="/notfound" replace />} />
+        </Routes>
+      </Suspense>
       <ToastContainer position="top-right" autoClose={1000} />
     </Router>
   );
