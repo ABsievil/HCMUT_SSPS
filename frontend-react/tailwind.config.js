@@ -18,7 +18,6 @@ export default {
       colors: colors,
       fontFamily: {
         sans: ['Inter', 'Helvetica', 'Arial', 'sans-serif'],
-        // Bạn có thể thêm font chữ khác nếu muốn
       },
     },
   },

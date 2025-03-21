@@ -229,8 +229,6 @@ const QRPaymentModal = ({ orderId, amount, onClose, quantity }) => {
   );
 };
 
-
-
 const Button = ({ children, onClick, className = "", disabled = false }) => (
   <button
     onClick={onClick}

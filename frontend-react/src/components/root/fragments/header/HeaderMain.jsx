@@ -1,4 +1,6 @@
 import React from "react";
+import LanguageSwitcher from "../../LanguageSwithcher";
+
 
 export default function HeaderMain() {
   return (
@@ -22,6 +24,8 @@ export default function HeaderMain() {
       <h1 className="text-[#51a7bf] text-base md:text-2xl font-black font-['Inter'] text-center drop-shadow-xl flex-1 mx-4">
         Hệ thống máy in trường Đại học Bách Khoa TP.Hồ Chí Minh
       </h1>
+      <LanguageSwitcher />
+
     </div>
   );
 }

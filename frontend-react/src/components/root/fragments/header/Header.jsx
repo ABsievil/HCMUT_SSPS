@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
+import LanguageSwitcher from "../../LanguageSwithcher";
 export default function Header() {
   const [isSticky, setIsSticky] = useState(false);
 
@@ -23,9 +23,7 @@ export default function Header() {
       } md:sticky top-0 z-10 transition-all`}
     >
       <div className="flex justify-center items-center w-full">
-        <div
-          className="bg-[#B7E0FF] border w-full flex md:flex-row justify-between items-center py-3 px-4 md:py-4 md:px-8"
-        >
+        <div className="bg-[#B7E0FF] border w-full flex md:flex-row justify-between items-center py-3 px-4 md:py-4 md:px-8">
           {/* Logo Section */}
           <div className="flex items-center">
             <a href="/" className="flex items-center space-x-3">
@@ -45,7 +43,8 @@ export default function Header() {
             KHAI PHÓNG - TIÊN PHONG - SÁNG TẠO
           </h1>
 
-          {/* Login Button */}
+          {/* Login Button và LanguageSwitcher */}
+          <div className="flex items-center space-x-4">
             <Link to="/login">
               <div
                 className="bg-[#87CEEB] text-black text-sm md:text-lg px-4 md:px-8 py-3 rounded-lg hover:bg-sky-600 
@@ -54,6 +53,8 @@ export default function Header() {
                 Đăng Nhập
               </div>
             </Link>
+            <LanguageSwitcher />
+          </div>
         </div>
       </div>
     </div>

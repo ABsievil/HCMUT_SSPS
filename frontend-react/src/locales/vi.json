@@ -1,0 +1,13 @@
+{
+    "login": {
+      "heading": "Trang đăng nhập",
+      "usernamePlaceholder": "Tên tài khoản",
+      "passwordPlaceholder": "Mật khẩu",
+      "forgotPassword": "Quên mật khẩu?",
+      "loginButton": "Đăng nhập",
+      "noAccountText": "Bạn chưa có tài khoản?",
+      "createAccountLink": "Tạo tài khoản",
+      "errorLoginFailed": "Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.",
+      "errorLoginError": "Đã xảy ra lỗi khi đăng nhập."
+    }
+  }

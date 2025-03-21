@@ -1,14 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import InputField from '../fragments/InputField/InputField'; // Import InputField
-import { toast } from 'react-toastify'
+import InputField from '../fragments/InputField/InputField';
+import { toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode';
+import { useTranslation } from 'react-i18next'; // Thêm hook useTranslation
 
 function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { t } = useTranslation(); // Khởi tạo hàm t để dịch
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -33,14 +35,14 @@ function LoginForm() {
           const role = decodedToken.role;
 
           localStorage.setItem('token', data.data);
-          localStorage.setItem('userRole', role); // set userRole to check authenticate in App.jsx
+          localStorage.setItem('userRole', role);
           window.location.href = '/account';
         } else if (data.status === "ERROR") {
-          toast.error("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");
+          toast.error(t('login.errorLoginFailed')); // Sử dụng t để dịch thông báo lỗi
         }
       })
       .catch(error => {
-        toast.error("Đã xảy ra lỗi khi đăng nhập.");
+        toast.error(t('login.errorLoginError')); // Sử dụng t để dịch thông báo lỗi
         console.error('Error:', error);
       });
   };
@@ -57,11 +59,11 @@ function LoginForm() {
       <img
         loading="lazy"
         src="https://cdn.builder.io/api/v1/image/assets/TEMP/4d7576939ba90f1483dc1b48490e69d0dc4888cc061d7e09535e09ea9924476c?placeholderIfAbsent=true&apiKey=985f1fb8be044ffd914af5aef5360e96"
-        alt="Logo"
+        alt={t('login.logoAlt')} // Dịch thuộc tính alt nếu cần
         className="object-contain self-center w-[90px] sm:w-[120px] mb-4"
       />
       <h2 className="self-center text-lg sm:text-xl text-black mb-4">
-        Trang đăng nhập
+        {t('login.heading')} {/* Dịch tiêu đề */}
       </h2>
 
       {/* Email InputField */}
@@ -69,7 +71,7 @@ function LoginForm() {
         id="emailInput"
         name="email"
         type="text"
-        placeholder="Tên tài khoản"
+        placeholder={t('login.usernamePlaceholder')} // Dịch placeholder
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
@@ -81,7 +83,7 @@ function LoginForm() {
         id="passwordInput"
         name="password"
         type={showPassword ? "text" : "password"}
-        placeholder="Mật khẩu"
+        placeholder={t('login.passwordPlaceholder')} // Dịch placeholder
         required
         value={password}
         onChange={(e) => setPassword(e.target.value)}
@@ -94,19 +96,19 @@ function LoginForm() {
       <div className="flex flex-col mt-6 w-full">
         <div className="flex justify-end text-sm mb-4">
           <a href="/verifymail" className="text-blue-700 font-bold">
-            Quên mật khẩu?
+            {t('login.forgotPassword')} {/* Dịch liên kết quên mật khẩu */}
           </a>
         </div>
         <button
           type="submit"
           className="w-full px-4 py-3 text-sm sm:text-base text-white bg-blue-700 rounded-md hover:bg-blue-800 transition duration-300"
         >
-          Đăng nhập
+          {t('login.loginButton')} {/* Dịch nút đăng nhập */}
         </button>
         <div className="flex flex-wrap gap-2 mt-4 text-sm">
-          <p className="text-gray-700">Bạn chưa có tài khoản?</p>
+          <p className="text-gray-700">{t('login.noAccountText')}</p> {/* Dịch văn bản */}
           <a href="/register" className="text-blue-700 font-bold underline">
-            Tạo tài khoản
+            {t('login.createAccountLink')} {/* Dịch liên kết tạo tài khoản */}
           </a>
         </div>
       </div>

@@ -1,0 +1,13 @@
+{
+    "login": {
+      "heading": "Login Page",
+      "usernamePlaceholder": "Username",
+      "passwordPlaceholder": "Password",
+      "forgotPassword": "Forgot password?",
+      "loginButton": "Login",
+      "noAccountText": "Don't have an account?",
+      "createAccountLink": "Create account",
+      "errorLoginFailed": "Login failed. Please check your information.",
+      "errorLoginError": "An error occurred while logging in."
+    }
+  }

@@ -7,6 +7,7 @@ import "./CSS/style.module.css";
 import "./CSS/login.module.css";
 import "./index.css";
 import { UserProvider } from './store/userContext.jsx';
+import './i18n'; // Import cấu hình i18n
 
 const rootElement = document.getElementById('root');
 const root = createRoot(rootElement);
