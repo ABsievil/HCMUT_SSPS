@@ -774,7 +774,7 @@ CREATE OR REPLACE PROCEDURE add_otp_by_email(email_input VARCHAR, otp_code_input
 LANGUAGE plpgsql AS $$ 
 BEGIN
     INSERT INTO OTP (email, otp_code)
-    VALUES (name, otp_code_input);
+    VALUES (email_input, otp_code_input);
 END;
 $$;
 --CALL add_otp_by_email('tinhquach@hcmut.edu.vn','1234m5')
